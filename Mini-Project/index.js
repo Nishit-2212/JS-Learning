@@ -206,7 +206,7 @@ const showData = (fields, searchValue) => {
     // var fieldss = fields
 
 
-    // ::TODO combine search from localStorage
+    // combine search from localStorage
     let getLastSearchValue = localStorage.getItem("LastSearch");
     let getLastSearchCategory = localStorage.getItem("LastSearchCategory");
 
@@ -255,6 +255,7 @@ const showData = (fields, searchValue) => {
 
                 const row = document.createElement("tr");
                 row.innerHTML = `
+                <td style="display: none;">${da.id}</td>   
                 <td>
                     ${da.title}
                 </td>
@@ -265,10 +266,13 @@ const showData = (fields, searchValue) => {
                     <img src="${da.images}" alt="Image is not loaded" height="100" width="100">
                 </td>
                 <td>
-                    ${da.desciption}
+                    ${da.description}
                 </td>
                 <td>
                     ${da.price}
+                </td>
+                <td>
+                    ${da.stock}
                 </td>
                 <td>
                     <button class="addToCart"> Add </button>
@@ -278,14 +282,49 @@ const showData = (fields, searchValue) => {
             }
         })
     }
-
-
 }
+
 
 window.addEventListener("load", () => {
     localStorage.removeItem("LastSearchCategory");
     localStorage.removeItem("LastSearch");
 
+});
+
+
+
+tableBody.addEventListener("click", (event) => {
+
+    if (event.target && event.target.classList.contains("addToCart")) {
+        const row = event.target.closest("tr");
+
+        const productId = row.children[0].innerText;
+        // const category = row.children[1].innerText;
+        // const imageSrc = row.children[2].querySelector("img").src;
+        // const description = row.children[3].innerText;
+        // const price = row.children[4].innerText;
+
+        // console.log(title);
+
+        let products = JSON.parse(localStorage.getItem("products"));
+
+        const product = products.find((p) => p.id == productId);
+
+        if(product) {
+
+            if (product.stock > 0) {
+                product.stock -= 1;
+
+                row.children[6].innerText = product.stock;
+
+                localStorage.setItem("products", JSON.stringify(products));
+
+                console.log(`Stock updated for ${product.title}. Remaining stock: ${product.stock}`);
+            } else {
+                alert("Out of stock!");
+            }
+        }
+    }
 });
 
 

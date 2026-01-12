@@ -7,7 +7,7 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="./index.css">
+    <!-- <link rel="stylesheet" href="./index.css"> -->
 
 </head>
 
@@ -38,10 +38,28 @@
                         </form>
                         <ul class="navbar-nav ms-auto my-2 my-lg-0">
                             <li class="nav-item me-4">
-                                <a class="nav-link" href="">About</a>
+                                <a class="nav-link" href="index.html">Home</a>
                             </li>
                             <li class="nav-item me-4">
-                                <a class="nav-link" href="">Shop</a>
+
+                                <!-- <a class="nav-link" href="">Shop</a> -->
+                                <div class="position-relative">
+                                    <!-- Cart Icon (using Bootstrap Icons SVG or font) -->
+                                    <!-- Ensure you have included the Bootstrap Icons CSS/SVG in your project -->
+                                    <svg xmlns="www.w3.org" width="30" height="30" fill="currentColor"
+                                        class="bi bi-cart-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM6 14a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm1.25.5a.75.75 0 1 1 1.5 0 .75.75 0 0 1-1.5 0zm4.75-.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                    </svg>
+
+                                    <!-- Dynamic Number Badge -->
+                                    <span id="cart-count"
+                                        class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                        0
+                                    </span>
+
+                                </div>
+
                             </li>
                             <li class="nav-item me-4">
                                 <a class="nav-link" href="">Blog</a>
@@ -64,6 +82,7 @@
 
         <thead>
             <tr>
+                <!-- <th style="display: none;"> Id: </th> -->
                 <th scope="col">Title</th>
                 <th scope="col">
                     Category
@@ -75,30 +94,11 @@
                 <th scope="col">Image</th>
                 <th scope="col">Description</th>
                 <th scope="col">Price</th>
+                <th scope="col">Qunatity</th>
             </tr>
         </thead>
         <tbody id="tbody">
-            <!-- <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>John</td>
-      <td>Doe</td>
-      <td>@social</td>
-      <td>@mdo</td>
-    </tr> -->
+            
         </tbody>
 
     </table>
