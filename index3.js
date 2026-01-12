@@ -356,6 +356,7 @@ var username = document.getElementById("firstname");
 var email = document.getElementById("email");
 var tableBody = document.querySelector("#userTable");
 var demos = document.getElementById("demo")
+var demos1 = document.getElementById("demo1");
 
 
 
@@ -436,7 +437,33 @@ const xyz = async(query) => {
     // }
 }
 
+
+
+const emailId = async(em) => {
+
+    const mail = em.trim();
+    console.log("Hello");
+
+    demos1.innerHTML = mail;
+
+        try {
+            userdata.map((da) => {
+                // console.log("Hello");
+                let mailid = da.email
+
+                // console.log("Hello")
+                renderUser(mailid,mail,da)
+
+            })
+    }
+    catch (e) {
+        console.log(e)
+    }
+
+}
+
 const debounceingp = debounce(xyz, 500);
+const debouncemail = debounce(emailId,500);
 
 // username.addEventListener("input", (e) => {
 //     if (e.target.value == userdata.username) {
@@ -458,7 +485,7 @@ username.addEventListener("input", (e) => {
 
 email.addEventListener("input",(e) => {
 
-    debounceingp(e.target.value);
+    debouncemail(e.target.value);
 
 })
 
