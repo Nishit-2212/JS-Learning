@@ -1,19 +1,143 @@
+let file = {
+  "products": [
+    {
+      "id": 1,
+      "title": "Essence Mascara Lash Princess",
+      "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
+      "category": "beauty",
+      "price": 9.99,
+      "stock": 99,
+      "brand": "Essence",
+      "images": [
+        "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princdess/1.webp"
+      ],
+      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
+    },
+    {
+      "id": 2,
+      "title": "Eyeshadow Palette with Mirror",
+      "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
+      "category": "beauty",
+      "price": 19.99,
+      "stock": 34,
+      "brand": "Glamour Beauty",
+      "images": [
+        "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-withdd-mirror/1.webp"
+      ],
+      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp"
+    },
+    {
+      "id": 3,
+      "title": "Powder Canister",
+      "description": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine.",
+      "category": "fragrances",
+      "price": 14.99,
+      "stock": 89,
+      "brand": "Velvet Touch",
+      "images": [
+        "https://cdn.dummyjson.com/product-images/beauty/powder-canistder/1.wedbp"
+      ],
+      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp"
+    },
+    {
+      "id": 4,
+      "title": "Red Lipstick",
+      "description": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips.",
+      "category": "fragrances",
+      "price": 12.99,
+      "stock": 91,
+      "brand": "Chic Cosmetics",
+      "images": [
+        "https://cdn.dummyjson.com/product-images/beauty/red-lipstickd/1.webp"
+      ],
+      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp"
+    },
+    {
+      "id": 5,
+      "title": "Red Nail Polish",
+      "description": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails.",
+      "category": "furniture",
+      "price": 8.99,
+      "stock": 79,
+      "brand": "Nail Couture",
+      "images": [
+        "https://cdn.dummyjson.com/product-images/beauty/red-nail-poldish/1.webp"
+      ],
+      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp"
+    },
+
+    {
+      "id": 6,
+      "title": "Calvin Klein CK One",
+      "description": "CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent.",
+      "category": "groceries",
+      "price": 49.99,
+      "stock": 4,
+      "brand": "Calvin Klein",
+      "images": [
+        "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/1.webp",
+        "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/2.webp",
+        "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/3.webp"
+      ],
+      "thumbnail": "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp"
+    },
+
+    {
+      "id": 7,
+      "title": "Chanel Coco Noir Eau De",
+      "description": "Coco Noir by Chanel is an elegant and mysterious fragrance.",
+      "category": "groceries",
+      "price": 129.99,
+      "stock": 58,
+      "brand": "Chanel",
+      "images": [
+        "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/1.webp",
+        "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/2.webp",
+        "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/3.webp"
+      ],
+      "thumbnail": "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/thumbnail.webp"
+    }
+
+  ]
+}
 
 
-let productsData;
 // const url = async () => {
-//     let file = "https://dummyjson.com/products";
-//     let res = await fetch(file);
-//     let data = await res.json();
-//     productsData = data.products;
-//     // console.log(userdata);
-// }
+    //     let file = "https://dummyjson.com/products";
+    //     let res = await fetch(file);
+    //     let data = await res.json();
+    //     productsData = data.products;
+    //     // console.log(userdata);
+    // }
+    
+    // url()
+    
+    
+    let productsData;
 
-// url()
+//with static data
+(async function () {
+    let storeData = localStorage.getItem('products');
+    // console.log(storeData)
+    if (storeData) {
+        productsData = JSON.parse(storeData);
+        return
+    }
+
+    // let file = "https://dummyjson.com/products/";
+    // let res = await fetch(file);
+    // let data = await res.json();
+    productsData = file.products;
+
+    console.log("Hello")
+    localStorage.setItem('products', JSON.stringify(productsData))
+
+
+})();   
 
 
 
-//with static
+// with single API
 // (async function () {
 //     let storeData = localStorage.getItem('products');
 //     // console.log(storeData)
@@ -30,31 +154,8 @@ let productsData;
 //     console.log("Hello")
 //     localStorage.setItem('products', JSON.stringify(productsData))
 
-    
-// })();
 
-
-
-
-// with single API
-(async function () {
-    let storeData = localStorage.getItem('products');
-    // console.log(storeData)
-    if (storeData) {
-        productsData = JSON.parse(storeData);
-        return
-    }
-
-    let file = "https://dummyjson.com/products/";
-    let res = await fetch(file);
-    let data = await res.json();
-    productsData = data.products;
-
-    console.log("Hello")
-    localStorage.setItem('products', JSON.stringify(productsData))
-
-
-})();   
+// })();   
 // categoryLoad()
 
 
@@ -94,12 +195,12 @@ const category = document.getElementById("categorySelect");
 
 
 
-//Render Data on reload
-(function() {
 
-    let allProductData = JSON.parse(localStorage.getItem("products"));
+const renderData = () => {
 
-    allProductData.map((da) => {
+let allProductData = JSON.parse(localStorage.getItem("products"));
+
+    productsData.map((da) => {
             
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -130,8 +231,21 @@ const category = document.getElementById("categorySelect");
             }
         )
 
+}
+
+
+
+
+
+
+//Render Data on reload
+(function() {
+
+    
+    // console.log("Hello")
+        renderData();
         cartUpdate();
-        
+        // cartDetails();
 
 
 })();
