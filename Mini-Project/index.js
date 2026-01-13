@@ -1,6 +1,6 @@
 
 
-var productsData;
+let productsData;
 // const url = async () => {
 //     let file = "https://dummyjson.com/products";
 //     let res = await fetch(file);
@@ -11,6 +11,32 @@ var productsData;
 
 // url()
 
+
+
+//with static
+// (async function () {
+//     let storeData = localStorage.getItem('products');
+//     // console.log(storeData)
+//     if (storeData) {
+//         productsData = JSON.parse(storeData);
+//         return
+//     }
+
+//     let file = "https://dummyjson.com/products/";
+//     let res = await fetch(file);
+//     let data = await res.json();
+//     productsData = data.products;
+
+//     console.log("Hello")
+//     localStorage.setItem('products', JSON.stringify(productsData))
+
+    
+// })();
+
+
+
+
+// with single API
 (async function () {
     let storeData = localStorage.getItem('products');
     // console.log(storeData)
@@ -26,8 +52,36 @@ var productsData;
 
     console.log("Hello")
     localStorage.setItem('products', JSON.stringify(productsData))
-})();
+
+
+})();   
 // categoryLoad()
+
+
+
+const cartUpdate = ()=> {
+        const cartCount = document.getElementById("cart-count");
+
+        let getCartItem = JSON.parse(localStorage.getItem("cart"));
+        // console.log(getCartItem)
+
+        if(getCartItem != null) {
+            let count = 0;
+            
+            for(const key of Object.keys(getCartItem)) {
+                // console.log(getCartItem[key])
+                count += getCartItem[key]
+            }
+
+            cartCount.textContent = count;
+
+        }
+        else {
+            // console.log("Outer")
+            cartCount.textContent = 0
+        }
+}
+
 
 
 const search = document.getElementById("Search");
@@ -35,6 +89,56 @@ const demo = document.getElementById("demo");
 const tableBody = document.getElementById("tbody");
 const searchButton = document.getElementById("button-addon2");
 const category = document.getElementById("categorySelect");
+
+
+
+
+
+//Render Data on reload
+(function() {
+
+    let allProductData = JSON.parse(localStorage.getItem("products"));
+
+    allProductData.map((da) => {
+            
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                <td style="display: none;">${da.id}</td>   
+                <td>
+                    ${da.title}
+                </td>
+                <td>
+                    ${da.category}
+                </td>
+                <td>
+                    <img src="${da.images}" alt="Image is not loaded" height="100" width="100">
+                </td>
+                <td>
+                    ${da.description}
+                </td>
+                <td>
+                    ${da.price}
+                </td>
+                <td>
+                    ${da.stock}
+                </td>
+                <td>
+                    <button class="addToCart"> Add </button>
+                </td>
+            `
+                tableBody.appendChild(row);
+            }
+        )
+
+        cartUpdate();
+        
+
+
+})();
+
+
+
+
 
 
 var categoryLoaded = false;
@@ -230,7 +334,7 @@ const showData = (fields, searchValue) => {
                     <img src="${da.images}" alt="Image is not loaded" height="100" width="100">
                 </td>
                 <td>
-                    ${da.desciption}
+                    ${da.description}
                 </td>
                 <td>
                     ${da.price}
@@ -285,6 +389,8 @@ const showData = (fields, searchValue) => {
 }
 
 
+
+
 window.addEventListener("load", () => {
     localStorage.removeItem("LastSearchCategory");
     localStorage.removeItem("LastSearch");
@@ -319,7 +425,23 @@ tableBody.addEventListener("click", (event) => {
 
                 localStorage.setItem("products", JSON.stringify(products));
 
-                console.log(`Stock updated for ${product.title}. Remaining stock: ${product.stock}`);
+                console.log(`Stock updated ${product.title}.remaining stock: ${product.stock}`);
+
+                let getCart = JSON.parse(localStorage.getItem("cart")) || {};
+                if(getCart[product.id]) {
+                    getCart[product.id] += 1;
+                }
+                else {
+                    // getCart[product.id] = 0;
+                    getCart[product.id] = 1;
+                }
+
+                // getCart[product.id] += 1;
+
+                localStorage.setItem("cart",JSON.stringify(getCart))
+
+                cartUpdate();
+
             } else {
                 alert("Out of stock!");
             }

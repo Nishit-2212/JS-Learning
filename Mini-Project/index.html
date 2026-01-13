@@ -44,19 +44,18 @@
 
                                 <!-- <a class="nav-link" href="">Shop</a> -->
                                 <div class="position-relative">
-                                    <!-- Cart Icon (using Bootstrap Icons SVG or font) -->
-                                    <!-- Ensure you have included the Bootstrap Icons CSS/SVG in your project -->
-                                    <svg xmlns="www.w3.org" width="30" height="30" fill="currentColor"
-                                        class="bi bi-cart-fill" viewBox="0 0 16 16">
-                                        <path
-                                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM6 14a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm1.25.5a.75.75 0 1 1 1.5 0 .75.75 0 0 1-1.5 0zm4.75-.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                                    </svg>
+                                    <a href="cart.html" class="position-relative d-inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                            fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                                            <path
+                                                d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM6 14a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm1.25.5a.75.75 0 1 1 1.5 0 .75.75 0 0 1-1.5 0zm4.75-.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                        </svg>
 
-                                    <!-- Dynamic Number Badge -->
-                                    <span id="cart-count"
-                                        class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                        0
-                                    </span>
+                                        <span id="cart-count"
+                                            class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                            0
+                                        </span>
+                                    </a>
 
                                 </div>
 
@@ -98,7 +97,6 @@
             </tr>
         </thead>
         <tbody id="tbody">
-            
         </tbody>
 
     </table>
