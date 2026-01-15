@@ -1,31 +1,54 @@
-// Parse the product ID from the URL
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get('productId');
 
-// Fetch the product details (dummy data for now)
-const product = {
-    id: productId,
-    name: "Sample Product",
-    price: 100
-};
+const products = JSON.parse(localStorage.getItem('products'));
+const product = products.find(p => p.id == productId);
 
-// Populate the form with the product details
-document.getElementById('product-name').value = product.name;
+document.getElementById('product-title').value = product.title;
+document.getElementById('product-description').value = product.description;
+document.getElementById('product-category').value = product.category;
 document.getElementById('product-price').value = product.price;
+document.getElementById('product-stock').value = product.stock;
+document.getElementById('product-brand').value = product.brand;
+document.getElementById('product-image').value = product.images;
 
-// Handle form submission
 document.getElementById('edit-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+        event.preventDefault();
 
-    const updatedProduct = {
-        id: productId,
-        name: document.getElementById('product-name').value,
-        price: document.getElementById('product-price').value
-    };
 
-    // Save the updated product details (for now, log to console)
-    console.log('Updated Product:', updatedProduct);
+        const updatedTitle = document.getElementById('product-title').value;
+        const updatedDescription = document.getElementById('product-description').value;
+        const updatedCategory = document.getElementById('product-category').value;
+        const updatedPrice = document.getElementById('product-price').value;
+        const updatedStock = parseInt(document.getElementById('product-stock').value, 10);
+        const updatedBrand = document.getElementById('product-brand').value;
+        const updatedImage = document.getElementById('product-image').value;
 
-    // Redirect back to the main page
-    window.location.href = 'index.html';
-});
+        const updatedProduct = {
+            id: productId,
+            title: updatedTitle,
+            description: updatedDescription,
+            category: updatedCategory,
+            price: updatedPrice,
+            stock: updatedStock,
+            brand: updatedBrand,
+            images: [updatedImage]
+        };
+
+        const index = products.findIndex(p => p.id == productId);
+
+        if (index !== -1) {
+            products[index] = updatedProduct;
+            localStorage.setItem('products', JSON.stringify(products));
+        }
+
+        console.log('Updated Product:', updatedProduct);
+
+        window.location.href = 'index.html';
+    });
+
+
+
+
+
+    console.log(productId);

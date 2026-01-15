@@ -601,6 +601,34 @@ tableBody.addEventListener("click", (event) => {
 
 
 
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('edit')) {
+        const row = event.target.closest('tr');
+        const productId = row.children[0].innerText; 
+
+
+        // console.log("Clicked");
+        window.location.href = `edit.html?productId=${productId}`;
+    }
+
+    if (event.target.classList.contains('delete')) {
+        const row = event.target.closest('tr');
+        const productId = row.children[0].innerText;
+        // console.log(productId);
+
+        let products = JSON.parse(localStorage.getItem("products"));
+        const product = products.find((p) => p.id == productId);
+        if (product) {
+            products.splice(products.indexOf(product), 1);
+            localStorage.setItem("products", JSON.stringify(products));
+            // alert("Product deleted successfully");
+            renderData();
+        }
+    }
+});
+
+
+
 
 
 
