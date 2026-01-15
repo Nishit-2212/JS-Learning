@@ -50,6 +50,7 @@
 
 
 const cartContainer = document.getElementById("cart-items");
+const checkoutBtn = document.getElementById("checkout-btn");
 
 
 // function() {
@@ -123,7 +124,7 @@ const cartDetails = () => {
                 <div class="col-md-3">
                     <div class="d-flex align-items-center gap-2">
                         <button class="quantity-btn decrement">-</button>
-                        <input type="number" class="quantity-input" value="${quantity}" min="1">
+                        <input type="number" class="quantity-input" value="${quantity}" min="1" id="quant">
                         <button class="quantity-btn increment">+</button>
                     </div>
                 </div>
@@ -152,6 +153,9 @@ cartContainer.addEventListener("click", (e) => {
     const product = products[productId];
 
     if (e.target.classList.contains("remove-btn")) {
+        let qunatity = document.getElementById("quant").value;
+        products[productId-1].stock += parseInt(qunatity);
+        localStorage.setItem("products", JSON.stringify(products));
         delete cart[productId];
     }
 
@@ -161,13 +165,17 @@ cartContainer.addEventListener("click", (e) => {
         let maxCount = getProduct.stock;
 
         
-
-        if (count >= maxCount) {
+        console.log(count, maxCount)
+        if (count > maxCount+2) {
             alert("Not enough Quantity")
             return
         }
 
         cart[productId]++;
+
+        products[productId-1].stock -= 1;
+
+        localStorage.setItem("products", JSON.stringify(products));
 
         console.log("Innre +")
         console.log(count, getProduct, maxCount)
@@ -175,6 +183,11 @@ cartContainer.addEventListener("click", (e) => {
 
     if (e.target.classList.contains("decrement")) {
         cart[productId]--;
+
+        
+        products[productId-1].stock += 1;
+
+        localStorage.setItem("products", JSON.stringify(products));
         if (cart[productId] <= 0) {
             // localStorage.removeItem("cart")
             delete cart[productId];
@@ -192,6 +205,7 @@ cartContainer.addEventListener("click", (e) => {
 
     localStorage.setItem("cart", JSON.stringify(cart));
 
+    calculateTotals();
     totalItem();
     cartDetails();
 });
@@ -211,16 +225,19 @@ const totalItem = () => {
     let getCart = JSON.parse(localStorage.getItem("cart"));
     let counter = 0;
 
-    // if (cart === null) {
-        
-    // }
-    // else {
 
-    //     // let count = getCart.reduce((accu,curr) => ++counter,0)
-    //     for (const data of Object.entries(getCart)) {
-    //         counter++;
-    //     }
-    // }
+
+    if (getCart === null) {
+        totalItem.textContent = `Total Item :- 0`
+        return;    
+    }
+    else {
+
+        // let count = getCart.reduce((accu,curr) => ++counter,0)
+        for (const data of Object.entries(getCart)) {
+            counter++;
+        }
+    }
  
 
     // console.log(counter)
@@ -228,5 +245,75 @@ const totalItem = () => {
 
 }
 
-cartDetails();
-totalItem();
+
+let flag = false;
+// render only one time
+function renderCartOnce() {
+    if (flag) return;
+    cartDetails();
+    totalItem();
+    flag = true;
+}
+renderCartOnce();
+
+
+
+//calculate toal price and subtotal
+const calculateTotals = () => {
+    const subTotalElem = document.getElementById("subTotal");
+    const totalElem = document.getElementById("total");
+    let getCart = JSON.parse(localStorage.getItem("cart"));
+    let products = JSON.parse(localStorage.getItem("products"));
+
+    let subTotal = 0;
+
+    if (getCart === null) {
+        subTotalElem.textContent = `$0.00`;
+        totalElem.textContent = `$0.00`;
+        return;
+    }
+    for (const [productId, quantity] of Object.entries(getCart)) {
+        const product = products[productId-1];
+        if (!product) continue;
+        subTotal += product.price * quantity;
+    }
+
+    let shipping = subTotal + 5;
+    subTotalElem.textContent = `$${subTotal.toFixed(2)}`;
+    totalElem.textContent = `$${shipping.toFixed(2)}`; 
+};
+calculateTotals();
+
+
+
+
+//checkout button event
+checkoutBtn.addEventListener("click", () => {
+    alert("Checkout Successful!");
+    // localStorage.removeItem("cart");
+    let products = JSON.parse(localStorage.getItem("products"));
+    let cart = JSON.parse(localStorage.getItem("cart"));
+
+    let productsIdInCart = [];
+    let productsQuantityInCart = [];
+
+    for (const [productId, quantity] of Object.entries(cart)) {
+        console.log(productId, quantity)
+        productsIdInCart.push(parseInt(productId));
+        productsQuantityInCart.push(quantity);
+    }
+
+    // console.log(productsIdInCart, productsQuantityInCart);
+    for (let i = 0; i < productsIdInCart.length; i++) {
+        const productId = productsIdInCart[i];
+        const quantity = productsQuantityInCart[i];
+        products[productId - 1].stock -= quantity;
+    }
+
+    localStorage.setItem("products", JSON.stringify(products));
+    localStorage.removeItem("cart");
+    cartDetails();
+    calculateTotals();
+    totalItem();
+
+});

@@ -225,6 +225,8 @@ let allProductData = JSON.parse(localStorage.getItem("products"));
                 </td>
                 <td>
                     <button class="addToCart"> Add </button>
+                    <button class="edit" id="editButton"> Edit </button>
+                    <button class="delete id="deleteButton"> Delete </button>
                 </td>
             `
                 tableBody.appendChild(row);
@@ -420,7 +422,8 @@ const showData = (fields, searchValue) => {
 
     tableBody.innerHTML = "";
 
-    let allProductData = productsData;
+    let getData = JSON.parse(localStorage.getItem("products"));
+    let allProductData = getData;
     // var fieldss = fields
 
 
@@ -454,7 +457,12 @@ const showData = (fields, searchValue) => {
                     ${da.price}
                 </td>
                 <td>
+                    ${da.stock}
+                </td>
+                <td>
                     <button class="addToCart"> Add </button>
+                    <button class="edit" id="editButton"> Edit </button>
+                    <button class="delete id="deleteButton"> Delete </button>
                 </td>
             `
                     tableBody.appendChild(row);
@@ -494,6 +502,8 @@ const showData = (fields, searchValue) => {
                 </td>
                 <td>
                     <button class="addToCart"> Add </button>
+                    <button class="edit" id="editButton"> Edit </button>
+                    <button class="delete id="deleteButton"> Delete </button>
                 </td>
             `
                 tableBody.appendChild(row);
@@ -564,22 +574,6 @@ tableBody.addEventListener("click", (event) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // :TODO Debouncing
 // const debounce = (func, ms) => {
 //     let timeout;
@@ -604,6 +598,10 @@ tableBody.addEventListener("click", (event) => {
 //     console.log("Hello")
 //     debounceSearch(e.target.value)
 // })
+
+
+
+
 
 
 
