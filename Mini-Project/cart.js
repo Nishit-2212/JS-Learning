@@ -289,7 +289,8 @@ const calculateTotals = () => {
         return;
     }
     for (const [productId, quantity] of Object.entries(getCart)) {
-        const product = products[productId-1];
+        const product = products.find(p => p.id == productId);
+        // const product = products[productId-1];
         if (!product) continue;
         subTotal += product.price * quantity;
     }

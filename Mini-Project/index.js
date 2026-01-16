@@ -116,7 +116,7 @@ let file = {
 let productsData;
 
 //with static data
-(async function () {
+(function () {
     let storeData = localStorage.getItem('products');
     // console.log(storeData)
     if (storeData) {
@@ -137,28 +137,28 @@ let productsData;
 
 
 
-// with single API
-// (async function () {
-//     let storeData = localStorage.getItem('products');
-//     // console.log(storeData)
-//     if (storeData) {
-//         productsData = JSON.parse(storeData);
-//         return
+// const cartUpdate = () => {
+//     const cartCount = document.getElementById("cart-count");
+
+//     let getCartItem = JSON.parse(localStorage.getItem("cart"));
+//     // console.log(getCartItem)
+
+//     if (getCartItem != null) {
+//         let count = 0;
+
+//         for (const key of Object.keys(getCartItem)) {
+//             // console.log(getCartItem[key])
+//             count += getCartItem[key]
+//         }
+
+//         cartCount.textContent = count;
+
 //     }
-
-//     let file = "https://dummyjson.com/products/";
-//     let res = await fetch(file);
-//     let data = await res.json();
-//     productsData = data.products;
-
-//     console.log("Hello")
-//     localStorage.setItem('products', JSON.stringify(productsData))
-
-
-// })();   
-// categoryLoad()
-
-
+//     else {
+//         // console.log("Outer")
+//         cartCount.textContent = 0
+//     }
+// }
 
 const cartUpdate = () => {
     const cartCount = document.getElementById("cart-count");
@@ -166,21 +166,17 @@ const cartUpdate = () => {
     let getCartItem = JSON.parse(localStorage.getItem("cart"));
     // console.log(getCartItem)
 
-    if (getCartItem != null) {
-        let count = 0;
-
-        for (const key of Object.keys(getCartItem)) {
-            // console.log(getCartItem[key])
-            count += getCartItem[key]
-        }
-
-        cartCount.textContent = count;
-
+    if (!getCartItem) {
+        cartCount.textContent = 0;
+        return;
     }
-    else {
-        // console.log("Outer")
-        cartCount.textContent = 0
+
+    let count = 0;
+    for (const key of Object.keys(getCartItem)) {
+        // console.log(getCartItem[key])
+        count += getCartItem[key]
     }
+    cartCount.textContent = count;
 }
 
 
@@ -192,8 +188,61 @@ const searchButton = document.getElementById("button-addon2");
 const category = document.getElementById("categorySelect");
 
 
-// const theme = document.getElementById("theme");
+let themess = document.getElementById("themess");
 
+// themess.textContent = "Light"
+// console.log(themess)
+
+themess.addEventListener("click", (e) => {
+    
+    // e.preventDefault();
+
+
+    // let themess = document.getElementById("themess");
+    // console.log("Hello")
+    let choosenTheme = themess.value;
+    console.log(choosenTheme)
+    
+    if(choosenTheme == "Dark") {
+        themess.value = "White"
+        themess.textContent = "Light"
+        document.cookie = "theme=Dark";
+        // console.log("Inside Dark")
+    }
+    else {
+        
+        themess.value = "Dark"
+        themess.textContent = "Dark"
+        console.log("Inside Light")
+        document.cookie = "theme=Light";
+    }
+    
+    console.log(choosenTheme);
+    
+    
+})
+
+// document.body.style.backgroundColor = "yellow";
+
+
+
+console.log(category)
+
+
+
+
+
+function getCookie(name) {
+    const cookies = document.cookie.split("; ");
+
+    for (let cookie of cookies) {
+        const [key, value] = cookie.split("=");
+        if (key === name) {
+            return value;
+        }
+    }
+    return null;
+}
 
 
 
@@ -258,29 +307,45 @@ const renderData = () => {
 
 })();
 
+const allCategory = new Set();
+
+// Dought Self invoking function is not working 
+function categoryLoad() {
+    console.log('Inside category function');
+
+    let allProductData = productsData;
+
+    allProductData.forEach(element => {
+        allCategory.add(element.category);
+    });
+
+    console.log(allCategory)
+
+    for (x of allCategory) {
+
+        const options = document.createElement("option");
+        options.value = x;
+        options.textContent = x;
+        category.appendChild(options);
+
+        //     category.innerHTML = `
+        //     <option value="${x}"> ${x} </option>
+        //    `  
+    }
+};
 
 
-
-
-
-var categoryLoaded = false;
 category.addEventListener("click", () => {
 
-    if (!categoryLoaded) {
+    if (!allCategory.size) {
         console.log("category clicked")
-        // category.innerHTML = ''
         categoryLoad();
-        categoryLoaded = true;
     }
 
 })
 
 
 category.addEventListener("change", function () {
-
-    // console.log("category clicked")
-    // category.innerHTML = ''
-    // categoryLoad()
 
     if (this.value == "") {
         // console.log("True")
@@ -397,33 +462,6 @@ searchButton.addEventListener("click", () => {
 });
 
 
-
-// Dought Self invoking function is not working 
-function categoryLoad() {
-    const allCategory = new Set();
-
-    let allProductData = productsData;
-
-    allProductData.map((da) => {
-        allCategory.add(da.category);
-    })
-
-    console.log(allCategory)
-
-    for (x of allCategory) {
-
-        const options = document.createElement("option");
-        options.value = x;
-        options.textContent = x;
-        category.appendChild(options);
-
-        //     category.innerHTML = `
-        //     <option value="${x}"> ${x} </option>
-        //    `  
-    }
-};
-
-
 const showData = (fields, searchValue) => {
 
     tableBody.innerHTML = "";
@@ -531,7 +569,7 @@ window.addEventListener("load", () => {
 
 tableBody.addEventListener("click", (event) => {
 
-    if (event.target && event.target.classList.contains("addToCart")) {
+    if (event?.target?.classList.contains("addToCart")) {
         const row = event.target.closest("tr");
 
         const productId = row.children[0].innerText;
@@ -549,10 +587,10 @@ tableBody.addEventListener("click", (event) => {
 
         let maxCount = product.stock;
         let count = getCart[product.id] || 0;
-        console.log("count and maxCOunt" , count,maxCount)
+        console.log("count and maxCOunt", count, maxCount)
 
         if (product) {
-            
+
             if (count < maxCount) {
                 // product.stock -= 1;
 
@@ -669,9 +707,9 @@ document.addEventListener('click', function (event) {
 
     const getId = JSON.parse(localStorage.getItem("id"));
     const getProduct = JSON.parse(localStorage.getItem("products"))
-    
 
-    console.log("Hellos")  
+
+    console.log("Hellos")
     let lastId;
     if (!getId && getProduct) {
         getProduct.map((da) => {
@@ -680,5 +718,19 @@ document.addEventListener('click', function (event) {
         localStorage.setItem("id", JSON.stringify(lastId));
         // console.log("Hello")   
     }
+
+
+    //COokie 
+    const theme = getCookie("theme");
+
+    if (theme == null) {
+        document.cookie = "theme=Light";
+        // document.cookie = "theme=Dark";
+    }
+    // else {
+    //     //
+
+    // }
+    console.log(theme);
 
 })()
