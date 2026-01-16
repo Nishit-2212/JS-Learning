@@ -9,6 +9,70 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="./index.css"> -->
 
+    <style>
+        * {
+  box-sizing: border-box;
+}
+
+body {
+  font: 16px Arial;  
+}
+
+/*the container must be positioned relative:*/
+.autocomplete {
+  position: relative;
+  display: inline-block;
+}
+
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: #e9e9e9; 
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+}
+    </style>
+
 </head>
 
 <body>
@@ -26,14 +90,26 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent9">
                         <form class="d-flex align-items-center position-relative ms-lg-3">
                             <div class="input-group align-items-center mt-3 mt-lg-0">
-                                <input aria-describedby="button-addon2" aria-label="Search" class="form-control"
-                                    placeholder="Search" type="text" id="Search"> <button class="btn bg-white border"
-                                    id="button-addon2" type="button"><svg class="bi bi-search" fill="currentColor"
+
+
+                                <!-- <input aria-describedby="button-addon2" aria-label="Search" class="form-control"
+                                    placeholder="Search" type="text" id="Search"> 
+                                
+                                <button class="btn bg-white border" id="button-addon2" type="button"><svg class="bi bi-search" fill="currentColor"
                                         height="20" viewbox="0 0 16 16" width="20" xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z">
                                         </path>
-                                    </svg></button>
+                                    </svg></button> -->
+
+                                <form autocomplete="off" action="/">
+                                    <div class="autocomplete" style="width:300px;">
+                                        <input id="myInput" type="text" name="myCountry" placeholder="Search Title">
+                                    </div>
+                                    <input type="submit">
+                                </form>
+
+
                             </div>
                         </form>
                         <ul class="navbar-nav ms-auto my-2 my-lg-0">
@@ -65,7 +141,7 @@
                             </li>
                             <li class="nav-item">
                                 <!-- <a class="nav-link" href="" id="themess">Dark</a> -->
-                                 <button id="themess" value="Dark">Dark</button>
+                                <button id="themess" value="Dark">Dark</button>
                             </li>
                         </ul>
                     </div>
@@ -95,7 +171,7 @@
                 <th scope="col">Description</th>
                 <th scope="col">Price</th>
                 <th scope="col">Qunatity</th>
-                <th scope="col">Action</th> <!-- New column for actions -->
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody id="tbody">
