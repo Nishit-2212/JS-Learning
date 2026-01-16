@@ -94,8 +94,11 @@ const cartDetails = () => {
 
         console.log(productId)
 
-        const product = products[productId-1];
-        console.log(product);
+
+        // const product = products[productId-1];
+        // const product = products.find(p => p.id == )
+        const product = products.find(p => p.id == productId);
+
 
         let totalPrice = product.price * quantity;
 
@@ -129,7 +132,7 @@ const cartDetails = () => {
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <span class="fw-bold product-price">$${totalPrice.toFixed(2)}</span>
+                    <span class="fw-bold product-price">${totalPrice.toFixed(2)}</span>
                 </div>
                 <div class="col-md-1">
                     <i class="bi bi-trash remove-btn"></i>
@@ -150,32 +153,45 @@ cartContainer.addEventListener("click", (e) => {
     const productId = card.dataset.productId;
     let cart = JSON.parse(localStorage.getItem("cart"));
     const products = JSON.parse(localStorage.getItem("products"));
-    const product = products[productId];
+
+    const product = products.find(p => p.id == productId);
+    // const product = products[productId];
+
+
+
+        //     let products = JSON.parse(localStorage.getItem("products"));
+        // const product = products.find((p) => p.id == productId);
+        // let getCart = JSON.parse(localStorage.getItem("cart")) || {};
+        // let maxCount = product.stock;
+        // let count = cart[product.id];
+        // console.log("count and maxCOunt" , count,maxCount)
+
+
 
     if (e.target.classList.contains("remove-btn")) {
-        let qunatity = document.getElementById("quant").value;
-        products[productId-1].stock += parseInt(qunatity);
-        localStorage.setItem("products", JSON.stringify(products));
+        // let qunatity = document.getElementById("quant").value;
+        
+        // products[productId-1].stock += parseInt(qunatity);
+        // localStorage.setItem("products", JSON.stringify(products));
         delete cart[productId];
     }
 
     if (e.target.classList.contains("increment")) {
         let count = cart[productId];
-        let getProduct = products[productId-1];
+        let getProduct = product;
         let maxCount = getProduct.stock;
 
         
-        console.log(count, maxCount)
-        if (count > maxCount+2) {
+        console.log("Count and maxCount",count, maxCount)
+        if (count >= maxCount) {
             alert("Not enough Quantity")
             return
         }
 
         cart[productId]++;
 
-        products[productId-1].stock -= 1;
 
-        localStorage.setItem("products", JSON.stringify(products));
+        // localStorage.setItem("products", JSON.stringify(products));
 
         console.log("Innre +")
         console.log(count, getProduct, maxCount)
@@ -185,9 +201,9 @@ cartContainer.addEventListener("click", (e) => {
         cart[productId]--;
 
         
-        products[productId-1].stock += 1;
+        // products[productId-1].stock += 1;
 
-        localStorage.setItem("products", JSON.stringify(products));
+        // localStorage.setItem("products", JSON.stringify(products));
         if (cart[productId] <= 0) {
             // localStorage.removeItem("cart")
             delete cart[productId];
@@ -200,7 +216,7 @@ cartContainer.addEventListener("click", (e) => {
     const priceSpan = card.querySelector(".product-price");
     if (priceSpan) {
         const totalPrice = (cart[productId] || 0) * product.price;
-        priceSpan.textContent = `$${totalPrice.toFixed(2)}`;
+        priceSpan.textContent = `${totalPrice.toFixed(2)}`;
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -249,7 +265,7 @@ const totalItem = () => {
 let flag = false;
 // render only one time
 function renderCartOnce() {
-    if (flag) return;
+    // if (flag) return;
     cartDetails();
     totalItem();
     flag = true;
@@ -268,8 +284,8 @@ const calculateTotals = () => {
     let subTotal = 0;
 
     if (getCart === null) {
-        subTotalElem.textContent = `$0.00`;
-        totalElem.textContent = `$0.00`;
+        subTotalElem.textContent = `0.00`;
+        totalElem.textContent = `0.00`;
         return;
     }
     for (const [productId, quantity] of Object.entries(getCart)) {
@@ -279,8 +295,8 @@ const calculateTotals = () => {
     }
 
     let shipping = subTotal + 5;
-    subTotalElem.textContent = `$${subTotal.toFixed(2)}`;
-    totalElem.textContent = `$${shipping.toFixed(2)}`; 
+    subTotalElem.textContent = `${subTotal.toFixed(2)}`;
+    totalElem.textContent = `${shipping.toFixed(2)}`; 
 };
 calculateTotals();
 
@@ -288,32 +304,67 @@ calculateTotals();
 
 
 //checkout button event
+// checkoutBtn.addEventListener("click", () => {
+//     alert("Checkout Successful!");
+//     // localStorage.removeItem("cart");
+//     let products = JSON.parse(localStorage.getItem("products"));
+//     let cart = JSON.parse(localStorage.getItem("cart"));
+
+//     let productsIdInCart = [];
+//     let productsQuantityInCart = [];
+
+//     for (const [productId, quantity] of Object.entries(cart)) {
+//         console.log(productId, quantity)
+//         productsIdInCart.push(parseInt(productId));
+//         productsQuantityInCart.push(quantity);
+//     }
+
+//     // console.log(productsIdInCart, productsQuantityInCart);
+//     for (let i = 0; i < productsIdInCart.length; i++) {
+//         const productId = productsIdInCart[i];
+//         const quantity = productsQuantityInCart[i];
+//         // products[productId - 1].stock -= quantity;
+//         // products = products.map((da) => {
+//         //     if(da.id == productId) {
+//         //         da.stock -= quantity;
+//         //     }
+//         // })
+//     }
+
+//     localStorage.setItem("products", JSON.stringify(products));
+//     localStorage.removeItem("cart");
+//     cartDetails();
+//     calculateTotals();
+//     totalItem();
+
+// });
+
+
 checkoutBtn.addEventListener("click", () => {
     alert("Checkout Successful!");
-    // localStorage.removeItem("cart");
-    let products = JSON.parse(localStorage.getItem("products"));
-    let cart = JSON.parse(localStorage.getItem("cart"));
 
-    let productsIdInCart = [];
-    let productsQuantityInCart = [];
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+    let cart = JSON.parse(localStorage.getItem("cart")) || {};
 
     for (const [productId, quantity] of Object.entries(cart)) {
-        console.log(productId, quantity)
-        productsIdInCart.push(parseInt(productId));
-        productsQuantityInCart.push(quantity);
+        const id = parseInt(productId);
+
+        const product = products.find(p => p.id === id);
+
+        if (product) {
+            product.stock -= quantity;
+
+            if (product.stock < 0) {
+                product.stock = 0;
+            }
+        }
+        localStorage.setItem("products", JSON.stringify(products));
     }
 
-    // console.log(productsIdInCart, productsQuantityInCart);
-    for (let i = 0; i < productsIdInCart.length; i++) {
-        const productId = productsIdInCart[i];
-        const quantity = productsQuantityInCart[i];
-        products[productId - 1].stock -= quantity;
-    }
 
-    localStorage.setItem("products", JSON.stringify(products));
     localStorage.removeItem("cart");
+
     cartDetails();
     calculateTotals();
     totalItem();
-
 });

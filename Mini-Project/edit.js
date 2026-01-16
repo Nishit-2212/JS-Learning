@@ -32,7 +32,7 @@ document.getElementById('edit-form').addEventListener('submit', function(event) 
             price: updatedPrice,
             stock: updatedStock,
             brand: updatedBrand,
-            images: [updatedImage]
+            images: updatedImage
         };
 
         const index = products.findIndex(p => p.id == productId);

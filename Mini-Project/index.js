@@ -1,119 +1,119 @@
 let file = {
-  "products": [
-    {
-      "id": 1,
-      "title": "Essence Mascara Lash Princess",
-      "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
-      "category": "beauty",
-      "price": 9.99,
-      "stock": 99,
-      "brand": "Essence",
-      "images": [
-        "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princdess/1.webp"
-      ],
-      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
-    },
-    {
-      "id": 2,
-      "title": "Eyeshadow Palette with Mirror",
-      "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
-      "category": "beauty",
-      "price": 19.99,
-      "stock": 34,
-      "brand": "Glamour Beauty",
-      "images": [
-        "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-withdd-mirror/1.webp"
-      ],
-      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp"
-    },
-    {
-      "id": 3,
-      "title": "Powder Canister",
-      "description": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine.",
-      "category": "fragrances",
-      "price": 14.99,
-      "stock": 89,
-      "brand": "Velvet Touch",
-      "images": [
-        "https://cdn.dummyjson.com/product-images/beauty/powder-canistder/1.wedbp"
-      ],
-      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp"
-    },
-    {
-      "id": 4,
-      "title": "Red Lipstick",
-      "description": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips.",
-      "category": "fragrances",
-      "price": 12.99,
-      "stock": 91,
-      "brand": "Chic Cosmetics",
-      "images": [
-        "https://cdn.dummyjson.com/product-images/beauty/red-lipstickd/1.webp"
-      ],
-      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp"
-    },
-    {
-      "id": 5,
-      "title": "Red Nail Polish",
-      "description": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails.",
-      "category": "furniture",
-      "price": 8.99,
-      "stock": 79,
-      "brand": "Nail Couture",
-      "images": [
-        "https://cdn.dummyjson.com/product-images/beauty/red-nail-poldish/1.webp"
-      ],
-      "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp"
-    },
+    "products": [
+        {
+            "id": 1,
+            "title": "Essence Mascara Lash Princess",
+            "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
+            "category": "beauty",
+            "price": 9.99,
+            "stock": 99,
+            "brand": "Essence",
+            "images": [
+                "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princdess/1.webp"
+            ],
+            "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
+        },
+        {
+            "id": 2,
+            "title": "Eyeshadow Palette with Mirror",
+            "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
+            "category": "beauty",
+            "price": 19.99,
+            "stock": 34,
+            "brand": "Glamour Beauty",
+            "images": [
+                "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-withdd-mirror/1.webp"
+            ],
+            "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp"
+        },
+        {
+            "id": 3,
+            "title": "Powder Canister",
+            "description": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine.",
+            "category": "fragrances",
+            "price": 14.99,
+            "stock": 89,
+            "brand": "Velvet Touch",
+            "images": [
+                "https://cdn.dummyjson.com/product-images/beauty/powder-canistder/1.wedbp"
+            ],
+            "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp"
+        },
+        {
+            "id": 4,
+            "title": "Red Lipstick",
+            "description": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips.",
+            "category": "fragrances",
+            "price": 12.99,
+            "stock": 91,
+            "brand": "Chic Cosmetics",
+            "images": [
+                "https://cdn.dummyjson.com/product-images/beauty/red-lipstickd/1.webp"
+            ],
+            "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp"
+        },
+        {
+            "id": 5,
+            "title": "Red Nail Polish",
+            "description": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails.",
+            "category": "furniture",
+            "price": 8.99,
+            "stock": 79,
+            "brand": "Nail Couture",
+            "images": [
+                "https://cdn.dummyjson.com/product-images/beauty/red-nail-poldish/1.webp"
+            ],
+            "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp"
+        },
 
-    {
-      "id": 6,
-      "title": "Calvin Klein CK One",
-      "description": "CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent.",
-      "category": "groceries",
-      "price": 49.99,
-      "stock": 4,
-      "brand": "Calvin Klein",
-      "images": [
-        "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/1.webp",
-        "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/2.webp",
-        "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/3.webp"
-      ],
-      "thumbnail": "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp"
-    },
+        {
+            "id": 6,
+            "title": "Calvin Klein CK One",
+            "description": "CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent.",
+            "category": "groceries",
+            "price": 49.99,
+            "stock": 4,
+            "brand": "Calvin Klein",
+            "images": [
+                "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/1.webp",
+                "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/2.webp",
+                "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/3.webp"
+            ],
+            "thumbnail": "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp"
+        },
 
-    {
-      "id": 7,
-      "title": "Chanel Coco Noir Eau De",
-      "description": "Coco Noir by Chanel is an elegant and mysterious fragrance.",
-      "category": "groceries",
-      "price": 129.99,
-      "stock": 58,
-      "brand": "Chanel",
-      "images": [
-        "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/1.webp",
-        "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/2.webp",
-        "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/3.webp"
-      ],
-      "thumbnail": "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/thumbnail.webp"
-    }
+        {
+            "id": 7,
+            "title": "Chanel Coco Noir Eau De",
+            "description": "Coco Noir by Chanel is an elegant and mysterious fragrance.",
+            "category": "groceries",
+            "price": 129.99,
+            "stock": 58,
+            "brand": "Chanel",
+            "images": [
+                "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/1.webp",
+                "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/2.webp",
+                "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/3.webp"
+            ],
+            "thumbnail": "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/thumbnail.webp"
+        }
 
-  ]
+    ]
 }
 
 
 // const url = async () => {
-    //     let file = "https://dummyjson.com/products";
-    //     let res = await fetch(file);
-    //     let data = await res.json();
-    //     productsData = data.products;
-    //     // console.log(userdata);
-    // }
-    
-    // url()
-    
-    
-    let productsData;
+//     let file = "https://dummyjson.com/products";
+//     let res = await fetch(file);
+//     let data = await res.json();
+//     productsData = data.products;
+//     // console.log(userdata);
+// }
+
+// url()
+
+
+let productsData;
 
 //with static data
 (async function () {
@@ -133,7 +133,7 @@ let file = {
     localStorage.setItem('products', JSON.stringify(productsData))
 
 
-})();   
+})();
 
 
 
@@ -160,27 +160,27 @@ let file = {
 
 
 
-const cartUpdate = ()=> {
-        const cartCount = document.getElementById("cart-count");
+const cartUpdate = () => {
+    const cartCount = document.getElementById("cart-count");
 
-        let getCartItem = JSON.parse(localStorage.getItem("cart"));
-        // console.log(getCartItem)
+    let getCartItem = JSON.parse(localStorage.getItem("cart"));
+    // console.log(getCartItem)
 
-        if(getCartItem != null) {
-            let count = 0;
-            
-            for(const key of Object.keys(getCartItem)) {
-                // console.log(getCartItem[key])
-                count += getCartItem[key]
-            }
+    if (getCartItem != null) {
+        let count = 0;
 
-            cartCount.textContent = count;
-
+        for (const key of Object.keys(getCartItem)) {
+            // console.log(getCartItem[key])
+            count += getCartItem[key]
         }
-        else {
-            // console.log("Outer")
-            cartCount.textContent = 0
-        }
+
+        cartCount.textContent = count;
+
+    }
+    else {
+        // console.log("Outer")
+        cartCount.textContent = 0
+    }
 }
 
 
@@ -192,18 +192,24 @@ const searchButton = document.getElementById("button-addon2");
 const category = document.getElementById("categorySelect");
 
 
+// const theme = document.getElementById("theme");
+
+
+
+
+
 
 
 
 
 const renderData = () => {
 
-let allProductData = JSON.parse(localStorage.getItem("products"));
+    let allProductData = JSON.parse(localStorage.getItem("products"));
 
     productsData.map((da) => {
-            
-                const row = document.createElement("tr");
-                row.innerHTML = `
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
                 <td style="display: none;">${da.id}</td>   
                 <td>
                     ${da.title}
@@ -229,9 +235,9 @@ let allProductData = JSON.parse(localStorage.getItem("products"));
                     <button class="delete id="deleteButton"> Delete </button>
                 </td>
             `
-                tableBody.appendChild(row);
-            }
-        )
+        tableBody.appendChild(row);
+    }
+    )
 
 }
 
@@ -241,13 +247,13 @@ let allProductData = JSON.parse(localStorage.getItem("products"));
 
 
 //Render Data on reload
-(function() {
+(function () {
 
-    
+
     // console.log("Hello")
-        renderData();
-        cartUpdate();
-        // cartDetails();
+    renderData();
+    cartUpdate();
+    // cartDetails();
 
 
 })();
@@ -289,7 +295,7 @@ category.addEventListener("change", function () {
 
 
     localStorage.setItem("LastSearchCategory", selectedValue);
-    showData("category",selectedValue)
+    showData("category", selectedValue)
 
 
     //try
@@ -344,7 +350,7 @@ category.addEventListener("change", function () {
 searchButton.addEventListener("click", () => {
 
     // console.log("Button Clicked")
-    let searchValue = search.value;
+    let searchValue = search.value.trim();
 
     localStorage.setItem("LastSearch", searchValue);
     showData("title", searchValue)
@@ -539,20 +545,24 @@ tableBody.addEventListener("click", (event) => {
         let products = JSON.parse(localStorage.getItem("products"));
 
         const product = products.find((p) => p.id == productId);
+        let getCart = JSON.parse(localStorage.getItem("cart")) || {};
 
-        if(product) {
+        let maxCount = product.stock;
+        let count = getCart[product.id] || 0;
+        console.log("count and maxCOunt" , count,maxCount)
 
-            if (product.stock > 0) {
-                product.stock -= 1;
+        if (product) {
+            
+            if (count < maxCount) {
+                // product.stock -= 1;
 
                 row.children[6].innerText = product.stock;
 
-                localStorage.setItem("products", JSON.stringify(products));
+                // localStorage.setItem("products", JSON.stringify(products));
 
                 console.log(`Stock updated ${product.title}.remaining stock: ${product.stock}`);
 
-                let getCart = JSON.parse(localStorage.getItem("cart")) || {};
-                if(getCart[product.id]) {
+                if (getCart[product.id]) {
                     getCart[product.id] += 1;
                 }
                 else {
@@ -562,7 +572,7 @@ tableBody.addEventListener("click", (event) => {
 
                 // getCart[product.id] += 1;
 
-                localStorage.setItem("cart",JSON.stringify(getCart))
+                localStorage.setItem("cart", JSON.stringify(getCart))
 
                 cartUpdate();
 
@@ -601,10 +611,11 @@ tableBody.addEventListener("click", (event) => {
 
 
 
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
+
     if (event.target.classList.contains('edit')) {
         const row = event.target.closest('tr');
-        const productId = row.children[0].innerText; 
+        const productId = row.children[0].innerText;
 
 
         // console.log("Clicked");
@@ -622,15 +633,52 @@ document.addEventListener('click', function(event) {
             products.splice(products.indexOf(product), 1);
             localStorage.setItem("products", JSON.stringify(products));
             // alert("Product deleted successfully");
-            renderData();
+            // renderData();
+            location.reload();
+
         }
     }
 });
 
 
 
+//calculate last ID
+// let flagss = false;
+// (function() {
+
+//     const getProduct = JSON.parse(localStorage.getItem("products"))
+//     console.log(flagss);
+
+//     let lastId;
+//     if(!flagss && getProduct) {
+//         // console.log("true")
+//         getProduct.map((da) => {
+//             lastId = da.id;
+//         })
+//         flagss = true;
+//         console.log("Hellos")    
+//         console.log(flagss);
+//     }
+
+//     localStorage.setItem("id",lastId);
+
+// })()
 
 
+(function () {
 
+    const getId = JSON.parse(localStorage.getItem("id"));
+    const getProduct = JSON.parse(localStorage.getItem("products"))
+    
 
+    console.log("Hellos")  
+    let lastId;
+    if (!getId && getProduct) {
+        getProduct.map((da) => {
+            lastId = da.id;
+        })
+        localStorage.setItem("id", JSON.stringify(lastId));
+        // console.log("Hello")   
+    }
 
+})()
