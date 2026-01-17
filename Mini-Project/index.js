@@ -102,14 +102,51 @@ let file = {
 }
 
 
-
+let themess = document.getElementById("themess");
 
 
 let productsData;
 
+
 //with static data
 (function () {
     let storeData = localStorage.getItem('products');
+
+
+
+    const getId = JSON.parse(localStorage.getItem("id"));
+    const getProduct = JSON.parse(localStorage.getItem("products"))
+
+
+    //Getting last Id
+    console.log("Hellos")
+    let lastId;
+    if (!getId && getProduct) {
+        getProduct.map((da) => {
+            lastId = da.id;
+        })
+        localStorage.setItem("id", JSON.stringify(lastId));
+    }
+
+
+    //COokie 
+    const theme = getCookie("theme");
+
+    if (theme == null) {
+        document.cookie = "theme=Light";
+        // document.cookie = "theme=Dark";
+    }
+
+    let themeCookie = getCookie("theme");
+    themess.textContent = themeCookie;
+    console.log("Cookie theme",themeCookie)
+
+
+    console.log("Cookie")
+    console.log(theme);
+    //cookies
+
+
     if (storeData) {
         productsData = JSON.parse(storeData);
         return
@@ -155,10 +192,13 @@ const searchButton = document.getElementById("button-addon2");
 const category = document.getElementById("categorySelect");
 
 
-let themess = document.getElementById("themess");
+
 
 
 themess.addEventListener("click", (e) => {
+
+    // let themeCookie = getCookie("theme");
+    // themess.textContent = themeCookie;
     
     let choosenTheme = themess.value;
     console.log(choosenTheme)
@@ -321,112 +361,114 @@ category.addEventListener("change", function () {
 
 
 // Commented
-// searchButton.addEventListener("click", () => {
+searchButton.addEventListener("click", (e) => {
 
-//     // console.log("Button Clicked")
-//     let searchValue = search.value.trim().toLowerCase();
-//     // console.log(searchValue);
+    e.preventDefault();
 
-
-//     localStorage.setItem("LastSearch", searchValue);
-//     showData("title", searchValue)
-
-// });
+    // console.log("Button Clicked")
+    let searchValue = search.value.trim().toLowerCase();
+    // console.log(searchValue);
 
 
-// const showData = (fields, searchValue) => {
+    localStorage.setItem("LastSearch", searchValue);
+    showData("title", searchValue)
 
-//     tableBody.innerHTML = "";
-
-//     let getData = JSON.parse(localStorage.getItem("products"));
-//     let allProductData = getData;
+});
 
 
-//     let getLastSearchValue = localStorage.getItem("LastSearch");
-//     let getLastSearchCategory = localStorage.getItem("LastSearchCategory");
+const showData = (fields, searchValue) => {
 
-//     console.log(getLastSearchCategory,getLastSearchValue);
+    tableBody.innerHTML = "";
 
-//     if (getLastSearchCategory && getLastSearchValue) {
-
-//         allProductData.filter((da) => da.category == getLastSearchCategory)
-//             .map((da) => {
-//                 let title = da.title.trim().toLowerCase();
-//                 console.log("Searched")
-//                 if (title.includes(getLastSearchValue)) {
-
-//                     const row = document.createElement("tr");
-//                     row.innerHTML = `
-//                 <td>
-//                     ${da.title}
-//                 </td>
-//                 <td>
-//                     ${da.category}
-//                 </td>
-//                 <td>
-//                     <img src="${da.images}" alt="Image is not loaded" height="100" width="100">
-//                 </td>
-//                 <td>
-//                     ${da.description}
-//                 </td>
-//                 <td>
-//                     ${da.price}
-//                 </td>
-//                 <td>
-//                     ${da.stock}
-//                 </td>
-//                 <td>
-//                     <button class="addToCart"> Add </button>
-//                     <button class="edit" id="editButton"> Edit </button>
-//                     <button class="delete id="deleteButton"> Delete </button>
-//                 </td>
-//             `
-//                     tableBody.appendChild(row);
+    let getData = JSON.parse(localStorage.getItem("products"));
+    let allProductData = getData;
 
 
-//                 }
-//             })
+    let getLastSearchValue = localStorage.getItem("LastSearch");
+    let getLastSearchCategory = localStorage.getItem("LastSearchCategory");
+
+    console.log(getLastSearchCategory,getLastSearchValue);
+
+    if (getLastSearchCategory && getLastSearchValue) {
+
+        allProductData.filter((da) => da.category == getLastSearchCategory)
+            .map((da) => {
+                let title = da.title.trim().toLowerCase();
+                console.log("Searched")
+                if (title.includes(getLastSearchValue)) {
+
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                <td>
+                    ${da.title}
+                </td>
+                <td>
+                    ${da.category}
+                </td>
+                <td>
+                    <img src="${da.images}" alt="Image is not loaded" height="100" width="100">
+                </td>
+                <td>
+                    ${da.description}
+                </td>
+                <td>
+                    ${da.price}
+                </td>
+                <td>
+                    ${da.stock}
+                </td>
+                <td>
+                    <button class="addToCart"> Add </button>
+                    <button class="edit" id="editButton"> Edit </button>
+                    <button class="delete id="deleteButton"> Delete </button>
+                </td>
+            `
+                    tableBody.appendChild(row);
 
 
-//     }
-//     else {
-//         allProductData.map((da) => {
-//             let field = da[fields].trim().toLowerCase();
-//             console.log("Searched")
-//             if (field.includes(searchValue)) {
+                }
+            })
 
-//                 const row = document.createElement("tr");
-//                 row.innerHTML = `
-//                 <td style="display: none;">${da.id}</td>   
-//                 <td>
-//                     ${da.title}
-//                 </td>
-//                 <td>
-//                     ${da.category}
-//                 </td>
-//                 <td>
-//                     <img src="${da.images}" alt="Image is not loaded" height="100" width="100">
-//                 </td>
-//                 <td>
-//                     ${da.description}
-//                 </td>
-//                 <td>
-//                     ${da.price}
-//                 </td>
-//                 <td>
-//                     ${da.stock}
-//                 </td>
-//                 <td>
-//                     <button class="addToCart"> Add </button>
-//                     <button class="edit" id="editButton"> Edit </button>
-//                     <button class="delete id="deleteButton"> Delete </button>
-//                 </td>
-//             `
-//                 tableBody.appendChild(row);
-//             }
-//         })
-//     }
-// }
+
+    }
+    else {
+        allProductData.map((da) => {
+            let field = da[fields].trim().toLowerCase();
+            console.log("Searched")
+            if (field.includes(searchValue)) {
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                <td style="display: none;">${da.id}</td>   
+                <td>
+                    ${da.title}
+                </td>
+                <td>
+                    ${da.category}
+                </td>
+                <td>
+                    <img src="${da.images}" alt="Image is not loaded" height="100" width="100">
+                </td>
+                <td>
+                    ${da.description}
+                </td>
+                <td>
+                    ${da.price}
+                </td>
+                <td>
+                    ${da.stock}
+                </td>
+                <td>
+                    <button class="addToCart"> Add </button>
+                    <button class="edit" id="editButton"> Edit </button>
+                    <button class="delete id="deleteButton"> Delete </button>
+                </td>
+            `
+                tableBody.appendChild(row);
+            }
+        })
+    }
+}
 
 
 
@@ -517,33 +559,34 @@ document.addEventListener('click', function (event) {
 });
 
 
-(function () {
+// (function () {
 
-    const getId = JSON.parse(localStorage.getItem("id"));
-    const getProduct = JSON.parse(localStorage.getItem("products"))
-
-
-    console.log("Hellos")
-    let lastId;
-    if (!getId && getProduct) {
-        getProduct.map((da) => {
-            lastId = da.id;
-        })
-        localStorage.setItem("id", JSON.stringify(lastId));
-    }
+//     const getId = JSON.parse(localStorage.getItem("id"));
+//     const getProduct = JSON.parse(localStorage.getItem("products"))
 
 
-    //COokie 
-    const theme = getCookie("theme");
+//     console.log("Hellos")
+//     let lastId;
+//     if (!getId && getProduct) {
+//         getProduct.map((da) => {
+//             lastId = da.id;
+//         })
+//         localStorage.setItem("id", JSON.stringify(lastId));
+//     }
 
-    if (theme == null) {
-        document.cookie = "theme=Light";
-        // document.cookie = "theme=Dark";
-    }
 
-    console.log(theme);
+//     //COokie 
+//     const theme = getCookie("theme");
 
-})()
+//     if (theme == null) {
+//         document.cookie = "theme=Light";
+//         // document.cookie = "theme=Dark";
+//     }
+
+//     console.log("Cookie")
+//     console.log(theme);
+
+// })()
 
 
 
@@ -551,6 +594,7 @@ document.addEventListener('click', function (event) {
 // console.log(search)
 
 
+//function is from W3cSchool
 function autocomplete(inp, arr) {
   var currentFocus;
   inp.addEventListener("input", function(e) {
@@ -643,7 +687,7 @@ function autocomplete(inp, arr) {
 }
 
 
-// :TODO Debouncing
+
 const debounce = (func, ms) => {
     let timeout;
     return function (...args) {
