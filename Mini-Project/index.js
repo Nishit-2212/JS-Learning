@@ -138,7 +138,14 @@ let productsData;
     }
 
     let themeCookie = getCookie("theme");
-    themess.textContent = themeCookie;
+
+    if(themeCookie == "Dark") {
+        themess.textContent = "Light"
+    }
+    else {
+        themess.textContent = "Dark"
+    }
+    // themess.textContent = themeCookie;
     console.log("Cookie theme",themeCookie)
 
 
@@ -291,8 +298,6 @@ const renderData = () => {
 
 
 
-
-
 //Render Data on reload
 (function () {
 
@@ -307,7 +312,6 @@ const renderData = () => {
 
 const allCategory = new Set();
 
-// Dought Self invoking function is not working 
 function categoryLoad() {
     console.log('Inside category function');
 
@@ -346,12 +350,8 @@ category.addEventListener("change", function () {
         localStorage.removeItem("LastSearchCategory");
     }
 
-
-
     const selectedValue = this.value;
     console.log(selectedValue)
-
-
 
     localStorage.setItem("LastSearchCategory", selectedValue);
     showData("category", selectedValue)
@@ -360,7 +360,6 @@ category.addEventListener("change", function () {
 });
 
 
-// Commented
 searchButton.addEventListener("click", (e) => {
 
     e.preventDefault();
@@ -559,39 +558,6 @@ document.addEventListener('click', function (event) {
 });
 
 
-// (function () {
-
-//     const getId = JSON.parse(localStorage.getItem("id"));
-//     const getProduct = JSON.parse(localStorage.getItem("products"))
-
-
-//     console.log("Hellos")
-//     let lastId;
-//     if (!getId && getProduct) {
-//         getProduct.map((da) => {
-//             lastId = da.id;
-//         })
-//         localStorage.setItem("id", JSON.stringify(lastId));
-//     }
-
-
-//     //COokie 
-//     const theme = getCookie("theme");
-
-//     if (theme == null) {
-//         document.cookie = "theme=Light";
-//         // document.cookie = "theme=Dark";
-//     }
-
-//     console.log("Cookie")
-//     console.log(theme);
-
-// })()
-
-
-
-// console.log("Seached")
-// console.log(search)
 
 
 //function is from W3cSchool
@@ -700,7 +666,7 @@ const debounce = (func, ms) => {
 
 const searching = async(sea) => {
 
-    let searchedValue = sea.trim();
+    // let searchedValue = sea.trim();
     // console.log(searchedValue)
     let titles = loadTitles();
     let titlesArray = [...titles]
