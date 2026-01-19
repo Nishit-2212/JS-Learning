@@ -1,10 +1,12 @@
 
-const form  = document.getElementById("create-form");
+const form = document.getElementById("create-form");
 
-form.addEventListener("submit",(e) => {
-    
+
+// Adding Product
+form.addEventListener("submit", (e) => {
+
     e.preventDefault()
-    
+
     const Title = document.getElementById('product-title').value;
     const Description = document.getElementById('product-description').value;
     const Category = document.getElementById('product-category').value;
@@ -21,25 +23,25 @@ form.addEventListener("submit",(e) => {
     const getProduct = JSON.parse(localStorage.getItem("products"));
 
     const createProduct = {
-            id: getId+1,
-            title: Title,
-            description: Description,
-            category: Category,
-            price: Price,
-            stock: Stock,
-            brand: Brand,
-            images: Image
-        };
+        id: getId + 1,
+        title: Title,
+        description: Description,
+        category: Category,
+        price: Price,
+        stock: Stock,
+        brand: Brand,
+        images: Image
+    };
 
     console.log(typeof getProduct)
     getProduct.push(createProduct);
 
     console.log("End")
-    
-    localStorage.setItem("id",JSON.stringify(getId+1))
-    localStorage.setItem("products",JSON.stringify(getProduct))
 
-    
+    localStorage.setItem("id", JSON.stringify(getId + 1))
+    localStorage.setItem("products", JSON.stringify(getProduct))
+
+
     window.location.href = 'index.html';
 
 })

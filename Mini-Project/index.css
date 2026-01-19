@@ -1,28 +1,61 @@
- E-Commerce Application (Pure JavaScript)
-Create a mini e-commerce web page using only HTML, CSS, and pure JavaScript
-Display a list of products dynamically from JavaScript data
-Implement product search and category filter
-Allow users to add products to a cart and manage quantities
-Show cart items with price calculation and total amount
-Ensure product stock updates correctly based on cart actions
-Persist cart and product data using localStorage
-Restore cart and stock state correctly after page refresh
-Implement a checkout flow that clears cart and updates stored data
+  * {
+      box-sizing: border-box;
+  }
 
+  body {
+      font: 16px Arial;
+  }
 
+  /*the container must be positioned relative:*/
+  .autocomplete {
+      position: relative;
+      display: inline-block;
+  }
 
-Try to cover all below topis. 
-DOM Manipulation for rendering
-LocalStorage & Cookies 
-Array , String & Object Data Structures
-Array Methods (map, filter, reduce) as per use case
-Event Handling & Event Delegation – Optimized action handling
-CRUD Operations
-& Many more
+  input {
+      border: 1px solid transparent;
+      /* background-color: #f1f1f1; */
+      padding: 10px;
+      font-size: 16px;
+  }
 
+  input[type=text] {
+      /* background-color: #f1f1f1; */
+      width: 100%;
+  }
 
+  input[type=submit] {
+      background-color: DodgerBlue;
+      /* color: #fff; */
+      cursor: pointer;
+  }
 
-:: TODO 
-var --> let
-in cart while increase the quanity it will check the condition
+  .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 100%;
+      left: 0;
+      right: 0;
+  }
 
+  .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      /* background-color: #fff; */
+      border-bottom: 1px solid #d4d4d4;
+  }
+
+  /*when hovering an item:*/
+  .autocomplete-items div:hover {
+      /* background-color: #e9e9e9; */
+  }
+
+  /*when navigating through the items using the arrow keys:*/
+  .autocomplete-active {
+      background-color: DodgerBlue !important;
+      /* color: #ffffff; */
+  }

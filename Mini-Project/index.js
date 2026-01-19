@@ -99,8 +99,6 @@ let file = {
 
 
 let themess = document.getElementById("themess");
-
-
 let productsData;
 
 
@@ -135,14 +133,16 @@ let productsData;
 
     let themeCookie = getCookie("theme");
 
-    if(themeCookie == "Dark") {
+    if (themeCookie == "Dark") {
         themess.textContent = "Light"
+        document.body.style.backgroundColor = "#424242"
     }
     else {
         themess.textContent = "Dark"
+        document.body.style.backgroundColor = "#f2f2f2"
     }
     // themess.textContent = themeCookie;
-    console.log("Cookie theme",themeCookie)
+    console.log("Cookie theme", themeCookie)
 
 
     console.log("Cookie")
@@ -166,12 +166,12 @@ let productsData;
 
 
 
-
+// Counting Total Count of Cart Product and inject in the Cart Image
 const cartUpdate = () => {
     const cartCount = document.getElementById("cart-count");
 
     let getCartItem = JSON.parse(localStorage.getItem("cart"));
-    
+
 
     if (!getCartItem) {
         cartCount.textContent = 0;
@@ -180,7 +180,7 @@ const cartUpdate = () => {
 
     let count = 0;
     for (const key of Object.keys(getCartItem)) {
-        
+
         count += getCartItem[key]
     }
     cartCount.textContent = count;
@@ -197,31 +197,33 @@ const category = document.getElementById("categorySelect");
 
 
 
-
+// Theme Event 
 themess.addEventListener("click", (e) => {
 
     // let themeCookie = getCookie("theme");
     // themess.textContent = themeCookie;
-    
+
     let choosenTheme = themess.value;
     console.log(choosenTheme)
-    
-    if(choosenTheme == "Dark") {
+
+    if (choosenTheme == "Dark") {
         themess.value = "White"
         themess.textContent = "Light"
         document.cookie = "theme=Dark";
+        document.body.style.backgroundColor = "#494949";
     }
     else {
-        
+
         themess.value = "Dark"
         themess.textContent = "Dark"
         console.log("Inside Light")
         document.cookie = "theme=Light";
+        document.body.style.backgroundColor = "#f2f2f2";
     }
-    
+
     console.log(choosenTheme);
-    
-    
+
+
 })
 
 
@@ -232,7 +234,7 @@ console.log(category)
 
 
 
-
+// split Cookie with given name
 function getCookie(name) {
     const cookies = document.cookie.split("; ");
 
@@ -251,7 +253,7 @@ function getCookie(name) {
 
 
 
-
+// RenderData Function on every Load
 const renderData = () => {
 
     let allProductData = JSON.parse(localStorage.getItem("products"));
@@ -306,10 +308,11 @@ const renderData = () => {
 
 })();
 
+// Category Render
 const allCategory = new Set();
 let categoryLoad = () => {
 
-        console.log('Inside category function');
+    console.log('Inside category function');
 
     let allProductData = productsData;
 
@@ -329,8 +332,7 @@ let categoryLoad = () => {
     }
 };
 
-
-
+// Category Load on click
 category.addEventListener("click", () => {
 
     if (!allCategory.size) {
@@ -341,6 +343,7 @@ category.addEventListener("click", () => {
 })
 
 
+// Category Filter event
 category.addEventListener("change", function () {
 
     if (this.value == "") {
@@ -357,6 +360,8 @@ category.addEventListener("change", function () {
 });
 
 
+
+// Search Event
 searchButton.addEventListener("click", (e) => {
 
     e.preventDefault();
@@ -372,6 +377,8 @@ searchButton.addEventListener("click", (e) => {
 });
 
 
+
+// ShowData for search and Category filter (also storing last search and Category search in localStorage)
 const showData = (fields, searchValue) => {
 
     tableBody.innerHTML = "";
@@ -383,7 +390,7 @@ const showData = (fields, searchValue) => {
     let getLastSearchValue = localStorage.getItem("LastSearch");
     let getLastSearchCategory = localStorage.getItem("LastSearchCategory");
 
-    console.log(getLastSearchCategory,getLastSearchValue);
+    console.log(getLastSearchCategory, getLastSearchValue);
 
     if (getLastSearchCategory && getLastSearchValue) {
 
@@ -477,13 +484,12 @@ window.addEventListener("load", () => {
 
 
 
+// Add To Cart Event
 tableBody.addEventListener("click", (event) => {
 
     if (event?.target?.classList.contains("addToCart")) {
         const row = event.target.closest("tr");
-
         const productId = row.children[0].innerText;
-
         let products = JSON.parse(localStorage.getItem("products"));
 
         const product = products.find((p) => p.id == productId);
@@ -496,10 +502,7 @@ tableBody.addEventListener("click", (event) => {
         if (product) {
 
             if (count < maxCount) {
-
                 row.children[6].innerText = product.stock;
-
-
                 console.log(`Stock updated ${product.title}.remaining stock: ${product.stock}`);
 
                 if (getCart[product.id]) {
@@ -509,11 +512,8 @@ tableBody.addEventListener("click", (event) => {
                     getCart[product.id] = 1;
                 }
 
-
                 localStorage.setItem("cart", JSON.stringify(getCart))
-
                 cartUpdate();
-
             } else {
                 alert("Out of stock!");
             }
@@ -524,7 +524,7 @@ tableBody.addEventListener("click", (event) => {
 
 
 
-
+// Edit and Delete Event
 document.addEventListener('click', function (event) {
 
     if (event.target.classList.contains('edit')) {
@@ -557,71 +557,71 @@ document.addEventListener('click', function (event) {
 
 
 
-//function is from W3cSchool
+//function is from W3cSchool for suggestion in searching
 function autocomplete(inp, arr) {
-  var currentFocus;
-  inp.addEventListener("input", function(e) {
-      var a, b, i, val = this.value;
-      closeAllLists();
-      if (!val) { return false;}
-      currentFocus = -1;
-      a = document.createElement("DIV");
-      a.setAttribute("id", this.id + "autocomplete-list");
-      a.setAttribute("class", "autocomplete-items");
-      this.parentNode.appendChild(a);
-      for (i = 0; i < arr.length; i++) {
-        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-          b = document.createElement("DIV");
-          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(val.length);
-          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-          b.addEventListener("click", function(e) {
-              inp.value = this.getElementsByTagName("input")[0].value;
-              closeAllLists();
-          });
-          a.appendChild(b);
+    var currentFocus;
+    inp.addEventListener("input", function (e) {
+        var a, b, i, val = this.value;
+        closeAllLists();
+        if (!val) { return false; }
+        currentFocus = -1;
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        this.parentNode.appendChild(a);
+        for (i = 0; i < arr.length; i++) {
+            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                b = document.createElement("DIV");
+                b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                b.innerHTML += arr[i].substr(val.length);
+                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                b.addEventListener("click", function (e) {
+                    inp.value = this.getElementsByTagName("input")[0].value;
+                    closeAllLists();
+                });
+                a.appendChild(b);
+            }
         }
-      }
-  });
-  inp.addEventListener("keydown", function(e) {
-      var x = document.getElementById(this.id + "autocomplete-list");
-      if (x) x = x.getElementsByTagName("div");
-      if (e.keyCode == 40) {
-        currentFocus++;
-        addActive(x);
-      } else if (e.keyCode == 38) { //up
-        currentFocus--;
-        addActive(x);
-      } else if (e.keyCode == 13) {
-        e.preventDefault();
-        if (currentFocus > -1) {
-          if (x) x[currentFocus].click();
+    });
+    inp.addEventListener("keydown", function (e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+            currentFocus++;
+            addActive(x);
+        } else if (e.keyCode == 38) { //up
+            currentFocus--;
+            addActive(x);
+        } else if (e.keyCode == 13) {
+            e.preventDefault();
+            if (currentFocus > -1) {
+                if (x) x[currentFocus].click();
+            }
         }
-      }
-  });
-  function addActive(x) {
-    if (!x) return false;
-    removeActive(x);
-    if (currentFocus >= x.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (x.length - 1);
-    x[currentFocus].classList.add("autocomplete-active");
-  }
-  function removeActive(x) {
-    for (var i = 0; i < x.length; i++) {
-      x[i].classList.remove("autocomplete-active");
+    });
+    function addActive(x) {
+        if (!x) return false;
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        x[currentFocus].classList.add("autocomplete-active");
     }
-  }
-  function closeAllLists(elmnt) {
-    var x = document.getElementsByClassName("autocomplete-items");
-    for (var i = 0; i < x.length; i++) {
-      if (elmnt != x[i] && elmnt != inp) {
-        x[i].parentNode.removeChild(x[i]);
-      }
+    function removeActive(x) {
+        for (var i = 0; i < x.length; i++) {
+            x[i].classList.remove("autocomplete-active");
+        }
     }
-  }
-  document.addEventListener("click", function (e) {
-      closeAllLists(e.target);
-  });
+    function closeAllLists(elmnt) {
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+            }
+        }
+    }
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
 }
 
 
@@ -636,10 +636,12 @@ const debounce = (func, ms) => {
     }
 }
 
-const searching = async(sea) => {
+const searching = async (sea) => {
 
     // let searchedValue = sea.trim();
     // console.log(searchedValue)
+
+    //getting all titles and for searching suggestion purpose
     let titles = loadTitles();
     let titlesArray = [...titles]
     autocomplete(document.getElementById("myInput"), titlesArray);
@@ -647,7 +649,7 @@ const searching = async(sea) => {
 
 const debounceSearch = debounce(searching, 500);
 
-search.addEventListener("input",(e) => {
+search.addEventListener("input", (e) => {
     console.log("Hello")
     debounceSearch(e.target.value)
 })
@@ -655,21 +657,19 @@ search.addEventListener("input",(e) => {
 
 
 
-
+// Load all Titles and save it into the set for suggestion in searching
 const loadTitles = () => {
 
     let getProducts = JSON.parse(localStorage.getItem("products"))
 
     const titles = new Set();
 
-
-    for(let product of getProducts) {
+    for (let product of getProducts) {
         // console.log(product.title);
         titles.add(product.title);
     }
 
     return titles;
     // console.log(titles)
-
 }
 

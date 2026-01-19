@@ -2,6 +2,8 @@ const cartContainer = document.getElementById("cart-items");
 const checkoutBtn = document.getElementById("checkout-btn");
 
 
+
+// Showing Cart Details from Cart LocalStorage
 const cartDetails = () => {
     const cartData = localStorage.getItem("cart");
 
@@ -61,6 +63,7 @@ const cartDetails = () => {
 };
 
 
+// Handling Events Like Add Product and Delete Product on Cart Page
 cartContainer.addEventListener("click", (e) => {
     const card = e.target.closest(".product-card");
     if (!card) return;
@@ -81,8 +84,8 @@ cartContainer.addEventListener("click", (e) => {
         let getProduct = product;
         let maxCount = getProduct.stock;
 
-        
-        console.log("Count and maxCount",count, maxCount)
+
+        console.log("Count and maxCount", count, maxCount)
         if (count >= maxCount) {
             alert("Not enough Quantity")
             return
@@ -121,6 +124,8 @@ cartContainer.addEventListener("click", (e) => {
 
 
 
+
+// Calculating Total Item in Cart
 const totalItem = () => {
 
     const totalItem = document.getElementById("totalItem");
@@ -133,14 +138,14 @@ const totalItem = () => {
 
     if (getCart === null) {
         totalItem.textContent = `Total Item :- 0`
-        return;    
+        return;
     }
     else {
         for (const data of Object.entries(getCart)) {
             counter++;
         }
     }
- 
+
 
     // console.log(counter)
     totalItem.textContent = `Total Item :- ${counter}`
@@ -183,11 +188,13 @@ const calculateTotals = () => {
 
     let shipping = subTotal + 5;
     subTotalElem.textContent = `${subTotal.toFixed(2)}`;
-    totalElem.textContent = `${shipping.toFixed(2)}`; 
+    totalElem.textContent = `${shipping.toFixed(2)}`;
 };
 calculateTotals();
 
 
+
+// Handling CheckOut Event and remove Item from product data in localStorage after CheckOut
 checkoutBtn.addEventListener("click", () => {
     alert("Checkout Successful!");
 
@@ -208,7 +215,6 @@ checkoutBtn.addEventListener("click", () => {
         }
         localStorage.setItem("products", JSON.stringify(products));
     }
-
 
     localStorage.removeItem("cart");
 
