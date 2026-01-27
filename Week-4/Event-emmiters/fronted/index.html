@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h2>Click to place you order</h2>
+    <button id="place">Place</button>
+
+
+
+
+    <script>
+
+        const btn = document.getElementById('place');
+
+        btn.addEventListener('click',async(e) => {
+            e.preventDefault();
+            const data = {
+                orderId : 5
+            }
+
+            const res = await fetch('http://127.0.0.0:3000/order', {
+                method : "POST",
+                headers : {"Content-type" : "application/json"},
+                body : JSON.stringify(data)
+            })
+
+
+            console.log(res)
+
+        })
+
+    </script>
+
+</body>
+</html>
