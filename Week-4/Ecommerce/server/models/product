@@ -1,0 +1,24 @@
+[
+    {
+        "title": "jhg",
+        "description": "jhg",
+        "category": "jhg",
+        "price": "jhg",
+        "stock": "jgh",
+        "id": 2
+    },
+    {
+        "description": "this is the tshirt",
+        "category": "jg",
+        "price": "jhgjh",
+        "stock": "ggggggg",
+        "id": 4
+    },
+    {
+        "description": "this is the tshirt",
+        "category": "jg",
+        "price": "jhgjh",
+        "stock": "ggggggg",
+        "id": 5
+    }
+]
