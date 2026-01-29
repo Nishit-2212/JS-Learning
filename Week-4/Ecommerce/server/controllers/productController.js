@@ -1,6 +1,6 @@
 const { LocalStorage } = require('node-localstorage')
 
-let localStorage = new LocalStorage('./models')
+let localStorage = new LocalStorage('./models');
 
 let productData = JSON.parse(localStorage.getItem("product")) || [];
 let productLastId = JSON.parse(localStorage.getItem("productId")) || 1;
@@ -49,12 +49,17 @@ const updateProduct = (updatedProduct) => {
 
 
 
-const deleteProduct = (id) => {
+const deleteProduct = (req,res) => {
+
+
+    let id = Number(req.params.id);
 
     try {
         let index = productData.findIndex(product => product.id === id);
         productData.splice(index, 1);
         localStorage.setItem("product", JSON.stringify(productData))
+
+        res.status(200).json({ message: "Product deleted Successfully" })
     }
     catch (err) {
         console.log("Error in deleting", err)

@@ -1,0 +1,32 @@
+[
+    {
+        "email": "nishit22@gmail.com",
+        "password": "$2b$10$4weg0YEwbFXwOBygPNaR1Oncl0iQudK5bRuEJAXR0KEL.O.X9Y26C",
+        "role": "user",
+        "id": 1
+    },
+    {
+        "email": "nishit@gmail.com",
+        "password": "$2b$10$/hnDR9nqt7ELh5ShmlX/P.AMZNbHbv98TWuz5EiEm0dTtAN3ERVZe",
+        "role": "admin",
+        "id": 2
+    },
+    {
+        "email": "nishit123@gmail.com",
+        "password": "$2b$10$QCI8opAsrj1FZP1N41dBSO2UaSzpnxh2qNqX2Wtx//zDiqVtuW.Ti",
+        "role": "user",
+        "id": 3
+    },
+    {
+        "email": "nishit2212@gmail.com",
+        "role": "user",
+        "password": "$2b$10$/WAhwUxUDJHeHe1u8zcKzekma8yoHbH.gicih6w0yWAmWhUzlcfY6",
+        "id": 4
+    },
+    {
+        "email": "nishit345@gmail.com",
+        "role": "user",
+        "password": "$2b$10$YZUJ6d1I6NHNL.KmuK0a9.3.EK3MeVFJCwaxnQDhEeoRSgMaROM6i",
+        "id": 5
+    }
+]

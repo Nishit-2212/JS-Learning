@@ -12,13 +12,6 @@
         "category": "jg",
         "price": "jhgjh",
         "stock": "ggggggg",
-        "id": 4
-    },
-    {
-        "description": "this is the tshirt",
-        "category": "jg",
-        "price": "jhgjh",
-        "stock": "ggggggg",
         "id": 5
     }
 ]

@@ -1,6 +1,5 @@
 const express = require('express');
-const { addProduct, fetchProduct, deleteProduct, updateProduct } = require('../controllers/studentsController.js')
-
+const { addProduct, fetchProduct, deleteProduct, updateProduct } = require('../controllers/productController.js')
 const router = express.Router();
 
 
@@ -49,15 +48,7 @@ router.put('/update-product', (req, res) => {
     }
 });
 
-router.delete('/:id', (req, res) => {
-    let id = Number(req.params.id);
-
-
-    deleteProduct(id);
-
-
-    res.status(200).json({ message: "Product deleted Successfully" })
-})
+router.delete('/:id', deleteProduct)
 
 
 module.exports = router;
