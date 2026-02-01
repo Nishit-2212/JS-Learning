@@ -1,32 +1,74 @@
 [
-    {
-        "email": "nishit22@gmail.com",
-        "password": "$2b$10$4weg0YEwbFXwOBygPNaR1Oncl0iQudK5bRuEJAXR0KEL.O.X9Y26C",
-        "role": "user",
-        "id": 1
-    },
-    {
-        "email": "nishit@gmail.com",
-        "password": "$2b$10$/hnDR9nqt7ELh5ShmlX/P.AMZNbHbv98TWuz5EiEm0dTtAN3ERVZe",
-        "role": "admin",
-        "id": 2
-    },
-    {
-        "email": "nishit123@gmail.com",
-        "password": "$2b$10$QCI8opAsrj1FZP1N41dBSO2UaSzpnxh2qNqX2Wtx//zDiqVtuW.Ti",
-        "role": "user",
-        "id": 3
-    },
-    {
-        "email": "nishit2212@gmail.com",
-        "role": "user",
-        "password": "$2b$10$/WAhwUxUDJHeHe1u8zcKzekma8yoHbH.gicih6w0yWAmWhUzlcfY6",
-        "id": 4
-    },
-    {
-        "email": "nishit345@gmail.com",
-        "role": "user",
-        "password": "$2b$10$YZUJ6d1I6NHNL.KmuK0a9.3.EK3MeVFJCwaxnQDhEeoRSgMaROM6i",
-        "id": 5
-    }
+  {
+    "email": "nishit22@gmail.com",
+    "password": "$2b$10$4weg0YEwbFXwOBygPNaR1Oncl0iQudK5bRuEJAXR0KEL.O.X9Y26C",
+    "role": "user",
+    "id": 1
+  },
+  {
+    "email": "nishit@gmail.com",
+    "password": "$2b$10$/hnDR9nqt7ELh5ShmlX/P.AMZNbHbv98TWuz5EiEm0dTtAN3ERVZe",
+    "role": "admin",
+    "id": 2
+  },
+  {
+    "email": "nishit123@gmail.com",
+    "password": "$2b$10$QCI8opAsrj1FZP1N41dBSO2UaSzpnxh2qNqX2Wtx//zDiqVtuW.Ti",
+    "role": "user",
+    "id": 3
+  },
+  {
+    "email": "nishit2212@gmail.com",
+    "role": "user",
+    "password": "$2b$10$/WAhwUxUDJHeHe1u8zcKzekma8yoHbH.gicih6w0yWAmWhUzlcfY6",
+    "id": 4
+  },
+  {
+    "email": "nishit345@gmail.com",
+    "role": "user",
+    "password": "$2b$10$YZUJ6d1I6NHNL.KmuK0a9.3.EK3MeVFJCwaxnQDhEeoRSgMaROM6i",
+    "id": 5
+  },
+  {
+    "username": "nishit",
+    "email": "nachiket224@gmail.com",
+    "password": "$2b$10$31M0Z882.5yQCdtlfsT/3ODx2erKqlnmwT1Z3ktHaLBY4rGsfcBR2",
+    "role": "user",
+    "id": 7
+  },
+  {
+    "username": "he",
+    "email": "he@gmail.com",
+    "password": "$2b$10$7XBNjOwAortjZZcdl.4s1.4X09n0Ms89jN2GQdy4RObGkhYo.xSjm",
+    "role": "user",
+    "id": 8
+  },
+  {
+    "username": "bb",
+    "email": "bb@gmail.com",
+    "password": "$2b$10$j7P/oy7gFJKq7H5p35usp.jhqiJhm1Dmwkg9WsJBpNJdl8iilUYB.",
+    "role": "user",
+    "id": 9
+  },
+  {
+    "username": "dshg",
+    "email": "he@gmail.com",
+    "password": "$2b$10$lyGOsprqA/xjZ.a6dBzHR.ZSmcyl8iPdpik0tO8q8stKkOx01lfCC",
+    "role": "user",
+    "id": 10
+  },
+  {
+    "username": "loil",
+    "email": "olol@gmail.com",
+    "password": "$2b$10$dIAMPCUrS5eyRPYUL1uS8OfkiGBsamJpoIbC.4QTCJJS/GaGtzQ/O",
+    "role": "user",
+    "id": 11
+  },
+  {
+    "username": "1",
+    "email": "1@gmail.com",
+    "password": "$2b$10$afYIKI5iX/gB0IZ6IGAAfepP6lylyiNeu2XRa67ngPKGI.GcrYiKy",
+    "role": "user",
+    "id": 12
+  }
 ]

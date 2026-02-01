@@ -3,14 +3,15 @@ const jwt = require('jsonwebtoken');
 
 
 const verifyToken = (req,res,next) => {
-
+    console.log("Inside verify Token middleware");
     const authHeader = req.header('Authorization');
-    if(!authHeader) {
-        res.status(401).json({error:"Access Denied"});
-    }
     console.log(authHeader);
     const token = authHeader.split(' ')[1];
-
+    
+    if(token == 'null' || token == undefined) {
+        console.log("Token not found");
+        res.status(401).json({error:"Access Denied"});
+    }
     console.log(token)
     let secretKey = process.env.SECRET_KEY;
 

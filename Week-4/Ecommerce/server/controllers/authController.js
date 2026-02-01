@@ -33,6 +33,7 @@ const checkLogin = async (req, res) => {
     const loginData = req.body;
     console.log("inside login",loginData)
 
+    console.log("userData",loginData)
     const getUserData = userData.find(user => user.email === loginData.email);
 
     if (getUserData === undefined) {

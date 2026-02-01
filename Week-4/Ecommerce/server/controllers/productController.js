@@ -15,7 +15,7 @@ const addProduct = (req, res) => {
     localStorage.setItem("productId", JSON.stringify(++productLastId));
     localStorage.setItem("product", JSON.stringify(productData));
     console.log(productData);
-    res.status(201).json("Product Created SuccesFully");
+    res.status(201).json({message: "Product added successfully" });
   } catch (err) {
     console.error("error in adding product", err);
     res.status(400).json({ message: "Error in adding product" });

@@ -1,9 +1,9 @@
-
 // latest code
 const form = document.getElementById("create-form");
+const getToken = localStorage.getItem("token");
 
 // Adding Product
-form.addEventListener("submit", async(e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const title = document.getElementById("title");
@@ -30,16 +30,24 @@ form.addEventListener("submit", async(e) => {
         method: "POST",
         headers: {
           "Content-type": "application/json",
+          Authorization: `Bearer ${getToken}`,
         },
         body: JSON.stringify(product),
       },
     );
 
-    response = await response.json();
-    console.log("Server response:", response);
+    const data = await response.json();
+    console.log("Server response:", data);
 
-     window.location.href = 'index.html';
-     alert("Product Created Successfully");
+    window.location.href = "index.html";
+
+    if (response.status === 201) {
+      console.log("Product created successfully");
+      alert(data.message);
+    } else {
+        console.log("Error in creating product");
+      alert(data.error);
+    }
     // handle response as needed
   } catch (err) {
     console.error("Error during fetch:", err);
