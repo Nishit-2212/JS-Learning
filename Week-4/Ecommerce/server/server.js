@@ -14,12 +14,12 @@ const PORT = process.env.port || 3000;
 // :TODO change to specific origin
 app.use(cors({
     origin: "*",
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST','PUT','DELETE'],
     headers : "Content-Type" 
 }));
 
 
-app.use("/api/product",verifyToken,productRoutes);
+app.use("/api/product",productRoutes);
 app.use("/api/user",userRoutes);
 app.use("/api/auth",authRoutes)
 
