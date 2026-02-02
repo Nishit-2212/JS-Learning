@@ -1,20 +1,50 @@
 const tableBody = document.getElementById('tbody');
 
 const authNavbar = document.getElementById('auth-nav');
-const token = localStorage.getItem('token');
+const createProductNav = document.getElementById('create-product-nav')
+const getToken = localStorage.getItem('token');
 
 
 
+const getUserFromToken = async () => {
+
+    if (!getToken) {
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:3000/api/auth/verifyToken",
+            {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${getToken}`,
+                },
+            });
+        const user = await response.json();
+        return user;
+    }
+    catch (Err) {
+        console.log("Error in Get User from Token", Err);
+    }
+
+}
 
 
-
-(async () => {
+const loadProducts = async () => {
 
     const productsData = await fetch("http://localhost:3000/api/product/list")
         .then(res => res.json())
         .catch(error => console.log("Error in fetching products", error))
 
     console.log(productsData);
+
+    let user = await getUserFromToken();
+    // console.log(user)
+
+    let editDeleteBtn = !user || user.role == 'user'
+        ? ` ` : `  <button class="edit" id="editButton"> Edit </button>
+                    <button class="delete id="deleteButton"> Delete </button>`;
 
 
     productsData.map((da) => {
@@ -42,22 +72,63 @@ const token = localStorage.getItem('token');
                 </td>
                 <td>
                     <button class="addToCart"> Add To Cart </button>
-                    <button class="edit" id="editButton"> Edit </button>
-                    <button class="delete id="deleteButton"> Delete </button>
+                    ${editDeleteBtn}
                 </td>
             `
         tableBody.appendChild(row);
     }
     )
 
+}
 
-    if(token) {
+
+(async () => {
+
+    await loadProducts();
+
+
+    if (getToken) {
+        checkAdmin();
         authNavbar.innerHTML = `
             <span> Welcome !!!!! </span>
             <a class="nav-link" onclick=logout()>Log Out</a>
         `
     }
+
 })();
+
+
+const checkAdmin = async () => {
+
+    try {
+        const response = await fetch("http://localhost:3000/api/auth/verifyToken",
+            {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${getToken}`,
+                },
+            });
+        const user = await response.json();
+
+
+        console.log("get status and role", response.status, user.role);
+
+        if (response.status != 200 || user.role == 'user') {
+            createProductNav.innerHTML = ``
+            return;
+        }
+
+        createProductNav.innerHTML = `
+        <a class="nav-link" href="create-product.html">Add Product</a>
+        <a class="nav-link" href="create-category.html">Add Category</a>
+        `
+
+    }
+    catch (err) {
+        console.log("Error in verify token", err);
+    }
+}
 
 
 const logout = () => {
@@ -69,7 +140,7 @@ const logout = () => {
 
 
 
-document.addEventListener('click', async(event) => {
+document.addEventListener('click', async (event) => {
 
     if (event.target.classList.contains('edit')) {
         const row = event.target.closest('tr');
@@ -89,7 +160,7 @@ document.addEventListener('click', async(event) => {
             method: 'DELETE',
         })
             .then(res => res.json())
-            .catch(error => console.log("Error in deleting product", error));   
+            .catch(error => console.log("Error in deleting product", error));
 
         console.log(response.message);
 

@@ -2,6 +2,39 @@
 const form = document.getElementById("create-form");
 const getToken = localStorage.getItem("token");
 
+
+
+(async () => {
+
+  if (!getToken) {
+    window.location.href = 'login.html';
+  }
+
+  try {
+    const response = await fetch("http://localhost:3000/api/auth/verifyToken",
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${getToken}`,
+        },
+      });
+    const user = await response.json();
+
+
+    console.log("get status and role", response.status, user.role);
+
+    if (response.status != 200 || user.role == 'user') {
+      window.location.href = 'login.html';
+    }
+  }
+  catch (err) {
+    console.log("Error in verify token", err);
+  }
+
+})();
+
+
 // Adding Product
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -45,7 +78,7 @@ form.addEventListener("submit", async (e) => {
       console.log("Product created successfully");
       alert(data.message);
     } else {
-        console.log("Error in creating product");
+      console.log("Error in creating product");
       alert(data.error);
     }
     // handle response as needed

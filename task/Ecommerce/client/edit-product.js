@@ -5,6 +5,8 @@ const priceInput = document.getElementById("price");
 const stockInput = document.getElementById("stock");
 const imageUrlInput = document.getElementById("imageUrl");
 
+const getToken = localStorage.getItem('token');
+
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("productId");
 
@@ -24,6 +26,33 @@ const productId = params.get("productId");
     stockInput.value = product.stock;
     imageUrlInput.value = product.images || '';
   }
+
+  if (!getToken) {
+    window.location.href = 'login.html';
+  }
+
+  try {
+    const response = await fetch("http://localhost:3000/api/auth/verifyToken",
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${getToken}`,
+        },
+      });
+    const user = await response.json();
+
+
+    console.log("get status and role", response.status, user.role);
+
+    if (response.status != 200 || user.role == 'user') {
+      window.location.href = 'login.html';
+    }
+  }
+  catch (err) {
+    console.log("Error in verify token", err);
+  }
+
 })();
 
 const form = document.getElementById("edit-form");
