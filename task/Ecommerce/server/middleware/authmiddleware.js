@@ -19,7 +19,7 @@ const verifyToken = (req,res,next) => {
 
     try {
         const getData = jwt.verify(token,secretKey);
-        req.email = getData.email;
+        req.user =  getData;
         console.log(getData);
         next();
     }
@@ -29,7 +29,6 @@ const verifyToken = (req,res,next) => {
 
 }
 
-//:TO-DO add adminmiddleware
 
 
 module.exports = { verifyToken }

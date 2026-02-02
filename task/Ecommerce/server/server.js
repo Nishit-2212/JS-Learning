@@ -4,7 +4,6 @@ const cors = require('cors');
 const productRoutes = require('./routes/productRoute');
 const userRoutes = require("./routes/userRoute");
 const authRoutes = require("./routes/authRoute")
-const {verifyToken} = require("./middleware/authmiddleware")
 
 const app = express();
 app.use(express.json())

@@ -70,5 +70,12 @@
     "password": "$2b$10$afYIKI5iX/gB0IZ6IGAAfepP6lylyiNeu2XRa67ngPKGI.GcrYiKy",
     "role": "user",
     "id": 12
+  },
+  {
+    "username": "2",
+    "email": "2@gmail.com",
+    "password": "$2b$10$Tv8rutoqk4yTyPF4fuzoEOOtX4ukdnwUapoVUiaIRFSq0O1d8qaPe",
+    "role": "admin",
+    "id": 13
   }
 ]

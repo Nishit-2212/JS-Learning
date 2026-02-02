@@ -1,11 +1,14 @@
 const tableBody = document.getElementById('tbody');
 
+const authNavbar = document.getElementById('auth-nav');
+const token = localStorage.getItem('token');
 
 
 
 
 
-const renderData = async () => {
+
+(async () => {
 
     const productsData = await fetch("http://localhost:3000/api/product/list")
         .then(res => res.json())
@@ -47,18 +50,26 @@ const renderData = async () => {
     }
     )
 
+
+    if(token) {
+        authNavbar.innerHTML = `
+            <span> Welcome !!!!! </span>
+            <a class="nav-link" onclick=logout()>Log Out</a>
+        `
+    }
+})();
+
+
+const logout = () => {
+
+    localStorage.removeItem('token');
+    window.location.reload();
+
 }
 
 
-renderData()
 
-
-
-
-
-
-
-document.addEventListener('click', async function(event) {
+document.addEventListener('click', async(event) => {
 
     if (event.target.classList.contains('edit')) {
         const row = event.target.closest('tr');
