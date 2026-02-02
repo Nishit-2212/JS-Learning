@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <h1>Create Product</h1>
+    <h1 id="form-title">Create Product</h1>
     <form id="create-form">
 
         <label for="product-title">Product Title:</label>
@@ -21,7 +21,9 @@
         <br>
 
         <label for="product-category">Category:</label>
-        <input type="text" id="category" name="category" required>
+        <select id="category" name="category" required>
+            <option value="">Select a category</option>
+        </select>
         <br>
 
         <label for="product-price">Product Price:</label>
@@ -40,7 +42,9 @@
         <br>
         <br>
 
-        <button type="submit">Create Product</button>
+        <div id="btn">
+        <button onclick="createProduct()">Create Product</button>
+        </div>
     </form>
 
     <script src="create-product.js"></script>

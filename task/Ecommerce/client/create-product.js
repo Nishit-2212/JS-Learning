@@ -1,39 +1,152 @@
-// latest code
+const titleInput = document.getElementById("title");
+const descriptionInput = document.getElementById("description");
+const categoryInput = document.getElementById("category");
+const priceInput = document.getElementById("price");
+const stockInput = document.getElementById("stock");
+const imageUrlInput = document.getElementById("imageUrl");
+
 const form = document.getElementById("create-form");
 const getToken = localStorage.getItem("token");
 
-
-
-(async () => {
-
+const securePage = async () => {
   if (!getToken) {
-    window.location.href = 'login.html';
+    window.location.href = "login.html";
   }
 
   try {
-    const response = await fetch("http://localhost:3000/api/auth/verifyToken",
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${getToken}`,
-        },
-      });
+    const response = await fetch("http://localhost:3000/api/auth/verifyToken", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${getToken}`,
+      },
+    });
     const user = await response.json();
-
 
     console.log("get status and role", response.status, user.role);
 
-    if (response.status != 200 || user.role == 'user') {
-      window.location.href = 'login.html';
+    if (response.status != 200 || user.role == "user") {
+      window.location.href = "login.html";
     }
-  }
-  catch (err) {
+  } catch (err) {
     console.log("Error in verify token", err);
   }
+};
 
+const fetchCategories = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/api/category", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${getToken}`,
+      },
+    });
+    const categories = await response.json();
+    console.log("categories:", categories);
+    const categorySelect = document.getElementById("category");
+    categories.forEach((category) => {
+      const option = document.createElement("option");
+      option.value = category.name;
+      option.textContent = category.name;
+      categorySelect.appendChild(option);
+    });
+  } catch (err) {
+    console.log("Error fetching categories:", err);
+  }
+};
+
+const changeSettings = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("productId");
+
+  if (!productId) {
+    return;
+  }
+
+  const formTitle = document.getElementById("form-title");
+  formTitle.value = "Edit Product";
+
+  const button = document.getElementById("btn");
+  button.innerHTML = `<button onclick="updateProduct()">Update Product</button>`;
+
+  const product = await fetch(`http://localhost:3000/api/product/${productId}`)
+    .then((res) => res.json())
+    .catch((error) => console.log("Error in fetching product by ID", error));
+
+  console.log(product);
+  titleInput.value = product.title;
+  descriptionInput.value = product.description;
+  categoryInput.value = product.category;
+  priceInput.value = product.price;
+  stockInput.value = product.stock;
+  imageUrlInput.value = product.imageUrl || '';
+};
+
+(async () => {
+  await securePage();
+  await fetchCategories();
+  await changeSettings();
 })();
 
+const updateProduct = async () => {
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("productId");
+
+  const titleInput = document.getElementById("title");
+  const descriptionInput = document.getElementById("description");
+  const categoryInput = document.getElementById("category");
+  const priceInput = document.getElementById("price");
+  const stockInput = document.getElementById("stock");
+  const imageUrlInput = document.getElementById("imageUrl");
+
+  const updatedProduct = {
+    id: Number(productId),
+    title: titleInput.value,
+    description: descriptionInput.value,
+    category: categoryInput.value,
+    price: priceInput.value,
+    stock: stockInput.value,
+    images: imageUrlInput.value,
+  };
+
+  try {
+    const updateResponse = await fetch(
+      "http://localhost:3000/api/product/update-product",
+      {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(updatedProduct),
+      },
+    )
+      .then((res) => res.json())
+      .catch((error) => console.log("Error in updating product", error));
+
+    console.log(updateResponse);
+
+    window.location.href = "index.html";
+    alert(updateResponse.message);
+    return;
+  } catch (err) {
+    console.log("Error in updating product", err);
+  }
+};
+
+const setImageCategoryWise = (category) => {
+  if (category.toLowerCase() === "beauty") {
+    return "https://plus.unsplash.com/premium_photo-1661769021743-7139c6fc4ab9?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXR5JTIwcHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D";
+  } else if (category.toLowerCase() === "fragrances") {
+    return "https://pebblely.com/ideas/perfume/black-white.jpg";
+  } else if (category.toLowerCase() === "furniture") {
+    return "https://img.freepik.com/free-psd/elegant-armchair-coffee-table-set-modern-comfort-style_191095-80516.jpg?semt=ais_hybrid&w=740&q=80";
+  } else if (category.toLowerCase() === "groceries") {
+    return "https://www.shutterstock.com/image-photo/indoor-photo-passover-products-shopping-260nw-2600073841.jpg";
+  } else {
+    return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdINGRnkX6PiG3W8O4DvHFUO5Z0nSPXmfVWg&s";
+  }
+};
 
 // Adding Product
 form.addEventListener("submit", async (e) => {
@@ -45,6 +158,15 @@ form.addEventListener("submit", async (e) => {
   const price = document.getElementById("price");
   const stock = document.getElementById("stock");
   const imageUrl = document.getElementById("imageUrl");
+
+  if (price.value <= 0 || stock.value <= 0) {
+    alert("Price and Stock must be Positive Values");
+    return;
+  }
+
+  if (imageUrl.value.trim() === "") {
+    imageUrl.value = setImageCategoryWise(category.value);
+  }
 
   const product = {
     title: title.value,
