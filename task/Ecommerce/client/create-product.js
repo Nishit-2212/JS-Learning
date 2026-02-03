@@ -6,27 +6,25 @@ const stockInput = document.getElementById("stock");
 const imageUrlInput = document.getElementById("imageUrl");
 
 const form = document.getElementById("create-form");
-const getToken = localStorage.getItem("token");
 
 const securePage = async () => {
-  if (!getToken) {
-    window.location.href = "login.html";
-  }
-
   try {
     const response = await fetch("http://localhost:3000/api/auth/verifyToken", {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${getToken}`,
       },
     });
+
+    if (response.status == 404 || response.status == 401) {
+      window.location.href = "login.html";
+      return;
+    }
     const user = await response.json();
 
-    console.log("get status and role", response.status, user.role);
-
-    if (response.status != 200 || user.role == "user") {
-      window.location.href = "login.html";
+    if (user.role == 'user') {
+      return
     }
   } catch (err) {
     console.log("Error in verify token", err);
@@ -39,7 +37,6 @@ const fetchCategories = async () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${getToken}`,
       },
     });
     const categories = await response.json();
@@ -121,6 +118,7 @@ const updateProduct = async () => {
       "http://localhost:3000/api/product/update-product",
       {
         method: "PUT",
+        credentials : "include",
         headers: {
           "Content-type": "application/json",
         },
@@ -197,9 +195,9 @@ form.addEventListener("submit", async (e) => {
       "http://localhost:3000/api/product/create-product",
       {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${getToken}`,
         },
         body: JSON.stringify(product),
       },

@@ -2,39 +2,38 @@ const tableBody = document.getElementById("tbody");
 
 const authNavbar = document.getElementById("auth-nav");
 const createProductNav = document.getElementById("create-product-nav");
-const getToken = localStorage.getItem("token");
+
+
 
 const getUserFromToken = async () => {
-  if (!getToken) {
-    return;
-  }
-
   try {
     const response = await fetch("http://localhost:3000/api/auth/verifyToken", {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${getToken}`,
       },
     });
+
+    if (response.status == 404 || response.status == 400) {
+      console.log("status code 404")
+      return null
+    }
     const user = await response.json();
     return user;
+
   } catch (Err) {
     console.log("Error in Get User from Token", Err);
   }
 };
 
-const loadProducts = async () => {
+const loadProducts = async (user) => {
 
   try {
     const productsData = await fetch("http://localhost:3000/api/product/list")
       .then((res) => res.json())
-      .catch((error) => console.log("Error in fetching products", error));
 
     console.log(productsData);
-
-    let user = await getUserFromToken();
-    // console.log(user)
 
     let editDeleteBtn =
       !user || user.role == "user"
@@ -75,36 +74,35 @@ const loadProducts = async () => {
   catch (err) {
     console.log("Error in fetching the product", err)
   }
-
-
 };
 
-(async () => {
-  await loadProducts();
 
-  if (getToken) {
-    checkAdmin();
-    authNavbar.innerHTML = `
+
+(async () => {
+  
+  const user = await getUserFromToken();
+  await loadProducts(user);
+  // console.log(user)
+  
+  if (!user) {
+    return;
+  }
+  checkAdmin(user);
+  authNavbar.innerHTML = `
             <span> Welcome !!!!! </span>
             <a class="nav-link" onclick=logout()>Log Out</a>
         `;
-  }
+
 })();
 
-const checkAdmin = async () => {
+const checkAdmin = async (user) => {
   try {
-    const response = await fetch("http://localhost:3000/api/auth/verifyToken", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${getToken}`,
-      },
-    });
-    const user = await response.json();
+  
+    // console.log("get status and role", response.status, user.role);
 
-    console.log("get status and role", response.status, user.role);
+    console.log(user)
 
-    if (response.status != 200 || user.role == "user") {
+    if (user.role == "user") {
       createProductNav.innerHTML = ``;
       return;
     }
@@ -119,7 +117,11 @@ const checkAdmin = async () => {
 };
 
 const logout = () => {
-  localStorage.removeItem("token");
+  const response = fetch("http://localhost:3000/api/auth/logout", {
+    credentials: "include",
+  });
+
+  console.log("logOut sucessfully", response)
   window.location.reload();
 };
 
@@ -141,6 +143,7 @@ document.addEventListener("click", async (event) => {
       const response = await fetch(
         `http://localhost:3000/api/product/${productId}`,
         {
+          credentials : "include",
           method: "DELETE",
         },
       )

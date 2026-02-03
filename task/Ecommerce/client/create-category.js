@@ -1,4 +1,3 @@
-const getToken = localStorage.getItem('token');
 const form = document.getElementById("edit-form");
 
 form.addEventListener("submit", async (e) => {
@@ -18,9 +17,9 @@ form.addEventListener("submit", async (e) => {
     try {
         const response = await fetch("http://localhost:3000/api/category/create-category", {
             method: "POST",
+            credentials : "include",
             headers: {
                 "Content-type": "application/json",
-                Authorization: `Bearer ${getToken}`
             },
             body: JSON.stringify(categoryObject),
         });

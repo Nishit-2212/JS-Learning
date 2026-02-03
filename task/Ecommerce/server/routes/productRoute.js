@@ -12,8 +12,8 @@ router.get('/list',fetchProduct);
 router.get('/:id', getProductById);
 
 
-router.put('/update-product', updateProduct)
-router.delete('/:id', deleteProduct)
+router.put('/update-product',verifyToken,adminMiddleware, updateProduct)
+router.delete('/:id',verifyToken,adminMiddleware, deleteProduct)
 
 
 module.exports = router;

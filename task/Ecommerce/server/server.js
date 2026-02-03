@@ -5,17 +5,21 @@ const productRoutes = require('./routes/productRoute');
 const userRoutes = require("./routes/userRoute");
 const authRoutes = require("./routes/authRoute")
 const categoryRoutes = require('./routes/categoryRoute');
+const cookieParser = require('cookie-parser')
 
 
 const app = express();
 app.use(express.json())
+app.use(cookieParser())
 
 const PORT = process.env.port || 3000;
+const allowOrigin = process.env.ALLOW_ORIGIN || "*";
 
 app.use(cors({
-    origin: "*",
+    origin: [allowOrigin],
+    credentials: true,
     methods: ['GET', 'POST','PUT','DELETE'],
-    headers : "Content-Type,Authorization" 
+    headers : ["Content-Type" ,"Authorization"] 
 }));
 
 

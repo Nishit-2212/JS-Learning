@@ -54,6 +54,16 @@ const checkLogin = async (req, res) => {
     }
     const token = generateToken(getUserData);
 
+    res.cookie('accessToken',token,{
+        httpOnly : true,
+        sameSite: "None",
+        secure : true,
+        maxAge : 30 * 60 * 1000, //30 min
+        path : "/"
+    });
+
+    // console.log(res)
+
     return res.status(200).json({
         message: "Login sucessful",
         token: token
@@ -64,14 +74,13 @@ const checkLogin = async (req, res) => {
 
 
 
-const getDataFromToken = async (req, res) => {
+const getDataFromToken =  (req, res) => {
 
-    const authHeader = req.header('Authorization');
-    const token = authHeader.split(' ')[1];
+    const token = req.cookies.accessToken || null;
 
-    if (token == 'null' || token == undefined) {
+    if (token === null || token === undefined) {
         console.log("Token not found");
-        return res.status(401).json({ error: "Token not found" });
+        return res.status(404).json({message:"Token not found"})
     }
 
     console.log(token)
@@ -91,9 +100,26 @@ const getDataFromToken = async (req, res) => {
 }
 
 
+const logOut = (req,res) => {
+
+    console.log("Inner Logout");
+    
+
+    res.clearCookie('accessToken',{
+        httpOnly : true,
+        sameSite: "None",
+        secure : true,
+        path : "/"
+    });
+
+    res.status(200).json({message:"Clear Cookie SuccessFully"})
+
+}
 
 
 
 
 
-module.exports = { checkLogin, getDataFromToken }
+
+
+module.exports = { checkLogin, getDataFromToken, logOut }
