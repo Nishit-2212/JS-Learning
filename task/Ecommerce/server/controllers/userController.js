@@ -29,10 +29,10 @@ const createUser = async (req, res) => {
     localStorage.setItem("userId", JSON.stringify(++userLastId));
 
     console.log(userData);
-    res.status(201).json({ message: "User is Created succesfully" });
+    return res.status(201).json({ message: "User is Created succesfully" });
   } catch (err) {
     console.log("Error in createUser:-", err);
-    res.status(400).json({ message: "User is not created" });
+    return res.status(400).json({ message: "User is not created" });
   }
 };
 

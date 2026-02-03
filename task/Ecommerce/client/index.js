@@ -25,24 +25,26 @@ const getUserFromToken = async () => {
 };
 
 const loadProducts = async () => {
-  const productsData = await fetch("http://localhost:3000/api/product/list")
-    .then((res) => res.json())
-    .catch((error) => console.log("Error in fetching products", error));
 
-  console.log(productsData);
+  try {
+    const productsData = await fetch("http://localhost:3000/api/product/list")
+      .then((res) => res.json())
+      .catch((error) => console.log("Error in fetching products", error));
 
-  let user = await getUserFromToken();
-  // console.log(user)
+    console.log(productsData);
 
-  let editDeleteBtn =
-    !user || user.role == "user"
-      ? ` `
-      : `  <button class="edit" id="editButton"> Edit </button>
+    let user = await getUserFromToken();
+    // console.log(user)
+
+    let editDeleteBtn =
+      !user || user.role == "user"
+        ? ` `
+        : `  <button class="edit" id="editButton"> Edit </button>
                     <button class="delete id="deleteButton"> Delete </button>`;
 
-  productsData.map((da) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
+    productsData.map((da) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
                 <td style="display: none;">${da.id}</td>   
                 <td>
                     ${da.title}
@@ -67,8 +69,14 @@ const loadProducts = async () => {
                     ${editDeleteBtn}
                 </td>
             `;
-    tableBody.appendChild(row);
-  });
+      tableBody.appendChild(row);
+    });
+  }
+  catch (err) {
+    console.log("Error in fetching the product", err)
+  }
+
+
 };
 
 (async () => {
@@ -129,18 +137,23 @@ document.addEventListener("click", async (event) => {
     const productId = row.children[0].innerText;
     // console.log(productId);
 
-    const response = await fetch(
-      `http://localhost:3000/api/product/${productId}`,
-      {
-        method: "DELETE",
-      },
-    )
-      .then((res) => res.json())
-      .catch((error) => console.log("Error in deleting product", error));
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/product/${productId}`,
+        {
+          method: "DELETE",
+        },
+      )
+        .then((res) => res.json())
+        .catch((error) => console.log("Error in deleting product", error));
 
-    console.log(response.message);
+      console.log(response.message);
 
-    location.reload();
-    alert(response.message);
+      location.reload();
+      alert(response.message);
+    }
+    catch (err) {
+      console.log("Error in deleting the product", err)
+    }
   }
 });

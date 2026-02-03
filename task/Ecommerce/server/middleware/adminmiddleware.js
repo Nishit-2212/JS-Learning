@@ -9,7 +9,7 @@ const adminMiddleware = (req,res,next) => {
         next();
     }
 
-    res.status(401).json({error:"You are not admin"})
+    return res.status(401).json({error:"You are not admin"})
 }
 
 

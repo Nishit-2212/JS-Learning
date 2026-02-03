@@ -65,22 +65,28 @@ const changeSettings = async () => {
   }
 
   const formTitle = document.getElementById("form-title");
-  formTitle.value = "Edit Product";
+  formTitle.textContent = "Edit Product";
 
   const button = document.getElementById("btn");
   button.innerHTML = `<button onclick="updateProduct()">Update Product</button>`;
 
-  const product = await fetch(`http://localhost:3000/api/product/${productId}`)
-    .then((res) => res.json())
-    .catch((error) => console.log("Error in fetching product by ID", error));
+  try {
+    const product = await fetch(`http://localhost:3000/api/product/${productId}`)
+      .then((res) => res.json())
 
-  console.log(product);
-  titleInput.value = product.title;
-  descriptionInput.value = product.description;
-  categoryInput.value = product.category;
-  priceInput.value = product.price;
-  stockInput.value = product.stock;
-  imageUrlInput.value = product.imageUrl || '';
+    console.log(product);
+    titleInput.value = product.title;
+    descriptionInput.value = product.description;
+    categoryInput.value = product.category;
+    priceInput.value = product.price;
+    stockInput.value = product.stock;
+    imageUrlInput.value = product.imageUrl || '';
+  }
+  catch (err) {
+    console.log("Error in fetching the product by id", err)
+  }
+
+
 };
 
 (async () => {
@@ -107,7 +113,7 @@ const updateProduct = async () => {
     category: categoryInput.value,
     price: priceInput.value,
     stock: stockInput.value,
-    images: imageUrlInput.value,
+    imageUrl: imageUrlInput.value,
   };
 
   try {
@@ -122,7 +128,6 @@ const updateProduct = async () => {
       },
     )
       .then((res) => res.json())
-      .catch((error) => console.log("Error in updating product", error));
 
     console.log(updateResponse);
 
@@ -135,22 +140,31 @@ const updateProduct = async () => {
 };
 
 const setImageCategoryWise = (category) => {
-  if (category.toLowerCase() === "beauty") {
-    return "https://plus.unsplash.com/premium_photo-1661769021743-7139c6fc4ab9?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXR5JTIwcHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D";
-  } else if (category.toLowerCase() === "fragrances") {
-    return "https://pebblely.com/ideas/perfume/black-white.jpg";
-  } else if (category.toLowerCase() === "furniture") {
-    return "https://img.freepik.com/free-psd/elegant-armchair-coffee-table-set-modern-comfort-style_191095-80516.jpg?semt=ais_hybrid&w=740&q=80";
-  } else if (category.toLowerCase() === "groceries") {
-    return "https://www.shutterstock.com/image-photo/indoor-photo-passover-products-shopping-260nw-2600073841.jpg";
-  } else {
-    return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdINGRnkX6PiG3W8O4DvHFUO5Z0nSPXmfVWg&s";
+
+  switch (category.toLowerCase()) {
+    case "beauty":
+      return "https://plus.unsplash.com/premium_photo-1661769021743-7139c6fc4ab9?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXR5JTIwcHJvZHVjdHxlbnwwfHwwfHx8MA%3D%3D";
+    case "fragrances":
+      return "https://pebblely.com/ideas/perfume/black-white.jpg";
+    case "furniture":
+      return "https://img.freepik.com/free-psd/elegant-armchair-coffee-table-set-modern-comfort-style_191095-80516.jpg?semt=ais_hybrid&w=740&q=80";
+    case "groceries":
+      return "https://www.shutterstock.com/image-photo/indoor-photo-passover-products-shopping-260nw-2600073841.jpg";
+    default:
+      return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdINGRnkX6PiG3W8O4DvHFUO5Z0nSPXmfVWg&s";
   }
 };
 
 // Adding Product
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  const checkBtn = document.getElementById('submitBtn').value;
+  console.log(checkBtn);
+
+  if (checkBtn !== 'createProduct') {
+    return;
+  }
 
   const title = document.getElementById("title");
   const description = document.getElementById("description");
@@ -203,7 +217,6 @@ form.addEventListener("submit", async (e) => {
       console.log("Error in creating product");
       alert(data.error);
     }
-    // handle response as needed
   } catch (err) {
     console.error("Error during fetch:", err);
   }

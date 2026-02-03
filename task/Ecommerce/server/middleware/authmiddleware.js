@@ -10,7 +10,7 @@ const verifyToken = (req,res,next) => {
     
     if(token == 'null' || token == undefined) {
         console.log("Token not found");
-        res.status(401).json({error:"Access Denied"});
+        return res.status(401).json({error:"Access Denied"});
     }
     console.log(token)
     let secretKey = process.env.SECRET_KEY;
@@ -24,7 +24,7 @@ const verifyToken = (req,res,next) => {
         next();
     }
     catch(err) {
-        res.status(400).json({error:"Token Invalid"});
+        return res.status(400).json({error:"Token Invalid"});
     }
 
 }

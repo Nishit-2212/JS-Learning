@@ -14,10 +14,10 @@ const addCategory = (req, res) => {
         localStorage.setItem("categoryId", JSON.stringify(++CategoryLastId));
         localStorage.setItem("category", JSON.stringify(Category));
         // console.log(Category);
-        res.status(201).json({ message: "Category added successfully" });
+        return res.status(201).json({ message: "Category added successfully" });
     } catch (err) {
         console.error("error in adding category", err);
-        res.status(400).json({ message: "Error in adding category" });
+        return res.status(400).json({ message: "Error in adding category" });
     }
 }
 
