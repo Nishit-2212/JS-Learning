@@ -115,16 +115,6 @@ const getDataFromToken = (req, res) => {
         return res.status(200).send(getData);
     }
     catch (err) {
-        //creating the access new token if access token is expire
-        // const token = generateAccessToken(getUserData);
-        // res.cookie('accessToken', token, {
-        //     httpOnly: true,
-        //     sameSite: "None",
-        //     secure: true,
-        //     maxAge: 1 * 24 * 60 * 60 * 1000, //1 Day
-        //     path: "/"
-        // });
-
         return res.status(400).json({ error: "Token Invalid" });
     }
 

@@ -53,6 +53,8 @@ const securePage = async () => {
     const user = await response.json();
 
     if (user.role == 'user') {
+      window.location.href = "index.html";
+      alert("Sorry you can't access this site");
       return
     }
   } catch (err) {
@@ -111,8 +113,6 @@ const changeSettings = async () => {
   catch (err) {
     console.log("Error in fetching the product by id", err)
   }
-
-
 };
 
 (async () => {
