@@ -20,7 +20,6 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
 
         if (response.status === 200) {
-            localStorage.setItem('token', getLoginResponse.token);
             console.log("Inner login status code 200");
             window.location.href = 'index.html';
         }

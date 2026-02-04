@@ -3,7 +3,7 @@ const form = document.getElementById("edit-form");
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const category = document.getElementById('category').value;
+    const category = document.getElementById('category').value.trim();
 
     if (!category) {
         alert("Please Enter a category");
@@ -31,9 +31,11 @@ form.addEventListener("submit", async (e) => {
         if (response.status === 201) {
             console.log("Category Added successfully");
             alert(data.message);
+            return;
         } else {
             console.log("Error in creating category");
-            alert(data.error);
+            alert(data.message);
+            return;
         }
     }
     catch (err) {

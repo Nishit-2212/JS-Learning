@@ -7,18 +7,31 @@ let localStorage = new LocalStorage('./models')
 
 let userData = JSON.parse(localStorage.getItem("user")) || [];
 
+const generateRefreshToken = (UserId) => {
+    try {
+        const data = {
+            "id": UserId
+        }
+        const secretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
+        const token = jwt.sign(data, secretKey, { expiresIn: '1d' });
+        return token;
+    }
+    catch (Err) {
+        console.log("Error in Generating RefreshToken", Err)
+    }
+}
 
-
-const generateToken = (loginData) => {
+const generateAccessToken = (loginData) => {
     try {
         console.log("inside generate token logindata", loginData.email)
         const data = {
+            "id": loginData.id,
             "email": loginData.email,
             "role": loginData.role
         }
         console.log("role in generateTOken", loginData.role);
-        const secretKey = process.env.SECRET_KEY;
-        const token = jwt.sign(data, secretKey, { expiresIn: '1h' });
+        const secretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
+        const token = jwt.sign(data, secretKey, { expiresIn: '15s' });
 
         return token;
     }
@@ -52,21 +65,29 @@ const checkLogin = async (req, res) => {
     if (!passwordMatched) {
         return res.status(400).json({ message: "password is incorrect" })
     }
-    const token = generateToken(getUserData);
+    const token = generateAccessToken(getUserData);
+    const RefreshToken = generateRefreshToken(getUserData.id);
 
-    res.cookie('accessToken',token,{
-        httpOnly : true,
+    res.cookie('refreshToken', RefreshToken, {
+        httpOnly: true,
         sameSite: "None",
-        secure : true,
-        maxAge : 30 * 60 * 1000, //30 min
-        path : "/"
+        secure: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, //7 Day
+        path: "/"
+    });
+
+    res.cookie('accessToken', token, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+        maxAge: 1 * 24 * 60 * 60 * 1000, //1 Day
+        path: "/"
     });
 
     // console.log(res)
 
     return res.status(200).json({
-        message: "Login sucessful",
-        token: token
+        message: "Login sucessful"
     })
 }
 
@@ -74,45 +95,127 @@ const checkLogin = async (req, res) => {
 
 
 
-const getDataFromToken =  (req, res) => {
+const getDataFromToken = (req, res) => {
 
     const token = req.cookies.accessToken || null;
+    const refreshToken = req.cookies.refreshToken || null;
 
-    if (token === null || token === undefined) {
+    if (!token || !refreshToken) {
         console.log("Token not found");
-        return res.status(404).json({message:"Token not found"})
+        return res.status(401).json({ message: "Token not found" })
     }
 
     console.log(token)
-    let secretKey = process.env.SECRET_KEY;
+    let secretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
 
     try {
         const getData = jwt.verify(token, secretKey);
-        req.user = getData;
+        // req.user = getData;
         console.log(getData);
         return res.status(200).send(getData);
-        
     }
     catch (err) {
+        //creating the access new token if access token is expire
+        // const token = generateAccessToken(getUserData);
+        // res.cookie('accessToken', token, {
+        //     httpOnly: true,
+        //     sameSite: "None",
+        //     secure: true,
+        //     maxAge: 1 * 24 * 60 * 60 * 1000, //1 Day
+        //     path: "/"
+        // });
+
         return res.status(400).json({ error: "Token Invalid" });
     }
 
 }
 
 
-const logOut = (req,res) => {
+const getUserFromRefreshToken = (token) => {
+
+    const secretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
+
+    try {
+        const decryptToken = jwt.verify(token, secretKey);
+        console.log("User Id from refresh token", decryptToken.id)
+        const user = userData.find((user) => user.id == decryptToken.id);
+
+        if (user == undefined) {
+            console.log("User not Found")
+            return null;
+        }
+        return user;
+    }
+    catch (Err) {
+        console.log("Error in geting data from refreshToken", Err)
+    }
+}
+
+
+const generateTokenFromRefreshToken = (req, res) => {
+
+    const refreshToken = req.cookies.refreshToken || null;
+    console.log("Inner generateTokenFromRefreshToken");
+    if (!refreshToken) {
+        return res.status(400).json({ message: "Refresh Token is not found" });
+    }
+
+    try {
+        const user = getUserFromRefreshToken(refreshToken);
+
+        if (!user) {
+            res.status(400).json({ message: "User not Found" })
+        }
+
+        console.log(user)
+        const newAccessToken = generateAccessToken(user);
+        console.log("New Access Token",newAccessToken);
+
+        res.cookie('accessToken', newAccessToken, {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+            maxAge: 1 * 24 * 60 * 60 * 1000, //1 Day
+            path: "/"
+        });
+
+        console.log("End generateTokenFromRefreshToken");
+        return res.status(200).json({
+            message: "new Access Token generated Succesfully"
+        })
+    }
+    catch (err) {
+        console.log("Error in generating newAccessToken", err)
+        return res.status(400).json({
+            message: "Error in generating new Access token",
+        })
+    }
+
+
+
+}
+
+
+const logOut = (req, res) => {
 
     console.log("Inner Logout");
-    
 
-    res.clearCookie('accessToken',{
-        httpOnly : true,
+
+    res.clearCookie('accessToken', {
+        httpOnly: true,
         sameSite: "None",
-        secure : true,
-        path : "/"
+        secure: true,
+        path: "/"
     });
 
-    res.status(200).json({message:"Clear Cookie SuccessFully"})
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+        path: "/"
+    });
+
+    res.status(200).json({ message: "Clear Cookie SuccessFully" })
 
 }
 
@@ -122,4 +225,4 @@ const logOut = (req,res) => {
 
 
 
-module.exports = { checkLogin, getDataFromToken, logOut }
+module.exports = { checkLogin, getDataFromToken, logOut, generateTokenFromRefreshToken }

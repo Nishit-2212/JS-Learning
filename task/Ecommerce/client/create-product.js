@@ -9,7 +9,8 @@ const form = document.getElementById("create-form");
 
 const securePage = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/auth/verifyToken", {
+
+    let response = await fetch("http://localhost:3000/api/auth/verifyToken", {
       method: "GET",
       credentials: "include",
       headers: {
@@ -17,7 +18,35 @@ const securePage = async () => {
       },
     });
 
-    if (response.status == 404 || response.status == 401) {
+    if (response.status == 401) {
+      console.log("Inner First if")
+      response = await fetch("http://localhost:3000/api/auth/generateToken", {
+        method : "POST",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      console.log("After generateToken Api call");
+      console.log("responce from this ", response);
+
+      if (response.status == 400) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      response = await fetch("http://localhost:3000/api/auth/verifyToken", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+
+
+    }
+
+    if (response.status == 404) {
       window.location.href = "login.html";
       return;
     }
@@ -118,7 +147,7 @@ const updateProduct = async () => {
       "http://localhost:3000/api/product/update-product",
       {
         method: "PUT",
-        credentials : "include",
+        credentials: "include",
         headers: {
           "Content-type": "application/json",
         },
@@ -164,29 +193,29 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  const title = document.getElementById("title");
-  const description = document.getElementById("description");
-  const category = document.getElementById("category");
-  const price = document.getElementById("price");
-  const stock = document.getElementById("stock");
-  const imageUrl = document.getElementById("imageUrl");
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const category = document.getElementById("category").value.trim();
+  const price = document.getElementById("price").value.trim();
+  const stock = document.getElementById("stock").value.trim();
+  let imageUrl = document.getElementById("imageUrl").value.trim();
 
-  if (price.value <= 0 || stock.value <= 0) {
+  if (price <= 0 || stock <= 0) {
     alert("Price and Stock must be Positive Values");
     return;
   }
 
-  if (imageUrl.value.trim() === "") {
-    imageUrl.value = setImageCategoryWise(category.value);
+  if (imageUrl === "") {
+    imageUrl = setImageCategoryWise(category);
   }
 
   const product = {
-    title: title.value,
-    description: description.value,
-    category: category.value,
-    price: price.value,
-    stock: stock.value,
-    imageUrl: imageUrl.value,
+    title: title,
+    description: description,
+    category: category,
+    price: price,
+    stock: stock,
+    imageUrl: imageUrl,
   };
   console.log("Product data:", product);
 

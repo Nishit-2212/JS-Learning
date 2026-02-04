@@ -7,13 +7,41 @@ const createProductNav = document.getElementById("create-product-nav");
 
 const getUserFromToken = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/auth/verifyToken", {
+    let response = await fetch("http://localhost:3000/api/auth/verifyToken", {
       method: "GET",
       credentials: "include",
       headers: {
         "Content-type": "application/json",
       },
     });
+
+    if (response.status == 401) {
+      console.log("Inner First if")
+      response = await fetch("http://localhost:3000/api/auth/generateToken", {
+        method : "POST",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      console.log("After generateToken Api call");
+      console.log("responce from this ", response);
+
+      if (response.status == 400) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      response = await fetch("http://localhost:3000/api/auth/verifyToken", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+
+
+    }
 
     if (response.status == 404 || response.status == 400) {
       console.log("status code 404")
