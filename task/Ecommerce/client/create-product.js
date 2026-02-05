@@ -19,21 +19,18 @@ const securePage = async () => {
     });
 
     if (response.status == 401) {
-      console.log("Inner First if")
       response = await fetch("http://localhost:3000/api/auth/generateToken", {
-        method : "POST",
+        method: "POST",
         credentials: "include",
         headers: {
           "Content-type": "application/json",
         },
       });
-      console.log("After generateToken Api call");
-      console.log("responce from this ", response);
-
       if (response.status == 400) {
         window.location.href = "login.html";
         return;
       }
+      console.log("New Access Token generated");
 
       response = await fetch("http://localhost:3000/api/auth/verifyToken", {
         method: "GET",
@@ -122,6 +119,7 @@ const changeSettings = async () => {
 })();
 
 const updateProduct = async () => {
+  await securePage();
   const params = new URLSearchParams(window.location.search);
   const productId = params.get("productId");
 
@@ -186,6 +184,8 @@ const setImageCategoryWise = (category) => {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  await securePage();
+
   const checkBtn = document.getElementById('submitBtn').value;
   console.log(checkBtn);
 
@@ -237,13 +237,15 @@ form.addEventListener("submit", async (e) => {
 
     window.location.href = "index.html";
 
-    if (response.status === 201) {
-      console.log("Product created successfully");
-      alert(data.message);
-    } else {
-      console.log("Error in creating product");
-      alert(data.error);
-    }
+    // if (response.status === 201) {
+    //   console.log("Product created successfully");
+    //   alert(data.message);
+    // } else {
+    //   console.log("Error in creating product");
+    //   alert(data.error);
+    // }
+
+    response.status === 201 ? alert(data.message) : alert(data.error);
   } catch (err) {
     console.error("Error during fetch:", err);
   }

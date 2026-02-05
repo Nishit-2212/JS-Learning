@@ -13,10 +13,10 @@ app.use(express.json())
 app.use(cookieParser())
 
 const PORT = process.env.port || 3000;
-const allowOrigin = process.env.ALLOW_ORIGIN || "*";
+const ALLOW_ORIGIN = process.env.ALLOW_ORIGIN || "*";
 
 app.use(cors({
-    origin: [allowOrigin],
+    origin: [ALLOW_ORIGIN],
     credentials: true,
     methods: ['GET', 'POST','PUT','DELETE'],
     headers : ["Content-Type" ,"Authorization"] 

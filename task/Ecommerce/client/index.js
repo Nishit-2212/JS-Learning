@@ -15,22 +15,21 @@ const getUserFromToken = async () => {
       },
     });
 
+    console.log(response.status)
+
     if (response.status == 401) {
-      console.log("Inner First if")
       response = await fetch("http://localhost:3000/api/auth/generateToken", {
-        method : "POST",
+        method: "POST",
         credentials: "include",
         headers: {
           "Content-type": "application/json",
         },
       });
-      console.log("After generateToken Api call");
-      console.log("responce from this ", response);
-
       if (response.status == 400) {
         window.location.href = "login.html";
         return;
       }
+      console.log("New Access Token generated");
 
       response = await fetch("http://localhost:3000/api/auth/verifyToken", {
         method: "GET",
@@ -44,8 +43,8 @@ const getUserFromToken = async () => {
     }
 
     if (response.status == 404 || response.status == 400) {
-      console.log("status code 404")
-      return null
+      console.log("status code ", response.status)
+      return null;
     }
     const user = await response.json();
     return user;
@@ -64,10 +63,17 @@ const loadProducts = async (user) => {
     console.log(productsData);
 
     let editDeleteBtn =
-      !user || user.role == "user"
-        ? ` `
+      ((!user) || (user.role == "user"))
+        ? ` <button class="addToCart"> Add To Cart </button> `
         : `  <button class="edit" id="editButton"> Edit </button>
                     <button class="delete id="deleteButton"> Delete </button>`;
+
+
+    if (!user) {
+      const actionBtn = document.getElementById('actionHeader');
+      actionBtn.remove();
+      editDeleteBtn = ` `;
+    }
 
     productsData.map((da) => {
       const row = document.createElement("tr");
@@ -92,7 +98,6 @@ const loadProducts = async (user) => {
                     ${da.stock}
                 </td>
                 <td>
-                    <button class="addToCart"> Add To Cart </button>
                     ${editDeleteBtn}
                 </td>
             `;
@@ -107,17 +112,16 @@ const loadProducts = async (user) => {
 
 
 (async () => {
-  
+
   const user = await getUserFromToken();
   await loadProducts(user);
-  // console.log(user)
-  
+  console.log(user)
   if (!user) {
     return;
   }
   checkAdmin(user);
   authNavbar.innerHTML = `
-            <span> Welcome !!!!! </span>
+            <span> Welcome !!!!! ${user.name} </span>
             <a class="nav-link" onclick=logout()>Log Out</a>
         `;
 
@@ -125,10 +129,6 @@ const loadProducts = async (user) => {
 
 const checkAdmin = async (user) => {
   try {
-  
-    // console.log("get status and role", response.status, user.role);
-
-    console.log(user)
 
     if (user.role == "user") {
       createProductNav.innerHTML = ``;
@@ -151,6 +151,8 @@ const logout = () => {
 
   console.log("logOut sucessfully", response)
   window.location.reload();
+
+  navigate("/index.html", { replace: true });
 };
 
 document.addEventListener("click", async (event) => {
@@ -163,6 +165,7 @@ document.addEventListener("click", async (event) => {
   }
 
   if (event.target.classList.contains("delete")) {
+    await getUserFromToken();
     const row = event.target.closest("tr");
     const productId = row.children[0].innerText;
     // console.log(productId);
@@ -171,7 +174,7 @@ document.addEventListener("click", async (event) => {
       const response = await fetch(
         `http://localhost:3000/api/product/${productId}`,
         {
-          credentials : "include",
+          credentials: "include",
           method: "DELETE",
         },
       )

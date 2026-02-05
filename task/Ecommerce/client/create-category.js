@@ -10,7 +10,6 @@ const securePage = async () => {
         });
 
         if (response.status == 401) {
-            console.log("Inner First if")
             response = await fetch("http://localhost:3000/api/auth/generateToken", {
                 method: "POST",
                 credentials: "include",
@@ -18,13 +17,11 @@ const securePage = async () => {
                     "Content-type": "application/json",
                 },
             });
-            console.log("After generateToken Api call");
-            console.log("responce from this ", response);
-
             if (response.status == 400) {
                 window.location.href = "login.html";
                 return;
             }
+            console.log("New Access Token generated");
 
             response = await fetch("http://localhost:3000/api/auth/verifyToken", {
                 method: "GET",
@@ -42,12 +39,12 @@ const securePage = async () => {
             return;
         }
         const user = await response.json();
-        console.log(user)
         if (user.role == 'user') {
             window.location.href = "index.html";
             alert("Sorry you can't access this site");
-            return
+            return;
         }
+        return;
     } catch (err) {
         console.log("Error in verify token", err);
     }
@@ -64,6 +61,8 @@ const form = document.getElementById("edit-form");
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    await securePage();
+
     const category = document.getElementById('category').value.trim();
 
     if (!category) {
@@ -71,11 +70,11 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
-    const englishOnlyRegex = /^[a-zA-Z]+$/; 
+    const englishOnlyRegex = /^[a-zA-Z]+$/;
 
     const categoryCheck = englishOnlyRegex.test(category);
 
-    if(!categoryCheck) {
+    if (!categoryCheck) {
         alert("Please Enter only Alphabet in Category name");
         return;
     }
@@ -110,7 +109,6 @@ form.addEventListener("submit", async (e) => {
     }
     catch (err) {
         console.log("Error in Adding Category");
-
     }
-});
+});    
 

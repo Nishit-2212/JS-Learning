@@ -27,9 +27,10 @@ const generateAccessToken = (loginData) => {
         const data = {
             "id": loginData.id,
             "email": loginData.email,
-            "role": loginData.role
+            "role": loginData.role,
+            "name" : loginData.username
         }
-        console.log("role in generateTOken", loginData.role);
+        console.log("role in generateTOken", loginData.username);
         const secretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
         const token = jwt.sign(data, secretKey, { expiresIn: '15s' });
 
@@ -137,6 +138,11 @@ const getUserFromRefreshToken = (token) => {
         return user;
     }
     catch (Err) {
+        if(Err.name === "TokenExpiredError") {
+            return null;
+            // console.log("Inner Catch")
+            // return res.status(404).json({error:"Refresh Token Expired"});
+        }
         console.log("Error in geting data from refreshToken", Err)
     }
 }
@@ -154,7 +160,7 @@ const generateTokenFromRefreshToken = (req, res) => {
         const user = getUserFromRefreshToken(refreshToken);
 
         if (!user) {
-            res.status(400).json({ message: "User not Found" })
+            return res.status(400).json({ message: "User not Found" })
         }
 
         console.log(user)
