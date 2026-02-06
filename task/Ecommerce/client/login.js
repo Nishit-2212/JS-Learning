@@ -30,3 +30,39 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     }
 
 });
+
+
+
+const getUserFromToken = async () => {
+  try {
+    let response = await fetch("http://localhost:3000/api/auth/verifyToken", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    console.log(response.status)
+
+    if (response.status == 404 || response.status == 400) {
+      console.log("status code ", response.status)
+      return null;
+    }
+    const user = await response.json();
+    return user;
+
+  } catch (Err) {
+    console.log("Error in Get User from Token", Err);
+  }
+};
+
+
+(async() => {
+
+    const user = await getUserFromToken();
+    if(user) {
+        globalThis.location.href = "index.html";
+        alert("You already Login Please LogOut first to login again")
+    }
+})()

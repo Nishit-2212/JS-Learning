@@ -26,6 +26,13 @@ const addProduct = (req, res) => {
 
 const fetchProduct = (req, res) => {
   try {
+    const page = parseInt(req.params.page) || 1;
+    const limit = 3;
+    // console.log("page and lmit",page,limit)
+    // console.log(req.params.page)
+    const skip = (page-1) * limit;
+    const paginationWiseProduct = productData.slice(skip,(skip+limit))
+    // console.log(paginationWiseProduct)
     console.log("Inner Load Product");
     return res.status(200).json(productData);
   } catch (err) {

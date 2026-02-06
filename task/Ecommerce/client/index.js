@@ -2,7 +2,12 @@ const tableBody = document.getElementById("tbody");
 
 const authNavbar = document.getElementById("auth-nav");
 const createProductNav = document.getElementById("create-product-nav");
+const actionBtn = document.getElementById('actionHeader');
 
+let user;
+
+const limit = 3;
+const page = 10;
 
 
 const getUserFromToken = async () => {
@@ -54,26 +59,41 @@ const getUserFromToken = async () => {
   }
 };
 
-const loadProducts = async (user) => {
+
+
+const loadProducts = async (getPage) => {
+
+  let page = getPage || 1;
 
   try {
-    const productsData = await fetch("http://localhost:3000/api/product/list")
+    const productsData = await fetch(`http://localhost:3000/api/product/list/${getPage}`)
       .then((res) => res.json())
 
+    console.log(page)
     console.log(productsData);
 
-    let editDeleteBtn =
-      ((!user) || (user.role == "user"))
-        ? ` <button class="addToCart"> Add To Cart </button> `
-        : `  <button class="edit" id="editButton"> Edit </button>
+    // let editDeleteBtn =
+    //   ((!user) || (user.role == "user"))
+    //     ? ` <button class="addToCart"> Add To Cart </button> `
+    //     : `  <button class="edit" id="editButton"> Edit </button>
+    //                 <button class="delete id="deleteButton"> Delete </button>`;
+
+
+    actionBtn.style.display = user ? '' : 'none';
+    let editDeleteBtn = ``;
+    if (user) {
+      actionBtn.style.display = '';
+      if (user.role == "user") {
+
+        editDeleteBtn = ` <button class="addToCart"> Add To Cart </button> `;
+      }
+      else {
+        editDeleteBtn = `  <button class="edit" id="editButton"> Edit </button>
                     <button class="delete id="deleteButton"> Delete </button>`;
-
-
-    if (!user) {
-      const actionBtn = document.getElementById('actionHeader');
-      actionBtn.remove();
-      editDeleteBtn = ` `;
+      }
     }
+
+
 
     productsData.map((da) => {
       const row = document.createElement("tr");
@@ -113,21 +133,25 @@ const loadProducts = async (user) => {
 
 (async () => {
 
-  const user = await getUserFromToken();
-  await loadProducts(user);
+  user = await getUserFromToken();
+  await loadProducts();
   console.log(user)
   if (!user) {
+    const actionBtn = document.getElementById('actionHeader');
+    actionBtn.remove();
     return;
   }
-  checkAdmin(user);
+  checkAdmin();
   authNavbar.innerHTML = `
             <span> Welcome !!!!! ${user.name} </span>
             <a class="nav-link" onclick=logout()>Log Out</a>
         `;
-
 })();
 
-const checkAdmin = async (user) => {
+
+
+
+const checkAdmin = async () => {
   try {
 
     if (user.role == "user") {
@@ -144,15 +168,17 @@ const checkAdmin = async (user) => {
   }
 };
 
-const logout = () => {
-  const response = fetch("http://localhost:3000/api/auth/logout", {
+const logout = async () => {
+  await getUserFromToken();
+
+  const response = await fetch("http://localhost:3000/api/auth/logout", {
     credentials: "include",
   });
 
   console.log("logOut sucessfully", response)
   window.location.reload();
 
-  navigate("/index.html", { replace: true });
+  // navigate("/index.html", { replace: true });
 };
 
 document.addEventListener("click", async (event) => {
