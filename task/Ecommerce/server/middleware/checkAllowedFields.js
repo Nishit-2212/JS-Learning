@@ -1,26 +1,28 @@
 const checkAllowedFields = (data = []) => {
-    return ((req, res, next) => {
+  return (req, res, next) => {
+    try {
+      if (!req.body) {
+        return res.status(400).json({ message: "Your Body in null" });
+      }
 
-        if (!req.body) {
-            return res.status(400).json({ message: "Your Body in null" })
-        }
+      const keys = Object.keys(req.body);
 
-        console.log("All body keys")
-        let boolean = true;
-        let i=0;
-        Object.keys(req.body).forEach(key => {
-            console.log(key);
-            if(key != data[i]) {
-                
-            }
-        })
+      const extraFields = keys.filter((key) => !data.includes(key));
 
-        console.log(boolean)
+      if (extraFields.length > 0) {
+        return res
+          .status(400)
+          .json({
+            message: `Extra fields are not allowed: ${extraFields.join(", ")}`,
+          });
+      }
 
-        next();
-    })
-}
+      next();
+    } catch (err) {
+      console.log("Error in checking allowed fields", err);
+      res.status(400).json({ message: "Error in checking allowed fields" });
+    }
+  };
+};
 
-
-
-module.exports = { checkAllowedFields }
+module.exports = { checkAllowedFields };

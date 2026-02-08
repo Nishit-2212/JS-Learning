@@ -1,4 +1,4 @@
-const loginAllowedFields = ["username","email","password"];
+const loginAllowedFields = ["username","email","password","role"];
 
 
 
