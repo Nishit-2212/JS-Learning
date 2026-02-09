@@ -13,7 +13,7 @@ const checkAllowedFields = (data = []) => {
         return res
           .status(400)
           .json({
-            message: `Extra fields are not allowed: ${extraFields.join(", ")}`,
+            message: `Extra fields are not allowed: ${extraFields}}`,
           });
       }
 
