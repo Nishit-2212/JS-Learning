@@ -8,9 +8,21 @@ form.addEventListener("submit", async (e) => {
   const description = document.getElementById("description").value;
   const price = document.getElementById("price").value;
   const stock = document.getElementById("stock").value;
+  
+  console.log(typeof price);
+
+  const filesInput = document.getElementById("photo");
+  const file = filesInput.files;
+
+  console.log(file)
+  const formData = new FormData();
+  formData.append("photo", file)
+
+  
 
 
-  const product = {    title: title,
+  const product = {
+    title: title,
     description: description,
     price: Number(price),
     stock: Number(stock),
@@ -18,15 +30,15 @@ form.addEventListener("submit", async (e) => {
 
   console.log("Product data:", product);
 
-  const response = await fetch("http://localhost:3000/api/product",{
-    method:"POST",
-    headers:{
-      "Content-type":"application/json"
+  const response = await fetch("http://localhost:3000/api/product", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json"
     },
-    body:JSON.stringify(product)
+    body: JSON.stringify(product),
+    image: formData
   })
 
-  console.log(typeof price);
-
+  alert("response",response)
 
 });

@@ -11,7 +11,7 @@ const assertFilesValid = (file) => {
     // for (const file of fileList) {
     console.log('File type', file.type);
     console.log('File Size', file.size);
-    
+
 
     if (!allowedFiles.includes(file.type)) {
         // alert(`Please choose this file format only ${allowedFiles}`);
@@ -34,8 +34,8 @@ const handleSubmit = async (event) => {
     const fileInput = document.getElementById("imag");
     const file = fileInput.files[0];
 
-    try { 
-        assertFilesValid(file) 
+    try {
+        assertFilesValid(file)
     }
     catch (err) {
         alert(err);
@@ -46,9 +46,12 @@ const handleSubmit = async (event) => {
 
     const formData = new FormData();
     formData.append("photo", file);
+    formData.append("name", "jainam");
+    formData.append("id", 2);
 
     console.log(formData)
     console.log("Upload unction");
+
 
 
     try {
@@ -66,7 +69,7 @@ const handleSubmit = async (event) => {
 
 const renderPhoto = () => {
 
-    
+
 
 }
 

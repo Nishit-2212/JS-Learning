@@ -10,6 +10,9 @@ const addProduct = (req, res) => {
   try {
     const getProduct = req.body;
     console.log(getProduct);
+    console.log
+    const getProductImage = req.file;
+    console.log('productImage',getProductImage);
 
     getProduct.id = productLastId++;
 

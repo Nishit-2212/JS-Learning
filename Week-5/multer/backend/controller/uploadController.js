@@ -8,16 +8,16 @@ const uploadImage = (req,res) => {
     console.log('Req.file...',req.file);
     console.log('Res.body....',req.body);
 
+    const user = req.body;
+    user.image = req.file.path;
+
+    console.log(user);
+
     res.send("Sucessfully uploded photo.")
 };
 
-const getPhoto = (req,res) => {
-
-
-
-}
 
 
 
 
-module.exports = {uploadImage, getPhoto};
+module.exports = {uploadImage};
