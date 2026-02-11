@@ -8,10 +8,11 @@ localStorage = new LocalStorage('./data');
 const fethAndStore = async (req, res) => {
 
     try {
-        const data = await fetch("https://jsonplaceholder.typicode.com/posts").then(res => res.json());
+        const data = await fetch("https://jsonplaceholder.typicode.com/posts");
+        const response = await data.json();
 
-        console.log(data);
-        localStorage.setItem('posts', JSON.stringify(data));
+        console.log(response);
+        localStorage.setItem('posts', JSON.stringify(response));
 
         return res.status(200).json({
             message: "Post Store Successfully"
@@ -19,7 +20,7 @@ const fethAndStore = async (req, res) => {
     }
     catch (err) {
 
-        console.log("Error in storing data", err)
+        console.error("Error in storing data", err)
         res.status(400).json({
             message: "Error in storing data"
         })
@@ -78,7 +79,7 @@ const generateAnalysis = (req, res) => {
 
     }
     catch (err) {
-        console.log('Error in Analysisc', err);
+        console.error('Error in Analysisc', err);
 
     }
 
@@ -109,8 +110,8 @@ const postsPerId = (req,res) => {
 
 
     }
-    catch (Err) {
-        console.log("Error in geting posts per id",Err);
+    catch (err) {
+        console.error("Error in geting posts per id",err);
         res.status(400).json({
             message:"Error in getting post by id"
         })

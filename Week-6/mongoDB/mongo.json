@@ -1,0 +1,12 @@
+db.createCollection("students",{
+    validator : {
+        $jsonSchema : {
+            bsonType : "object",
+            title : "student object validation",
+            required : ["name","category"],
+            properties : {
+                name : 
+            }
+        }
+    }
+})
