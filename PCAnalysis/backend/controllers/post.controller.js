@@ -38,7 +38,9 @@ const generateAnalysis = (req, res) => {
         let totalPost = 0;
         let totalLength = 0;
         let longPostIndex = 0;
-        let maxLength = 0;
+        let maxLength = 0; longPostIndex = totalPost;
+        let postPerUser = [];
+        let postPerUser12 = {};
 
         for (const post of Allpost) {
             totalPost++;
@@ -46,13 +48,45 @@ const generateAnalysis = (req, res) => {
             let body = post.body;
             totalLength += title.length;
 
+            // let index = parseInt(post.userId);
+
+            // if(postPerUser[index - 1]){
+            //     let obj = postPerUser[index-1];
+            //     obj.count = obj.count + 1;
+            //     postPerUser[index-1] = obj;
+            // } else {
+            //     const obj = {
+            //         userId: post.userId,
+            //         count: 1
+            //     }postPerUser12[index] = {postCount: 1}
+            //     postPerUser.push(obj);
+            // }
+
+            const index = "userId : " + post.userId;
+
+        
+
+            postPerUser12[index]
+                ? postPerUser12[index].postCount += 1
+                : postPerUser12[index] = { postCount: 1 };
+            // if(postPerUser12[index]) {
+            //     postPerUser12[index].postCount += 1;
+            // }
+            // else {
+            //     postPerUser12[index] = {postCount: 1};
+            // }
+
+
             if (body.length > maxLength) {
                 maxLength = body.length;
                 longPostIndex = totalPost;
             }
 
+
+
         }
 
+        console.log("Post per use", postPerUser12);
         const averageTitleLength = totalLength / totalPost;
         const longestPost = Allpost[[longPostIndex - 1]];
 
@@ -62,7 +96,7 @@ const generateAnalysis = (req, res) => {
 
         console.log("maxLength", maxLength);
         console.log("index of maxlength", longPostIndex);
-        console.log("Object of long post", Allpost[[longPostIndex]]);
+        console.log("Object of long post", Allpost[longPostIndex]);
 
         localStorage.setItem('analysis', JSON.stringify({
             "totalPosts": totalPost,
@@ -88,17 +122,17 @@ const generateAnalysis = (req, res) => {
 
 
 
-const postsPerId = (req,res) => {
+const postsPerId = (req, res) => {
 
     const Allpost = JSON.parse(localStorage.getItem('posts')) || [];
     try {
         const userPost = [];
         const id = req.params.id;
-        console.log("id",id);
+        console.log("id", id);
 
         Allpost.forEach(post => {
             let userId = post.userId;
-            if(userId == id) {
+            if (userId == id) {
                 userPost.push(post)
             }
         });
@@ -111,9 +145,9 @@ const postsPerId = (req,res) => {
 
     }
     catch (err) {
-        console.error("Error in geting posts per id",err);
+        console.error("Error in geting posts per id", err);
         res.status(400).json({
-            message:"Error in getting post by id"
+            message: "Error in getting post by id"
         })
     }
 
