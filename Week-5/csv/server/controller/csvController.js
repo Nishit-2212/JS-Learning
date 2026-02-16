@@ -44,6 +44,21 @@ const csvReader = async (req, res) => {
 }
 
 
+const numberOfLine = async (req,res) => {
+
+    let count = 0;
+    fs.createReadStream('files/csv/spending.csv')
+        .pipe(csv())
+        .on('data', (data) => count++)
+        .on('end',() => console.log(`Number of Line ${count}`))
+
+    res.status(200).send({
+        totalCount : count
+    })
+
+}
 
 
-module.exports = { csvWriter, csvReader }
+
+
+module.exports = { csvWriter, csvReader, numberOfLine }
