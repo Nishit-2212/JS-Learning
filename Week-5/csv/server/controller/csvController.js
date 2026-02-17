@@ -47,10 +47,15 @@ const csvReader = async (req, res) => {
 const numberOfLine = async (req,res) => {
 
     let count = 0;
-    fs.createReadStream('files/csv/spending.csv')
+    fs.createReadStream('files/csv/olist_customers_dataset.csv')
         .pipe(csv())
         .on('data', (data) => count++)
-        .on('end',() => console.log(`Number of Line ${count}`))
+        .on('end',() => console.log(`Total Customers ${count}`))
+
+    fs.createReadStream('files/csv/olist_order_items_dataset.csv')
+        .pipe(csv())
+        .on('data', (data) => count++)
+        .on('end',() => console.log(`Total Orders ${count}`))
 
     res.status(200).send({
         totalCount : count
