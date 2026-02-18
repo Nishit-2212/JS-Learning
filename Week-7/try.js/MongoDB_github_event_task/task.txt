@@ -1,0 +1,249 @@
+Hi Team,
+We’ll practice MongoDB on a large real-world dataset from GH Archive (public GitHub event data).
+Your job:
+Download a large dataset (hours/days)
+Import it into MongoDB
+Create indexes
+Write queries (simple → complex) and measure performance using explain()
+Dataset Source
+Website: https://www.gharchive.org/
+Hourly files are named: YYYY-MM-DD-HH.json.gz (time is UTC)
+Example: https://data.gharchive.org/2026-02-16-15.json.gz
+Prerequisites
+You must have:
+MongoDB running
+mongosh
+mongoimport (MongoDB Database Tools)
+wget (or curl) and gunzip
+Verify:
+mongosh --version
+mongoimport --version
+wget --version (or curl --version)
+gunzip --version
+Step 1 — Download GH Archive data (choose ONE size)
+Create a folder:
+mkdir -p gharchive && cd gharchive
+Option A (recommended): Download 1 full day (24 hours)
+Replace the date with any date you want (UTC):
+wget https://data.gharchive.org/2026-02-16-{0..23}.json.gz
+Option B: Download 7 days (large)
+Example: Feb 10–16 (UTC):
+for d in 10 11 12 13 14 15 16; do
+  wget https://data.gharchive.org/2026-02-$d-{0..23}.json.gz
+done
+Tips:
+If a single hour fails, re-run wget for just that file.
+Keep note of your date range and how many files you downloaded.
+Step 2 — Import into MongoDB (streaming, fast)
+We will import into:
+DB: training
+Collection: gh_events
+Option 1: Fresh import (recommended — drop collection first)
+Run from inside the gharchive/ folder:
+gunzip -c *.json.gz | mongoimport \
+  --db training --collection gh_events \
+  --type json \
+  --drop \
+  --numInsertionWorkers 8
+Option 2: Append import (do NOT drop)
+gunzip -c *.json.gz | mongoimport \
+  --db training --collection gh_events \
+  --type json \
+  --numInsertionWorkers 8
+Step 3 — Verify import (must do)
+In mongosh, check:
+You can see the collection gh_events inside database training
+The collection has a large number of documents (not 0)
+Open 1–2 documents and understand the fields (look for: event type, repo name, actor, created time)
+Step 4 — Indexing Tasks (no query answers)
+You MUST create indexes to support common filters. Create:
+An index that helps when filtering by event type
+An index that helps when filtering by repo
+An index that helps when filtering by actor
+At least one compound index (example idea: combine a filter field + time field)
+You must submit:
+the index definitions you created
+why you chose them (what query they help)
+proof they exist (output of index list)
+Practice Tasks (Simple → Complex) — clearer instructions
+Important: Do not copy answers from others. You must write your own queries.
+For each task, submit:
+the query/pipeline you wrote
+result summary (counts/top rows)
+explain("executionStats") output when asked
+Task 1 — “How many records do we have?”
+Goal: Learn basic counting and filtering.
+Do these:
+Count all documents in gh_events
+Count documents where type equals one specific event type (example: "PushEvent")
+Count documents only within a time window (for example, one hour or one day from your imported range)
+What to submit:
+the 3 queries you wrote + their counts
+Task 2 — “What are the top values?”
+Goal: Learn grouping + sorting.
+Do these (top 10 or top 20):
+Top event types by number of events
+Top repos by number of events
+Top actors by number of events
+What to submit:
+3 aggregation pipelines + top results
+Task 3 — “Do indexes really help?”
+Goal: Learn performance testing with/without an index.
+Steps:
+Choose ONE query that filters by repo (or actor/type) and runs somewhat slow without indexes.
+Run it with explain("executionStats") and record:
+totalDocsExamined
+totalKeysExamined
+executionTimeMillis
+whether it used an index (IXSCAN) or full scan (COLLSCAN)
+Drop the relevant index (only the one related to that query).
+Run the same query again with explain("executionStats")
+Compare numbers (with index vs without index)
+Re-create the index you dropped
+What to submit:
+query + the two explain outputs
+Task 4 — “Hourly trend”
+Goal: Learn time-bucketing using created_at.
+Do:
+Calculate event counts per hour (across your imported data)
+Add a filter (example: only one event type) and run again
+Compare performance using explain() on at least one of them
+What to submit:
+pipelines + 1 explain output
+Task 5 — “Understand the data shape”
+Goal: Learn schema exploration.
+Do:
+Identify which important fields are sometimes missing
+Find how many unique repos and unique actors you have
+Pick one nested field and show you can filter/group on it
+What to submit:
+queries/pipelines + short notes
+
+
+
+-----------------------------------------------------------------------------------------
+Step 4 — Indexing Tasks (no query answers)
+You MUST create indexes to support common filters.
+-----------------------------------------------------------------------------------------
+
+1. An index that helps when filtering by event type
+
+- db.gh_events.createIndex({type:1})
+
+Query :- db.gh_events.find({type:'PushEvent'}).explain('executionStats')
+Before Indexing:-
+                executionTimeMillis: 820481
+After Indexing :- 
+                executionTimeMillis: 410481
+
+
+
+2. An index that helps when filtering by repo
+
+- db.gh_events.createIndex({'repo.name':1})
+
+
+Query :- db.gh_events.find({'repo.name': 'wikibook/sqld'}).explain('executionStats')
+Before Indexing:-
+                winningPlan: {
+                    stage: 'COLLSCAN',
+                    filter: { 'repo.name': { '$eq': 'wikibook/sqld' } },
+                    direction: 'forward'
+                },
+                TotalDocsExamined: 48282086,
+                executionTimeMillisEstimate: 237716,   isEqualto = 3.96 minutes
+After Indexing:-
+                winningPlan: {
+                    stage: 'FETCH',
+                    inputStage: {
+                        stage: 'IXSCAN',
+                        keyPattern: { 'repo.name': 1 },
+                        indexName: 'repo.name_1',
+                        isMultiKey: false,
+                        multiKeyPaths: { 'repo.name': [] },
+                        isUnique: false,
+                        isSparse: false,
+                        isPartial: false,
+                        indexVersion: 2,
+                        direction: 'forward',
+                        indexBounds: {
+                        'repo.name': [ '["Nishit-2212/JS-Learning", "Nishit-2212/JS-Learning"]' ]
+                        }
+                    }
+                }
+                executionTimeMillis: 2416,
+                totalDocsExamined: 6,
+
+
+
+
+3. An index that helps when filtering by actor
+
+
+
+4. 
+
+
+-------------------------------------------------------------------------------
+Task 1 — “How many records do we have?”
+Goal: Learn basic counting and filtering.
+Do these:
+-------------------------------------------------------------------------------
+
+1. Count all documents in gh_events
+Ans:- 
+- db.gh_events.find().count()
+          OR
+- db.gh_events.countDocuments()
+Output:-   48282086
+* The only difference between them is speed. The execution time of countDocuments is >> .count()
+
+
+2. Count documents where type equals one specific event type (example: "PushEvent")
+Ans:-
+- db.gh_events.aggregate([{$match:{type:'PushEvent'}},{$count:"Total_PushEvent"}])
+Output:-[ { Total_PushEvent: 32158622 } ]
+
+
+3. Count documents only within a time window (for example, one hour or one day from your imported range)
+Ans:- 
+- 
+
+
+
+
+----------------------------------------------------------------------------------------
+Task 2 — “What are the top values?”
+Goal: Learn grouping + sorting.
+Do these (top 10 or top 20):
+----------------------------------------------------------------------------------------
+
+1. Top event types by number of events
+- db.gh_events.aggregate([ { $group: { _id: '$type',Total:{$sum:1}}}, {$sort : {Total:-1}}])
+Output:- 
+[
+  { _id: 'PushEvent', Total: 32158622 },
+  { _id: 'CreateEvent', Total: 4141458 },
+  { _id: 'PullRequestEvent', Total: 4019386 },
+  { _id: 'DeleteEvent', Total: 1615216 },
+  { _id: 'IssueCommentEvent', Total: 1574572 },
+  { _id: 'IssuesEvent', Total: 1283596 },
+  { _id: 'WatchEvent', Total: 1090960 },
+  { _id: 'PullRequestReviewCommentEvent', Total: 889392 },
+  { _id: 'PullRequestReviewEvent', Total: 805856 },
+  { _id: 'ReleaseEvent', Total: 263488 },
+  { _id: 'ForkEvent', Total: 245716 },
+  { _id: 'MemberEvent', Total: 94570 },
+  { _id: 'CommitCommentEvent', Total: 29298 },
+  { _id: 'PublicEvent', Total: 29174 },
+  { _id: 'GollumEvent', Total: 28800 },
+  { _id: 'DiscussionEvent', Total: 11982 }
+]
+
+
+2. Top repos by number of events
+- db.gh_events.aggregate([
+... { $group : {_id:'repo.name',TotalEvents:{$sum:1} }},
+... { $sort : {TotalEvents:-1}},
+... { $project : { Repo_name:"$_id",NumberOfEvents:"$TotalEvents"} } ])
+

@@ -11,7 +11,11 @@ mongoimport --db YELP_dataset \
             --numInsertionWorkers 8
 
 
-
+gunzip -c *.json.gz | mongoimport \
+            --db training --collection gh_events \
+            --type json \
+            --drop \
+            --numInsertionWorkers 8
 
 
 
