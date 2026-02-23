@@ -1,0 +1,161 @@
+1. find the unique event type
+ANs:- 
+- db.gh_events.aggregate([
+    { $group: { _id: "$type" } }, 
+    { $project: { _id:0,Events: "$_id" } }
+    ])
+  OR
+- db.gh_events.distinct('type')
+
+Output :- [
+  { Events: 'PublicEvent' },
+  { Events: 'ForkEvent' },
+  { Events: 'IssuesEvent' },
+  { Events: 'PullRequestReviewCommentEvent' },
+  { Events: 'DiscussionEvent' },
+  { Events: 'PushEvent' },
+  { Events: 'WatchEvent' },
+  { Events: 'CommitCommentEvent' },
+  { Events: 'IssueCommentEvent' },
+  { Events: 'CreateEvent' },
+  { Events: 'GollumEvent' },
+  { Events: 'PullRequestEvent' },
+  { Events: 'PullRequestReviewEvent' },
+  { Events: 'DeleteEvent' },
+  { Events: 'MemberEvent' },
+  { Events: 'ReleaseEvent' }
+]
+
+
+2. identify if there any duplicate id exist in the dataset
+- db.gh_events.aggregate([ 
+    { $group: { _id:"$_id",count:{$sum:1} } }, 
+    { $match: { count : { $gt : 1 } }} 
+    ])
+
+Output :- 
+
+
+
+3. find top 3 most event type. 
+- db.gh_events.aggregate([ { $group: { _id: "$type", count: { $sum: 1 } } }, { $sort: { count: -1 } }, { $limit: 3 }])
+
+Output :- 
+[
+  { _id: 'PushEvent', count: 92961 },
+  { _id: 'PullRequestEvent', count: 17864 },
+  { _id: 'CreateEvent', count: 12700 }
+]
+
+or (practise of $cond)
+
+- db.gh_events.aggregate([
+    {
+        $group: {
+            _id: "$type",
+            count: { $sum: 1 }
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            Events: "$_id",
+            range: {
+                $cond: {
+                    if: { $gt: ["$count", 17000] },
+                    then: "high",
+                    else: "less"
+                }
+            }
+        }
+    }
+])
+Output :- 
+[
+  { Event: 'PublicEvent', Range: 'less' },
+  { Event: 'ForkEvent', Range: 'less' },
+  { Event: 'IssuesEvent', Range: 'less' },
+  { Event: 'PullRequestReviewCommentEvent', Range: 'less' },
+  { Event: 'DiscussionEvent', Range: 'less' },
+  { Event: 'PushEvent', Range: 'less' },
+  { Event: 'WatchEvent', Range: 'less' },
+  { Event: 'CommitCommentEvent', Range: 'less' },
+  { Event: 'IssueCommentEvent', Range: 'less' },
+  { Event: 'CreateEvent', Range: 'less' },
+  { Event: 'GollumEvent', Range: 'less' },
+  { Event: 'PullRequestEvent', Range: 'less' },
+  { Event: 'PullRequestReviewEvent', Range: 'less' },
+  { Event: 'DeleteEvent', Range: 'less' },
+  { Event: 'MemberEvent', Range: 'less' },
+  { Event: 'ReleaseEvent', Range: 'less' }
+]
+
+
+
+
+4. Count number of events day per day
+db.gh_events.aggregate([ { $bucketAuto: { groupBy: "$created_at", buckets: 7, output: { TotalEvent: {"$sum": 1 } } } }]
+db.gh_events.aggregate([ { $bucketAuto: { groupBy: "$created_at", buckets: 7, output: { TotalEvent: {"$sum": 1 } } } }])
+[
+  {
+    _id: {
+      min: ISODate('2026-02-10T00:00:00.000Z'),
+      max: ISODate('2026-02-11T02:09:06.000Z')
+    },
+    TotalEvent: 6897572
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-11T02:09:06.000Z'),
+      max: ISODate('2026-02-12T02:38:55.000Z')
+    },
+    TotalEvent: 6897446
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-12T02:38:55.000Z'),
+      max: ISODate('2026-02-13T02:44:55.000Z')
+    },
+    TotalEvent: 6897554
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-13T02:44:55.000Z'),
+      max: ISODate('2026-02-14T02:19:18.000Z')
+    },
+    TotalEvent: 6897538
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-14T02:19:18.000Z'),
+      max: ISODate('2026-02-15T01:43:07.000Z')
+    },
+    TotalEvent: 6897508
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-15T01:43:07.000Z'),
+      max: ISODate('2026-02-16T00:57:26.000Z')
+    },
+    TotalEvent: 6897474
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-16T00:57:26.000Z'),
+      max: ISODate('2026-02-16T23:59:59.000Z')
+    },
+    TotalEvent: 6896994
+  }
+]
+
+
+5. Which UTC hour has highest activity ?
+- 
+Output:-
+
+db.gh_events.aggregate([ { $group: { _id: {$hour: "$created_at"}, NumberOfEvents: {$sum:1} } }, { $sort: { "NumberOfEvents" : -1 } }, { $limit: 3 }])
+[
+  { _id: 13, NumberOfEvents: 2131702 },
+  { _id: 12, NumberOfEvents: 2117904 },
+  { _id: 2, NumberOfEvents: 2082858 }
+]

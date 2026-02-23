@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <form id="form">
+        <input type="text" placeholder="Enter any value" id="inputType">
+        <button type="submit" id="sub">Submit</button>
+    </form>
+
+
+    <script>
+
+        const forms = document.getElementById('form');
+        const inp = document.getElementById('inputType');
+
+        forms.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            let data = inp.value;
+            let dataObject = { value: data }
+            // you can't pass the string you have to pass on object
+            // console.log(JSON.stringify(data))
+             try {
+                const responce = await fetch("http://localhost:3000/data", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dataObject)
+                })
+                console.log(responce)
+            }
+            catch (Err) {
+                console.log("error :-", Err)
+            }
+
+            console.log("post request fired by fronted")
+            // await submitData();
+
+        })
+
+        const submitData = async () => {
+
+            try {
+                await fetch("http://127.0.0.0:3000/data", {
+                    method: "POST",
+                    header: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(inp)
+                })
+            }
+            catch (Err) {
+                console.log("error :-", Err)
+            }
+
+            console.log("post request fired by fronted")
+
+        }
+
+
+        // sub.addEventListener('onclick',(e) => {
+        //     console.log("clicked")
+        // })
+    </script>
+</body>
+
+
+
+</html>

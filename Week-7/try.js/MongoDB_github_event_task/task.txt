@@ -1,0 +1,842 @@
+Hi Team,
+We’ll practice MongoDB on a large real-world dataset from GH Archive (public GitHub event data).
+Your job:
+Download a large dataset (hours/days)
+Import it into MongoDB
+Create indexes
+Write queries (simple → complex) and measure performance using explain()
+Dataset Source
+Website: https://www.gharchive.org/
+Hourly files are named: YYYY-MM-DD-HH.json.gz (time is UTC)
+Example: https://data.gharchive.org/2026-02-16-15.json.gz
+Prerequisites
+You must have:
+MongoDB running
+mongosh
+mongoimport (MongoDB Database Tools)
+wget (or curl) and gunzip
+Verify:
+mongosh --version
+mongoimport --version
+wget --version (or curl --version)
+gunzip --version
+Step 1 — Download GH Archive data (choose ONE size)
+Create a folder:
+mkdir -p gharchive && cd gharchive
+Option A (recommended): Download 1 full day (24 hours)
+Replace the date with any date you want (UTC):
+wget https://data.gharchive.org/2026-02-16-{0..23}.json.gz
+Option B: Download 7 days (large)
+Example: Feb 10–16 (UTC):
+for d in 10 11 12 13 14 15 16; do
+  wget https://data.gharchive.org/2026-02-$d-{0..23}.json.gz
+done
+Tips:
+If a single hour fails, re-run wget for just that file.
+Keep note of your date range and how many files you downloaded.
+Step 2 — Import into MongoDB (streaming, fast)
+We will import into:
+DB: training
+Collection: gh_events
+Option 1: Fresh import (recommended — drop collection first)
+Run from inside the gharchive/ folder:
+gunzip -c *.json.gz | mongoimport \
+  --db training --collection gh_events \
+  --type json \
+  --drop \
+  --numInsertionWorkers 8
+Option 2: Append import (do NOT drop)
+gunzip -c *.json.gz | mongoimport \
+  --db training --collection gh_events \
+  --type json \
+  --numInsertionWorkers 8
+Step 3 — Verify import (must do)
+In mongosh, check:
+You can see the collection gh_events inside database training
+The collection has a large number of documents (not 0)
+Open 1–2 documents and understand the fields (look for: event type, repo name, actor, created time)
+Step 4 — Indexing Tasks (no query answers)
+You MUST create indexes to support common filters. Create:
+An index that helps when filtering by event type
+An index that helps when filtering by repo
+An index that helps when filtering by actor
+At least one compound index (example idea: combine a filter field + time field)
+You must submit:
+the index definitions you created
+why you chose them (what query they help)
+proof they exist (output of index list)
+Practice Tasks (Simple → Complex) — clearer instructions
+Important: Do not copy answers from others. You must write your own queries.
+For each task, submit:
+the query/pipeline you wrote
+result summary (counts/top rows)
+explain("executionStats") output when asked
+Task 1 — “How many records do we have?”
+Goal: Learn basic counting and filtering.
+Do these:
+Count all documents in gh_events
+Count documents where type equals one specific event type (example: "PushEvent")
+Count documents only within a time window (for example, one hour or one day from your imported range)
+What to submit:
+the 3 queries you wrote + their counts
+Task 2 — “What are the top values?”
+Goal: Learn grouping + sorting.
+Do these (top 10 or top 20):
+Top event types by number of events
+Top repos by number of events
+Top actors by number of events
+What to submit:
+3 aggregation pipelines + top results
+Task 3 — “Do indexes really help?”
+Goal: Learn performance testing with/without an index.
+Steps:
+Choose ONE query that filters by repo (or actor/type) and runs somewhat slow without indexes.
+Run it with explain("executionStats") and record:
+totalDocsExamined
+totalKeysExamined
+executionTimeMillis
+whether it used an index (IXSCAN) or full scan (COLLSCAN)
+Drop the relevant index (only the one related to that query).
+Run the same query again with explain("executionStats")
+Compare numbers (with index vs without index)
+Re-create the index you dropped
+What to submit:
+query + the two explain outputs
+Task 4 — “Hourly trend”
+Goal: Learn time-bucketing using created_at.
+Do:
+Calculate event counts per hour (across your imported data)
+Add a filter (example: only one event type) and run again
+Compare performance using explain() on at least one of them
+What to submit:
+pipelines + 1 explain output
+Task 5 — “Understand the data shape”
+Goal: Learn schema exploration.
+Do:
+Identify which important fields are sometimes missing
+Find how many unique repos and unique actors you have
+Pick one nested field and show you can filter/group on it
+What to submit:
+queries/pipelines + short notes
+
+
+
+-----------------------------------------------------------------------------------------
+Step 4 — Indexing Tasks (no query answers)
+You MUST create indexes to support common filters.
+-----------------------------------------------------------------------------------------
+
+1. An index that helps when filtering by event type
+
+- db.gh_events.createIndex({type:1})
+
+Query :- db.gh_events.find({type:'PushEvent'}).explain('executionStats')
+Before Indexing:-
+                executionTimeMillis: 820481
+After Indexing :- 
+                executionTimeMillis: 410481
+
+
+
+2. An index that helps when filtering by repo
+
+- db.gh_events.createIndex({'repo.name':1})
+
+
+Query :- db.gh_events.find({'repo.name': 'wikibook/sqld'}).explain('executionStats')
+Before Indexing:-
+                winningPlan: {
+                    stage: 'COLLSCAN',
+                    filter: { 'repo.name': { '$eq': 'wikibook/sqld' } },
+                    direction: 'forward'
+                },
+                TotalDocsExamined: 48282086,
+                executionTimeMillisEstimate: 237716,   isEqualto = 3.96 minutes
+After Indexing:-
+                winningPlan: {
+                    stage: 'FETCH',
+                    inputStage: {
+                        stage: 'IXSCAN',
+                        keyPattern: { 'repo.name': 1 },
+                        indexName: 'repo.name_1',
+                        isMultiKey: false,
+                        multiKeyPaths: { 'repo.name': [] },
+                        isUnique: false,
+                        isSparse: false,
+                        isPartial: false,
+                        indexVersion: 2,
+                        direction: 'forward',
+                        indexBounds: {
+                        'repo.name': [ '["Nishit-2212/JS-Learning", "Nishit-2212/JS-Learning"]' ]
+                        }
+                    }
+                }
+                executionTimeMillis: 2416,
+                totalDocsExamined: 6,
+
+
+
+
+3. An index that helps when filtering by actor
+
+- db.gh_events.createIndex({"actor.id":1})
+
+
+4. At least one compound index (example idea: combine a filter field + time field)
+
+- db.gh_events.createIndex({"actor.id":1,"repo.id":1,"created_at":1})
+
+
+-------------------------------------------------------------------------------
+Task 1 — “How many records do we have?”
+Goal: Learn basic counting and filtering.
+Do these:
+-------------------------------------------------------------------------------
+
+1. Count all documents in gh_events
+Ans:- 
+- db.gh_events.find().count()
+          OR
+- db.gh_events.countDocuments()
+Output:-   48282086
+* The only difference between them is speed. The execution time of countDocuments is >> .count()
+
+
+2. Count documents where type equals one specific event type (example: "PushEvent")
+Ans:-
+- db.gh_events.aggregate([{$match:{type:'PushEvent'}},{$count:"Total_PushEvent"}])
+Output:-[ { Total_PushEvent: 32158622 } ]
+
+
+3. Count documents only within a time window (for example, one hour or one day from your imported range)
+Ans:- 
+- 
+
+
+
+
+----------------------------------------------------------------------------------------
+Task 2 — “What are the top values?”
+Goal: Learn grouping + sorting.
+Do these (top 10 or top 20):
+----------------------------------------------------------------------------------------
+
+1. Top event types by number of events
+- db.gh_events.aggregate([ { $group: { _id: '$type',Total:{$sum:1}}}, {$sort : {Total:-1}}])
+Output:- 
+[
+  { _id: 'PushEvent', Total: 32158622 },
+  { _id: 'CreateEvent', Total: 4141458 },
+  { _id: 'PullRequestEvent', Total: 4019386 },
+  { _id: 'DeleteEvent', Total: 1615216 },
+  { _id: 'IssueCommentEvent', Total: 1574572 },
+  { _id: 'IssuesEvent', Total: 1283596 },
+  { _id: 'WatchEvent', Total: 1090960 },
+  { _id: 'PullRequestReviewCommentEvent', Total: 889392 },
+  { _id: 'PullRequestReviewEvent', Total: 805856 },
+  { _id: 'ReleaseEvent', Total: 263488 },
+  { _id: 'ForkEvent', Total: 245716 },
+  { _id: 'MemberEvent', Total: 94570 },
+  { _id: 'CommitCommentEvent', Total: 29298 },
+  { _id: 'PublicEvent', Total: 29174 },
+  { _id: 'GollumEvent', Total: 28800 },
+  { _id: 'DiscussionEvent', Total: 11982 }
+]
+
+
+
+2. Top repos by number of events
+- db.gh_events.aggregate([ 
+    { $group: { _id: '$repo.name', TotalEvents: { $sum: 1 } } }, 
+    { $sort: { TotalEvents: -1 } }, 
+    { $project: { Repo_name: "$_id", NumberOfEvents: "$TotalEvents" } }])
+Output :- 
+[
+  {
+    _id: 'gaston1799/RobloxLua',
+    Repo_name: 'gaston1799/RobloxLua',
+    NumberOfEvents: 131838
+  },
+  {
+    _id: 'escapingwork/teenagerspopulation',
+    Repo_name: 'escapingwork/teenagerspopulation',
+    NumberOfEvents: 109880
+  },
+  {
+    _id: 'merge-demo/mergequeue-st',
+    Repo_name: 'merge-demo/mergequeue-st',
+    NumberOfEvents: 82104
+  },
+  {
+    _id: 'pedroslopez/whatsapp-web.js',
+    Repo_name: 'pedroslopez/whatsapp-web.js',
+    NumberOfEvents: 68520
+  },
+  {
+    _id: 'cosmocws/zelenza_app',
+    Repo_name: 'cosmocws/zelenza_app',
+    NumberOfEvents: 67680
+  },
+  {
+    _id: 'sidarthus89/EVE-Data-Site',
+    Repo_name: 'sidarthus89/EVE-Data-Site',
+    NumberOfEvents: 67060
+  },
+  {
+    _id: 'sidarthus89/EVE-Data-Site-Dev',
+    Repo_name: 'sidarthus89/EVE-Data-Site-Dev',
+    NumberOfEvents: 66034
+  },
+  {
+    _id: 'shaehabultra/test',
+    Repo_name: 'shaehabultra/test',
+    NumberOfEvents: 54670
+  },
+  {
+    _id: 'Carbare/teste',
+    Repo_name: 'Carbare/teste',
+    NumberOfEvents: 50280
+  }
+]
+
+
+
+3. Top actors by number of events
+- db.gh_events.aggregate([
+...   {
+...     $group: {
+...       _id: "$actor.id",
+...       actorName : {$first:"$actor.login"},
+...       totalCount: { $sum: 1 }
+...     }
+...   },
+...   {
+...     $sort: { totalCount: -1 }
+...   },
+...   {
+...     $project: {
+...       _id :0 ,
+...       ActorId: "$_id",
+...       ActorName: "$actorName",
+...       TotalEvents: "$totalCount"
+...     }
+...   }
+... ])
+
+Output :- 
+[
+  {
+    ActorId: 41898282,
+    ActorName: 'github-actions[bot]',
+    TotalEvents: 6369742
+  },
+  {
+    ActorId: 49699333,
+    ActorName: 'dependabot[bot]',
+    TotalEvents: 1747542
+  },
+  { ActorId: 29139614, ActorName: 'renovate[bot]', TotalEvents: 680934 },
+  { ActorId: 39814207, ActorName: 'pull[bot]', TotalEvents: 632532 },
+  { ActorId: 198982749, ActorName: 'Copilot', TotalEvents: 372808 },
+  { ActorId: 175728472, ActorName: 'Copilot', TotalEvents: 332476 },
+  {
+    ActorId: 136622811,
+    ActorName: 'coderabbitai[bot]',
+    TotalEvents: 246646
+  },
+  {
+    ActorId: 166895733,
+    ActorName: 'swa-runner-app[bot]',
+    TotalEvents: 246598
+  },
+  { ActorId: 35613825, ActorName: 'vercel[bot]', TotalEvents: 151420 },
+  { ActorId: 111938061, ActorName: 'sidarthus89', TotalEvents: 133094 },
+  { ActorId: 35858201, ActorName: 'gaston1799', TotalEvents: 131838 },
+  { ActorId: 156567935, ActorName: 'adymob2024', TotalEvents: 130992 },
+  { ActorId: 244841556, ActorName: 'escapingwork', TotalEvents: 109880 },
+  {
+    ActorId: 159125892,
+    ActorName: 'lovable-dev[bot]',
+    TotalEvents: 106556
+  },
+  {
+    ActorId: 176961590,
+    ActorName: 'gemini-code-assist[bot]',
+    TotalEvents: 91784
+  },
+  { ActorId: 206951365, ActorName: 'cursor[bot]', TotalEvents: 89670 },
+  {
+    ActorId: 199175422,
+    ActorName: 'chatgpt-codex-connector[bot]',
+    TotalEvents: 84490
+  },
+  {
+    ActorId: 87141165,
+    ActorName: 'trunk-staging-io[bot]',
+    TotalEvents: 74938
+  },
+  { ActorId: 245677317, ActorName: 'cosmocws', TotalEvents: 67680 },
+  {
+    ActorId: 118344674,
+    ActorName: 'github-merge-queue[bot]',
+    TotalEvents: 66934
+  }
+]
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------
+Task 3 — “Do indexes really help?”
+Goal: Learn performance testing with/without an index.
+Steps:
+----------------------------------------------------------------------------------------------
+
+
+1. Choose ONE query that filters by repo (or actor/type) and runs somewhat slow without indexes.
+Ans:-
+  I am filtering based on repo.id without indexing and here's the result of execution time
+
+  Query :- db.gh_events.find({ "repo.id" : 919315136}).explain('executionStats')
+  Time :- 
+          executionTimeMillis: 437232,
+          totalKeysExamined: 0,
+          totalDocsExamined: 48282086,
+          winningPlan: {
+            stage: 'COLLSCAN',
+            filter: { 'repo.id': { '$eq': '919315136' } },
+            direction: 'forward'
+          },
+
+  After Indexing on repo.id
+  - db.gh_events.createIndex({"repo.id":1})
+
+  Query :- db.gh_events.find({ "repo.id" : 919315136}).explain('executionStats')
+  Time :- 
+          executionTimeMillis: 13,
+          totalKeysExamined: 0,
+          winningPlan: {
+            stage: 'FETCH',
+            inputStage: {
+              stage: 'IXSCAN',
+              keyPattern: { 'repo.id': 1 },
+              indexName: 'repo.id_1',
+              isMultiKey: false,
+              multiKeyPaths: { 'repo.id': [] },
+              isUnique: false,
+              isSparse: false,
+              isPartial: false,
+              indexVersion: 2,
+              direction: 'forward',
+              indexBounds: { 'repo.id': [ '[919315136, 919315136]' ] }
+            }
+          },
+
+  As you see the difference between time in execution the query. Before Indexing it was taking
+  around 437 second and after indexing it was taking only 13 milisecond. so it means indexing is
+  really helpful when you want to fetch particallur data or sort data.
+
+
+
+
+
+----------------------------------------------------------------------------------------
+Task 4 — “Hourly trend”
+Goal: Learn time-bucketing using created_at.
+Do:
+----------------------------------------------------------------------------------------
+
+1. Calculate event counts per hour (across your imported data)
+Ans:-
+There are two ways to do this $bucket and $bucketAuto
+
+$bucket :-
+db.gh_events.aggregate([
+...  { $addFields : { created_at: { $toDate: "$created_at" } } },
+...     {
+...      $match: {
+...        created_at: {
+...          $gt: ISODate("2026-02-10T00:00:00Z"),
+...          $lt: ISODate("2026-02-11T00:00:00Z")
+...        }
+...      }
+...  },
+...  { $bucket : { groupBy : "$created_at", boundaries: [ 
+...          ISODate("2026-02-10T00:00:00Z"),
+...          ISODate("2026-02-10T01:00:00Z"),
+...          ISODate("2026-02-10T02:00:00Z"),
+...          ISODate("2026-02-10T03:00:00Z"),
+...          ISODate("2026-02-10T04:00:00Z") 
+...         ],
+...         default: "Other",
+...         output: {
+...           totalEvents: { $sum: 1 }
+...         }
+...       }
+...     }
+...   ])
+
+Output:- 
+  [
+  { _id: 'Other', totalEvents: 5207116 },
+  { _id: ISODate('2026-02-10T00:00:00.000Z'), totalEvents: 278252 },
+  { _id: ISODate('2026-02-10T01:00:00.000Z'), totalEvents: 292406 },
+  { _id: ISODate('2026-02-10T02:00:00.000Z'), totalEvents: 290606 },
+  { _id: ISODate('2026-02-10T03:00:00.000Z'), totalEvents: 283040 }
+]
+* in _id:'Other' i calculate totalEvents on other dates(except mention dates)
+
+
+$bucketAuto :- 
+    db.gh_events.aggregate([
+...   {
+...     $addFields: {
+...       created_at: { $toDate: "$created_at" }
+...     }
+...   },
+...   {
+...     $match: {
+...       created_at: {
+...         $gt: ISODate("2026-02-10T00:00:00Z"),
+...         $lt: ISODate("2026-02-11T00:00:00Z")
+...       }
+...     }
+...   },
+...   {
+...     $bucketAuto: {
+...       groupBy: "$created_at",
+...       buckets: 24,  
+...       output: {
+...         totalEvents: { $sum: 1 }
+...       }
+...     }
+...   }
+... ])
+Output :- 
+[
+  {
+    _id: {
+      min: ISODate('2026-02-10T00:00:01.000Z'),
+      max: ISODate('2026-02-10T00:56:56.000Z')
+    },
+    totalEvents: 264698
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T00:56:56.000Z'),
+      max: ISODate('2026-02-10T01:51:42.000Z')
+    },
+    totalEvents: 264710
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T01:51:42.000Z'),
+      max: ISODate('2026-02-10T02:45:59.000Z')
+    },
+    totalEvents: 264724
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T02:45:59.000Z'),
+      max: ISODate('2026-02-10T03:41:43.000Z')
+    },
+    totalEvents: 264696
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T03:41:43.000Z'),
+      max: ISODate('2026-02-10T04:39:57.000Z')
+    },
+    totalEvents: 264742
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T04:39:57.000Z'),
+      max: ISODate('2026-02-10T05:35:23.000Z')
+    },
+    totalEvents: 264754
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T05:35:23.000Z'),
+      max: ISODate('2026-02-10T06:31:20.000Z')
+    },
+    totalEvents: 264686
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T06:31:20.000Z'),
+      max: ISODate('2026-02-10T07:25:22.000Z')
+    },
+    totalEvents: 264808
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T07:25:22.000Z'),
+      max: ISODate('2026-02-10T08:22:48.000Z')
+    },
+    totalEvents: 264710
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T08:22:48.000Z'),
+      max: ISODate('2026-02-10T09:20:10.000Z')
+    },
+    totalEvents: 264686
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T09:20:10.000Z'),
+      max: ISODate('2026-02-10T10:19:47.000Z')
+    },
+    totalEvents: 264692
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T10:19:47.000Z'),
+      max: ISODate('2026-02-10T11:19:58.000Z')
+    },
+    totalEvents: 264782
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T11:19:58.000Z'),
+      max: ISODate('2026-02-10T12:18:33.000Z')
+    },
+    totalEvents: 264788
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T12:18:33.000Z'),
+      max: ISODate('2026-02-10T13:14:10.000Z')
+    },
+    totalEvents: 264656
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T13:14:10.000Z'),
+      max: ISODate('2026-02-10T14:10:21.000Z')
+    },
+    totalEvents: 264656
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T14:10:21.000Z'),
+      max: ISODate('2026-02-10T15:11:40.000Z')
+    },
+    totalEvents: 264652
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T15:11:40.000Z'),
+      max: ISODate('2026-02-10T16:19:39.000Z')
+    },
+    totalEvents: 264758
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T16:19:39.000Z'),
+      max: ISODate('2026-02-10T17:28:39.000Z')
+    },
+    totalEvents: 264740
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T17:28:39.000Z'),
+      max: ISODate('2026-02-10T18:37:36.000Z')
+    },
+    totalEvents: 264658
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T18:37:36.000Z'),
+      max: ISODate('2026-02-10T19:40:17.000Z')
+    },
+    totalEvents: 264654
+  }
+]
+
+* in $bucket you have to specify each date range but $bucketAuto you just have to pass
+  how many range you want after group data
+
+
+
+
+
+2. Add a filter (example: only one event type) and run again
+Ans :- 
+    Filtering on date
+
+  db.gh_events.aggregate([
+...   {
+...     $addFields: {
+...       created_at: { $toDate: "$created_at" }
+...     }
+...   },
+...   {
+...     $match: {
+...       created_at: {
+...         $gt: ISODate("2026-02-10T00:00:00Z"),
+...         $lt: ISODate("2026-02-11T00:00:00Z")
+...       }
+...     }
+...   },
+...   {
+...     $bucketAuto: {
+...       groupBy: "$created_at",
+...       buckets: 24,  
+...       output: {
+...         totalEvents: { $sum: 1 }
+...       }
+...     }
+...   }
+... ])
+Output:-
+[
+  {
+    _id: {
+      min: ISODate('2026-02-10T00:00:01.000Z'),
+      max: ISODate('2026-02-10T00:56:56.000Z')
+    },
+    totalEvents: 264698
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T00:56:56.000Z'),
+      max: ISODate('2026-02-10T01:51:42.000Z')
+    },
+    totalEvents: 264710
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T01:51:42.000Z'),
+      max: ISODate('2026-02-10T02:45:59.000Z')
+    },
+    totalEvents: 264724
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T02:45:59.000Z'),
+      max: ISODate('2026-02-10T03:41:43.000Z')
+    },
+    totalEvents: 264696
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T03:41:43.000Z'),
+      max: ISODate('2026-02-10T04:39:57.000Z')
+    },
+    totalEvents: 264742
+  },
+  {
+    _id: {
+      min: ISODate('2026-02-10T04:39:57.000Z'),
+      max: ISODate('2026-02-10T05:35:23.000Z')
+    },
+    totalEvents: 264754
+  }
+]
+
+
+
+3. Compare performance using explain() on at least one of them
+Ans:-
+  db.gh_events.aggregate([
+...   {
+...     $addFields: {
+...       created_at: { $toDate: "$created_at" }
+...     }
+...   },
+...   {
+...     $match: {
+...       created_at: {
+...         $gt: ISODate("2026-02-10T00:00:00Z"),
+...         $lt: ISODate("2026-02-11T00:00:00Z")
+...       }
+...     }
+...   },
+...   {
+...     $bucketAuto: {
+...       groupBy: "$created_at",
+...       buckets: 24,  
+...       output: {
+...         totalEvents: { $sum: 1 }
+...       }
+...     }
+...   }
+... ]).explain('executionStats')
+Output :-
+          executionSuccess: true,
+          totalKeysExamined: 0,
+          totalDocsExamined: 48282086,
+
+
+
+
+
+----------------------------------------------------------------------------------------
+Task 5 — “Understand the data shape”
+Goal: Learn schema exploration.
+Do:
+----------------------------------------------------------------------------------------
+
+1. Identify which important fields are sometimes missing
+Ans:-
+
+- The repo field is sometime missing in the doucument and this is total number of count
+   the repo field is misiing :-
+  Query :- db.gh_events.find({ 'repo.name': { $exists:false }}).count()
+  Output :- 1130
+
+
+
+
+2. Find how many unique repos and unique actors you have.
+Ans:-
+
+Total Unique actor.login :-
+- db.gh_events.aggregate([ { $group : { _id:"$actor.login"}},{ $count:"TotalCount"} ])
+[ { TotalCount: 2440520 } ]
+
+
+Total Unique repo.name :-
+- db.gh_events.aggregate([ { $group : { _id:"$repo.name"}},{ $count:"TotalCount"} ])
+[ { TotalCount: 3612026 } ]
+
+
+
+
+3. Pick one nested field and show you can filter/group on it
+Ans:-
+  
+  I am filtering my name and see the how many repo in these days that i am contributing
+  Query:-
+   db.gh_events.aggregate([
+... { $match: { "actor.login":"Nishit-2212" }},
+... { $group : { _id:"$repo.name" } },
+... { $count : "TotalRepoContri" } ])
+
+Output:- [ { TotalRepoContri: 1 } ]
+
+
+
+
+
+
+
+* at end of this task i update all my created_at field :- type string to ISODate 
+  with this command
+  
+  db.gh_events.updateMany(
+...   {},
+...   [
+...     {
+...       $set: {
+...         created_at: { $toDate: "$created_at" }
+...       }
+...     }
+...   ]
+... )

@@ -1,0 +1,63 @@
+1. create Indexing
+-- db.collections.createIndex({age:1})
+
+
+2. show all Indexing
+-- db.collections.getIndexes();
+Output :- [ { v:2, key: { _id: 1 }, name: '_id_' },
+            { v:2, key: { age: 1 }, name: 'age_1' },  ]
+
+
+3. Drop index
+-- db.collections.dropIndex("age_1")
+
+
+4. Compound Indexing
+-- db.collections.createIndex({age:1,price:1})
+
+5. Multikey indexing (it applies on array)
+-- db.collections.craeteIndex({projects:1})
+(indexing is created on each element of an array)
+
+
+6. 
+
+
+
+
+
+---------------------------
+Info
+---------------------------
+-- Total Events
+training> db.gh_events.distinct('type')
+[
+  'CommitCommentEvent',
+  'CreateEvent',
+  'DeleteEvent',
+  'DiscussionEvent',
+  'ForkEvent',
+  'GollumEvent',
+  'IssueCommentEvent',
+  'IssuesEvent',
+  'MemberEvent',
+  'PublicEvent',
+  'PullRequestEvent',
+  'PullRequestReviewCommentEvent',
+  'PullRequestReviewEvent',
+  'PushEvent',
+  'ReleaseEvent',
+  'WatchEvent'
+]
+
+
+
+
+
+Winnig plan is to see the which indexing is more optimized
+ to use to execute your query.
+If there are multiple indexing in then it also have rejecetdPlans 
+
+
+* see the states of you MongoDB query
+db.collection.find().explain("executionStats")
