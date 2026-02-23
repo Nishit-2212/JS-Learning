@@ -102,6 +102,21 @@ let themess = document.getElementById("themess");
 let productsData;
 
 
+// split Cookie with given name
+const getCookie = (name) => {
+    const cookies = document.cookie.split("; ");
+
+    for (let cookie of cookies) {
+        const [key, value] = cookie.split("=");
+        if (key === name) {
+            return value;
+        }
+    }
+    return null;
+}
+
+
+
 //with static data
 (function () {
     let storeData = localStorage.getItem('products');
@@ -159,7 +174,6 @@ let productsData;
 
     console.log("Hello")
     localStorage.setItem('products', JSON.stringify(productsData))
-
 
 })();
 
@@ -232,27 +246,6 @@ themess.addEventListener("click", (e) => {
 console.log(category)
 
 
-
-
-// split Cookie with given name
-function getCookie(name) {
-    const cookies = document.cookie.split("; ");
-
-    for (let cookie of cookies) {
-        const [key, value] = cookie.split("=");
-        if (key === name) {
-            return value;
-        }
-    }
-    return null;
-}
-
-
-
-
-
-
-
 // RenderData Function on every Load
 const renderData = () => {
 
@@ -294,23 +287,18 @@ const renderData = () => {
 }
 
 
-
-
 //Render Data on reload
 (function () {
-
-
     // console.log("Hello")
     renderData();
     cartUpdate();
     // cartDetails();
-
-
 })();
+
 
 // Category Render
 const allCategory = new Set();
-let categoryLoad = () => {
+const categoryLoad = () => {
 
     console.log('Inside category function');
 
@@ -323,12 +311,10 @@ let categoryLoad = () => {
     console.log(allCategory)
 
     for (x of allCategory) {
-
         const options = document.createElement("option");
         options.value = x;
         options.textContent = x;
         category.appendChild(options);
-
     }
 };
 
@@ -369,7 +355,6 @@ searchButton.addEventListener("click", (e) => {
     // console.log("Button Clicked")
     let searchValue = search.value.trim().toLowerCase();
     // console.log(searchValue);
-
 
     localStorage.setItem("LastSearch", searchValue);
     showData("title", searchValue)
@@ -475,7 +460,7 @@ const showData = (fields, searchValue) => {
 
 
 
-
+// on each load remove the lastSearch and LastCategory search
 window.addEventListener("load", () => {
     localStorage.removeItem("LastSearchCategory");
     localStorage.removeItem("LastSearch");
