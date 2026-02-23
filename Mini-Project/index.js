@@ -134,7 +134,6 @@ const getCookie = (name) => {
         getProduct.map((da) => {
             lastId = da.id;
         })
-        console.log("Inside id")
         localStorage.setItem("id", JSON.stringify(lastId));
     }
 
@@ -171,7 +170,6 @@ const getCookie = (name) => {
         return
     }
 
-    console.log("Hello")
     productsData = file.products;
 
     console.log("Hello")
@@ -242,11 +240,10 @@ themess.addEventListener("click", (e) => {
 
 })
 
-// console.log(category)
 
 
 
-
+console.log(category)
 
 
 // RenderData Function on every Load
