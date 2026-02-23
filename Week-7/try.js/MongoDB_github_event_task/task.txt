@@ -184,7 +184,7 @@ After Indexing:-
 
 4. At least one compound index (example idea: combine a filter field + time field)
 
-- 
+- db.gh_events.createIndex({"actor.id":1,"repo.id":1,"created_at":1})
 
 
 -------------------------------------------------------------------------------

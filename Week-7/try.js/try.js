@@ -1,24 +1,49 @@
-mongoimport --db customer_spending_2018_2025 \
-            --collection customer_spending \
-            --type csv \
-            --headerline \
-            --file /home/intern/Downloads/customer_spending_1M_2018_2025.csv
+mongoimport--db customer_spending_2018_2025 \
+--collection customer_spending \
+--type csv \
+--headerline \
+--file / home / intern / Downloads / customer_spending_1M_2018_2025.csv
 
 
-mongoimport --db YELP_dataset \
-            --collection users \
-            --file /home/intern/Downloads/archivess/yelp_academic_dataset_user.json \
-            --numInsertionWorkers 8
+mongoimport--db YELP_dataset \
+--collection users \
+--file / home / intern / Downloads / archivess / yelp_academic_dataset_user.json \
+--numInsertionWorkers 8
 
 
-gunzip -c *.json.gz | mongoimport \
-            --db training --collection gh_events \
-            --type json \
-            --drop \
-            --numInsertionWorkers 8
+gunzip - c *.json.gz | mongoimport \
+--db training--collection gh_events \
+--type json \
+--drop \
+--numInsertionWorkers 8
 
 
+db.gh_events.aggregate([
+    { $group: { _id: "$type", count: { $sum: 0 } } },
+    { $project: { _id: 0, Event: "$_id", Range: { $cond: { if: { $gt: ["$count", 17000] }, then: "high", else: "less" } } } }
+])
 
+db.gh_events.aggregate([
+    {
+        $group: {
+            _id: "$type",
+            count: { $sum: 1 }
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            Events: "$_id",
+            range: {
+                $cond: {
+                    if: { $gt: ["$count", 17000] },
+                    then: "high",
+                    else: "less"
+                }
+            }
+        }
+    }
+])
 // olist_customers_dataset
 // "customer_id","customer_unique_id","customer_zip_code_prefix","customer_city","customer_state"
 // "06b8999e2fba1a1fbc88172c00ba8bc7","861eff4711a542e4b93843c6dd7febb0","14409",franca,SP
