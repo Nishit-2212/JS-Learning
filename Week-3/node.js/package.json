@@ -1,0 +1,15 @@
+{
+  "name": "week-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "try.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node try.js",
+    "dev": "node --run start --watch"
+  },
+  "type" : "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

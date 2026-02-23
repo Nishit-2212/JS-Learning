@@ -1,0 +1,102 @@
+<html>
+<head>
+    <style>
+        *{
+            margin: 25px;
+            box-sizing: border-box;
+        }
+        .grandparent{
+            height: 350px;
+            width: 350px;
+            border: 2px solid red;
+        }
+        .parent{
+            height: 250px;
+            width: 250px;
+            border: 2px solid blue;
+        }
+        .child{
+            height: 150px;
+            width: 150px;
+            border: 2px solid green;
+        }
+    </style>
+</head>
+<body>
+    <div class="grandparent" id="one">
+        Grandparent
+        <div class="parent" id="Two">
+            Parent
+            <div class="child" id="three">
+                Child
+            </div>
+        </div>
+    </div>
+    <script>
+        let grandparent=document.getElementById('one')
+        let parent=document.getElementById('Two')
+        let child=document.getElementById('three')
+        grandparent.addEventListener('click',function(e){
+          
+            console.log("Grandparent Clicked")
+        },true)
+        parent.addEventListener('click',function(e){
+            // e.stopPropagation()
+            console.log("Parent Clicked")
+        },true)
+        child.addEventListener('click',function(e){
+       
+            console.log("Child Clicked")
+        },true)
+
+        // grandparent.addEventListener('click',(e) => {
+        //     console.log('clicked',e.target.id);
+        // })
+    </script>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body> -->
+    
+    <!-- <button id="btn" > Click Me</button> -->
+    <!-- <p id="in"> Hello </p> -->
+
+    <!-- <input id="txt" type="text"/> -->
+
+    <!-- <input type="text" id="txt"/>
+    <p id="inje"></p> -->
+<!-- 
+    <p id="box" style="color: blue;"> Hello </p>
+
+    <input type="text" id="keyb">
+
+    <p id="keyp"></p> -->
+
+    <!-- <button id="plus">+</button>
+    <p id="tex">0</p>
+    <button id="minus">-</button> -->
+
+
+    <!-- <input type="text" id="tex">
+    <p id="coun"></p> -->
+
+
+    <!-- <button id="theme"> Dark </button> -->
+
+    <!-- <h1>Try You Luck</h1>
+    <input type="text" id="tex">
+    <button id="btn1">Submit</button>
+    <p id="ans"></p>
+
+    <script src="./async.js"> </script> 
+</body>
+</html> -->
