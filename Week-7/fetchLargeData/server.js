@@ -173,45 +173,34 @@ app.get('/try', async (req, res) => {
 
 app.get('/try2', async (req, res) => {
     try {
-
         const uri = 'https://data.gharchive.org/2026-02-16-15.json.gz';
-
-        // const response = await fetch(uri);
-
         const response = await axios({
             method: "get",
             url: uri,
             responseType: "stream"
-        })
-
+        });
         const unzip = response.data.pipe(zlib.createUnzip());
-
         const rl = readline.createInterface({
             input: unzip,
             crlfDelay: Infinity
-        })
-
-        let newData = [];
-        let limit = 0
+        });
+        let batch = [];
+        const batchSize = 1000;
         for await (const line of rl) {
-            limit++;
-            newData.push(JSON.parse(line));
-            if (limit == 10000) {
-                await gh_events.insertMany(newData);
-                newData = [];
-                console.log('Limit', limit)
-                console.log('newData length', newData.length)
-                limit = 0;
+            try {
+                batch.push(JSON.parse(line));
+            } catch {
+                continue;
+            }
+            if (batch.length === batchSize) {
+                await gh_events.insertMany(batch);
+                batch = [];
             }
         }
-
-        console.log(newData)
-        await gh_events.insertMany(newData);
-
-        return res.status(200).send({
-            msg: "Sucess",
-        })
-
+        if (batch.length > 0) {
+            await gh_events.insertMany(batch);
+        }
+        return res.status(200).send({ msg: "Success" });
     } catch (err) {
         console.error(err);
         res.status(500).send('Something went wrong');
