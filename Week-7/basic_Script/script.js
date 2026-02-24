@@ -5,11 +5,11 @@ const mongoose = require("mongoose");
 const axios = require('axios');
 
 const ghEventsSchema = new mongoose.Schema({}, { strict: false });
-const gh_events = mongoose.model("GhEvent", ghEventsSchema);
+const gh_events = mongoose.model("gh_events", ghEventsSchema);
 
 const connectDB = async () => {
     try {
-        await mongoose.connect("mongodb://127.0.0.1:27017/gh_events");
+        await mongoose.connect("mongodb://127.0.0.1:27017/training");
         console.log("MongoDB Connected Successfully");
     } catch (error) {
         console.error("Database connection failed:", error.message);
@@ -38,7 +38,9 @@ const dataFetchChrone = async () => {
         const batchSize = 1000;
         for await (const line of rl) {
             try {
-                batch.push(JSON.parse(line));
+                const event = JSON.parse(line);
+                event.created_at = new Date(event.created_at);
+                batch.push(event);
             } catch {
                 console.log(`Line no:${batch.length} is invalid`);
                 continue;

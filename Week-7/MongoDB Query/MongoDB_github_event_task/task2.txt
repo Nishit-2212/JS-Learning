@@ -94,8 +94,8 @@ Output :-
 
 
 4. Count number of events day per day
-db.gh_events.aggregate([ { $bucketAuto: { groupBy: "$created_at", buckets: 7, output: { TotalEvent: {"$sum": 1 } } } }]
-db.gh_events.aggregate([ { $bucketAuto: { groupBy: "$created_at", buckets: 7, output: { TotalEvent: {"$sum": 1 } } } }])
+- db.gh_events.aggregate([ { $bucketAuto: { groupBy: "$created_at", buckets: 7, output: { TotalEvent: {"$sum": 1 } } } }])
+- db.gh_events.aggregate([ { $bucketAuto: { groupBy: "$created_at", buckets: 7, output: { TotalEvent: {"$sum": 1 } } } }])
 [
   {
     _id: {
@@ -150,12 +150,82 @@ db.gh_events.aggregate([ { $bucketAuto: { groupBy: "$created_at", buckets: 7, ou
 
 
 5. Which UTC hour has highest activity ?
-- 
+- db.gh_events.aggregate([ { $group: { _id: {$hour: "$created_at"}, NumberOfEvents: {$sum:1} } }, { $sort: { "NumberOfEvents" : -1 } }, { $limit: 3 }])
 Output:-
-
-db.gh_events.aggregate([ { $group: { _id: {$hour: "$created_at"}, NumberOfEvents: {$sum:1} } }, { $sort: { "NumberOfEvents" : -1 } }, { $limit: 3 }])
 [
   { _id: 13, NumberOfEvents: 2131702 },
   { _id: 12, NumberOfEvents: 2117904 },
   { _id: 2, NumberOfEvents: 2082858 }
 ]
+
+
+
+6. Which event type is most frequent ?
+- db.gh_events.aggregate([ 
+     { $group : { _id:"$type",count:{$sum:1} }},
+     { $sort : { "count":-1 } },
+     { $project : { _id:0,Event: "$_id" } }
+    ])
+Output:-
+[
+  { Event: 'PushEvent' },
+  { Event: 'CreateEvent' },
+  { Event: 'PullRequestEvent' },
+  { Event: 'DeleteEvent' },
+  { Event: 'IssueCommentEvent' },
+  { Event: 'IssuesEvent' },
+  { Event: 'WatchEvent' },
+  { Event: 'PullRequestReviewCommentEvent' },
+  { Event: 'PullRequestReviewEvent' },
+  { Event: 'ReleaseEvent' },
+  { Event: 'ForkEvent' },
+  { Event: 'MemberEvent' },
+  { Event: 'CommitCommentEvent' },
+  { Event: 'PublicEvent' },
+  { Event: 'GollumEvent' },
+  { Event: 'DiscussionEvent' }
+]
+
+
+
+7. Which event type is least frequent ?
+- db.gh_events.aggregate([ 
+     { $group : { _id:"$type",count:{$sum:1} }},
+     { $sort : { "count":1 } },
+     { $project : { _id:0,Event: "$_id" } }
+    ])
+
+
+
+
+8. Which day had maximum activity ?
+- db.gh_events.aggregate([
+    { $group : { _id:{ $dateToString: { format:"%Y-%m-%d",date:"$created_at"}},
+                 count: {$sum:1}
+    }},
+    { $sort: { count:-1}},
+    { $project : { _id:0}}
+])
+
+
+db.collection.aggregate([
+  {
+    $group: {
+      _id: {
+        $dateToString: { format: "%Y-%m-%d", date: "$created_at" }
+      },
+      totalEvents: { $sum: 1 }
+    }
+  },
+  {
+    $sort: { totalEvents: -1 }
+  },
+  {
+    $limit: 1
+  }
+])
+
+
+
+9. Find 2nd Most Recent Event (Without aggregate pipeline)
+- db.gh_events.find()

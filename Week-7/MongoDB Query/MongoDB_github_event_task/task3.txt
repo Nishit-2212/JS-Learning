@@ -1,0 +1,1308 @@
+Q1. Write a query to find all documents where type is "PushEvent".
+Ans:-
+- db.gh_events.find({ type:"PushEvent" }).limit(3)
+or
+- db.gh_events.aggregate([ { $match: { type: "PushEvent" } }, { $limit : 3 } ])
+Output :- 
+[
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1437'),
+    id: '8289250528',
+    type: 'PushEvent',
+    actor: {
+      id: 3667395,
+      login: 'wikibook',
+      display_login: 'wikibook',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/wikibook',
+      avatar_url: 'https://avatars.githubusercontent.com/u/3667395?'
+    },
+    repo: {
+      id: 919315136,
+      name: 'wikibook/sqld',
+      url: 'https://api.github.com/repos/wikibook/sqld'
+    },
+    payload: {
+      repository_id: 919315136,
+      push_id: Long('30584224360'),
+      ref: 'refs/heads/main',
+      head: '1f747ff5c4dec84f9ed03c35b29fbdece599cece',
+      before: '56a9059d9586e073245fe422c112d6ac97bca287'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z')
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1438'),
+    id: '8289250532',
+    type: 'PushEvent',
+    actor: {
+      id: 45670,
+      login: 'jverkoey',
+      display_login: 'jverkoey',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/jverkoey',
+      avatar_url: 'https://avatars.githubusercontent.com/u/45670?'
+    },
+    repo: {
+      id: 927830970,
+      name: 'OBDb/Kia-K4',
+      url: 'https://api.github.com/repos/OBDb/Kia-K4'
+    },
+    payload: {
+      repository_id: 927830970,
+      push_id: Long('30584224358'),
+      ref: 'refs/heads/main',
+      head: 'abb66f2656a4064da87ddc7106de375c05fccc6d',
+      before: '47f2a4b25b21a2f779ab3d495707a7630463ce9d'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z'),
+    org: {
+      id: 121072653,
+      login: 'OBDb',
+      gravatar_id: '',
+      url: 'https://api.github.com/orgs/OBDb',
+      avatar_url: 'https://avatars.githubusercontent.com/u/121072653?'
+    }
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1439'),
+    id: '8289250546',
+    type: 'PushEvent',
+    actor: {
+      id: 222359834,
+      login: 'juanpabloponceggg',
+      display_login: 'juanpabloponceggg',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/juanpabloponceggg',
+      avatar_url: 'https://avatars.githubusercontent.com/u/222359834?'
+    },
+    repo: {
+      id: 1153646422,
+      name: 'juanpabloponceggg/MEJORAS-CV',
+      url: 'https://api.github.com/repos/juanpabloponceggg/MEJORAS-CV'
+    },
+    payload: {
+      repository_id: 1153646422,
+      push_id: Long('30584224366'),
+      ref: 'refs/heads/main',
+      head: '00608347609ee61d0981338e222390afa779b6d0',
+      before: '2239f84a384dd253585a6abef48a21e229e9c6cb'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z')
+  }
+]
+
+
+
+
+Q2. Find all events that are public: true.
+ANs:-
+- db.gh_events.find({ public : true }).limit(3)
+
+Output :- 
+[
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1437'),
+    id: '8289250528',
+    type: 'PushEvent',
+    actor: {
+      id: 3667395,
+      login: 'wikibook',
+      display_login: 'wikibook',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/wikibook',
+      avatar_url: 'https://avatars.githubusercontent.com/u/3667395?'
+    },
+    repo: {
+      id: 919315136,
+      name: 'wikibook/sqld',
+      url: 'https://api.github.com/repos/wikibook/sqld'
+    },
+    payload: {
+      repository_id: 919315136,
+      push_id: Long('30584224360'),
+      ref: 'refs/heads/main',
+      head: '1f747ff5c4dec84f9ed03c35b29fbdece599cece',
+      before: '56a9059d9586e073245fe422c112d6ac97bca287'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z')
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1438'),
+    id: '8289250532',
+    type: 'PushEvent',
+    actor: {
+      id: 45670,
+      login: 'jverkoey',
+      display_login: 'jverkoey',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/jverkoey',
+      avatar_url: 'https://avatars.githubusercontent.com/u/45670?'
+    },
+    repo: {
+      id: 927830970,
+      name: 'OBDb/Kia-K4',
+      url: 'https://api.github.com/repos/OBDb/Kia-K4'
+    },
+    payload: {
+      repository_id: 927830970,
+      push_id: Long('30584224358'),
+      ref: 'refs/heads/main',
+      head: 'abb66f2656a4064da87ddc7106de375c05fccc6d',
+      before: '47f2a4b25b21a2f779ab3d495707a7630463ce9d'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z'),
+    org: {
+      id: 121072653,
+      login: 'OBDb',
+      gravatar_id: '',
+      url: 'https://api.github.com/orgs/OBDb',
+      avatar_url: 'https://avatars.githubusercontent.com/u/121072653?'
+    }
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1439'),
+    id: '8289250546',
+    type: 'PushEvent',
+    actor: {
+      id: 222359834,
+      login: 'juanpabloponceggg',
+      display_login: 'juanpabloponceggg',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/juanpabloponceggg',
+      avatar_url: 'https://avatars.githubusercontent.com/u/222359834?'
+    },
+    repo: {
+      id: 1153646422,
+      name: 'juanpabloponceggg/MEJORAS-CV',
+      url: 'https://api.github.com/repos/juanpabloponceggg/MEJORAS-CV'
+    },
+    payload: {
+      repository_id: 1153646422,
+      push_id: Long('30584224366'),
+      ref: 'refs/heads/main',
+      head: '00608347609ee61d0981338e222390afa779b6d0',
+      before: '2239f84a384dd253585a6abef48a21e229e9c6cb'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z')
+  }
+]
+
+
+
+
+
+Q3. Find documents created on "2026-02-10T00:00:00Z".
+Ans:-
+- db.gh_events.find({ created_at:ISODate('2026-02-10T00:00:00Z')}).limit(3)
+
+Output:-
+[
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1437'),
+    id: '8289250528',
+    type: 'PushEvent',
+    actor: {
+      id: 3667395,
+      login: 'wikibook',
+      display_login: 'wikibook',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/wikibook',
+      avatar_url: 'https://avatars.githubusercontent.com/u/3667395?'
+    },
+    repo: {
+      id: 919315136,
+      name: 'wikibook/sqld',
+      url: 'https://api.github.com/repos/wikibook/sqld'
+    },
+    payload: {
+      repository_id: 919315136,
+      push_id: Long('30584224360'),
+      ref: 'refs/heads/main',
+      head: '1f747ff5c4dec84f9ed03c35b29fbdece599cece',
+      before: '56a9059d9586e073245fe422c112d6ac97bca287'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z')
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1438'),
+    id: '8289250532',
+    type: 'PushEvent',
+    actor: {
+      id: 45670,
+      login: 'jverkoey',
+      display_login: 'jverkoey',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/jverkoey',
+      avatar_url: 'https://avatars.githubusercontent.com/u/45670?'
+    },
+    repo: {
+      id: 927830970,
+      name: 'OBDb/Kia-K4',
+      url: 'https://api.github.com/repos/OBDb/Kia-K4'
+    },
+    payload: {
+      repository_id: 927830970,
+      push_id: Long('30584224358'),
+      ref: 'refs/heads/main',
+      head: 'abb66f2656a4064da87ddc7106de375c05fccc6d',
+      before: '47f2a4b25b21a2f779ab3d495707a7630463ce9d'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z'),
+    org: {
+      id: 121072653,
+      login: 'OBDb',
+      gravatar_id: '',
+      url: 'https://api.github.com/orgs/OBDb',
+      avatar_url: 'https://avatars.githubusercontent.com/u/121072653?'
+    }
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1439'),
+    id: '8289250546',
+    type: 'PushEvent',
+    actor: {
+      id: 222359834,
+      login: 'juanpabloponceggg',
+      display_login: 'juanpabloponceggg',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/juanpabloponceggg',
+      avatar_url: 'https://avatars.githubusercontent.com/u/222359834?'
+    },
+    repo: {
+      id: 1153646422,
+      name: 'juanpabloponceggg/MEJORAS-CV',
+      url: 'https://api.github.com/repos/juanpabloponceggg/MEJORAS-CV'
+    },
+    payload: {
+      repository_id: 1153646422,
+      push_id: Long('30584224366'),
+      ref: 'refs/heads/main',
+      head: '00608347609ee61d0981338e222390afa779b6d0',
+      before: '2239f84a384dd253585a6abef48a21e229e9c6cb'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z')
+  }
+]
+
+
+
+
+
+Q4. Retrieve all events where actor.login is "CRaFT4ik".
+Ans:-
+- db.gh_events.find({ "actor.login": "CRaFT4ik"}).limit(3)
+
+Output:-
+[
+  {
+    _id: ObjectId('69954fb0dce25a721f2e2b5d'),
+    id: '8289250446',
+    type: 'PushEvent',
+    actor: {
+      id: 1649292,
+      login: 'CRaFT4ik',
+      display_login: 'CRaFT4ik',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/CRaFT4ik',
+      avatar_url: 'https://avatars.githubusercontent.com/u/1649292?'
+    },
+    repo: {
+      id: 779482878,
+      name: 'CRaFT4ik/CRaFT4ik',
+      url: 'https://api.github.com/repos/CRaFT4ik/CRaFT4ik'
+    },
+    payload: {
+      repository_id: 779482878,
+      push_id: Long('30584224312'),
+      ref: 'refs/heads/main',
+      head: '8eb1f7b9d870592ab18576e6a965404e0c4e54f5',
+      before: 'd8fe0212e964551fbdf21523805e5af7c966f2f0'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z')
+  },
+  {
+    _id: ObjectId('6995533fdce25a721fe72a20'),
+    id: '8434820326',
+    type: 'DeleteEvent',
+    actor: {
+      id: 1649292,
+      login: 'CRaFT4ik',
+      display_login: 'CRaFT4ik',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/CRaFT4ik',
+      avatar_url: 'https://avatars.githubusercontent.com/u/1649292?'
+    },
+    repo: {
+      id: 1157486566,
+      name: 'CRaFT4ik/serena',
+      url: 'https://api.github.com/repos/CRaFT4ik/serena'
+    },
+    payload: {
+      ref: 'fix-jetbrains-plugin-wsl-windows',
+      ref_type: 'branch',
+      full_ref: 'refs/heads/fix-jetbrains-plugin-wsl-windows',
+      pusher_type: 'user'
+    },
+    public: true,
+    created_at: ISODate('2026-02-13T21:55:15.000Z')
+  },
+  {
+    _id: ObjectId('69955372dce25a721ff13cc1'),
+    id: '6547648814',
+    type: 'WatchEvent',
+    actor: {
+      id: 1649292,
+      login: 'CRaFT4ik',
+      display_login: 'CRaFT4ik',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/CRaFT4ik',
+      avatar_url: 'https://avatars.githubusercontent.com/u/1649292?'
+    },
+    repo: {
+      id: 998732712,
+      name: 'yichuan-w/LEANN',
+      url: 'https://api.github.com/repos/yichuan-w/LEANN'
+    },
+    payload: { action: 'started' },
+    public: true,
+    created_at: ISODate('2026-02-13T05:28:35.000Z')
+  }
+]
+
+
+
+
+Q5. Find all events where repo.name contains "microsoft".
+Ans:-
+- db.gh_events.find({ "repo.name":{ $regex: /microsoft/ }}).limit(3)
+
+Output:-
+db.gh_events.find({ "repo.name":{ $regex: "microsoft" ,$options:"i"}}).limit(3)
+[
+  {
+    _id: ObjectId('69955322dce25a721fdfcf36'),
+    id: '8431418887',
+    type: 'PushEvent',
+    actor: {
+      id: 39814207,
+      login: 'pull[bot]',
+      display_login: 'pull',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/pull[bot]',
+      avatar_url: 'https://avatars.githubusercontent.com/u/39814207?'
+    },
+    repo: {
+      id: 587057024,
+      name: '16CentAstrology/Microsoft-Teams-Samples',
+      url: 'https://api.github.com/repos/16CentAstrology/Microsoft-Teams-Samples'
+    },
+    payload: {
+      repository_id: 587057024,
+      push_id: Long('30726476573'),
+      ref: 'refs/heads/main',
+      head: '85170463ef6124af787093452e67baf5d079dd5a',
+      before: '2291abede8ab5830ea65902c3328cab38c38a8cd'
+    },
+    public: true,
+    created_at: ISODate('2026-02-13T19:42:14.000Z')
+  },
+  {
+    _id: ObjectId('69955aed7d71c2a0186024ab'),
+    id: '8431418887',
+    type: 'PushEvent',
+    actor: {
+      id: 39814207,
+      login: 'pull[bot]',
+      display_login: 'pull',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/pull[bot]',
+      avatar_url: 'https://avatars.githubusercontent.com/u/39814207?'
+    },
+    repo: {
+      id: 587057024,
+      name: '16CentAstrology/Microsoft-Teams-Samples',
+      url: 'https://api.github.com/repos/16CentAstrology/Microsoft-Teams-Samples'
+    },
+    payload: {
+      repository_id: 587057024,
+      push_id: Long('30726476573'),
+      ref: 'refs/heads/main',
+      head: '85170463ef6124af787093452e67baf5d079dd5a',
+      before: '2291abede8ab5830ea65902c3328cab38c38a8cd'
+    },
+    public: true,
+    created_at: ISODate('2026-02-13T19:42:14.000Z')
+  },
+  {
+    _id: ObjectId('6995502cdce25a721f475cdc'),
+    id: '8292219993',
+    type: 'PushEvent',
+    actor: {
+      id: 39814207,
+      login: 'pull[bot]',
+      display_login: 'pull',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/pull[bot]',
+      avatar_url: 'https://avatars.githubusercontent.com/u/39814207?'
+    },
+    repo: {
+      id: 631100146,
+      name: '16CentAstrology/microsoft-365-docs',
+      url: 'https://api.github.com/repos/16CentAstrology/microsoft-365-docs'
+    },
+    payload: {
+      repository_id: 631100146,
+      push_id: Long('30587192559'),
+      ref: 'refs/heads/public',
+      head: '6c8e7ee49ab04aa4953b8c5c8f8d13b29c86ee23',
+      before: 'dab1059558ec0cacef256faf3b2f0024784081b8'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T02:39:18.000Z')
+  }
+]
+
+
+
+
+Q6. Find documents where type is either "PushEvent" or "WatchEvent".
+Ans:- 
+- db.gh_events.find({ $or: [{type:"PushEVent"},{type:"WatchEvent"}]}).limit(3)
+
+Output:-
+[
+  {
+    _id: ObjectId('69954fb0dce25a721f2e2bd7'),
+    id: '6442154845',
+    type: 'WatchEvent',
+    actor: {
+      id: 206495698,
+      login: 'a-makelky',
+      display_login: 'a-makelky',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/a-makelky',
+      avatar_url: 'https://avatars.githubusercontent.com/u/206495698?'
+    },
+    repo: {
+      id: 1151665392,
+      name: 'elrolio/model-intel-skill',
+      url: 'https://api.github.com/repos/elrolio/model-intel-skill'
+    },
+    payload: { action: 'started' },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:06.000Z')
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e188d'),
+    id: '6442158111',
+    type: 'WatchEvent',
+    actor: {
+      id: 65445287,
+      login: 'KAPITOSHKA7400',
+      display_login: 'KAPITOSHKA7400',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/KAPITOSHKA7400',
+      avatar_url: 'https://avatars.githubusercontent.com/u/65445287?'
+    },
+    repo: {
+      id: 895714308,
+      name: 'NuboHeimer/VkVideoLiveService',
+      url: 'https://api.github.com/repos/NuboHeimer/VkVideoLiveService'
+    },
+    payload: { action: 'started' },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:19.000Z')
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1898'),
+    id: '6442158896',
+    type: 'WatchEvent',
+    actor: {
+      id: 42789638,
+      login: 'Hamza-Shewa',
+      display_login: 'Hamza-Shewa',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/Hamza-Shewa',
+      avatar_url: 'https://avatars.githubusercontent.com/u/42789638?'
+    },
+    repo: {
+      id: 326228917,
+      name: 'projectdiscovery/katana',
+      url: 'https://api.github.com/repos/projectdiscovery/katana'
+    },
+    payload: { action: 'started' },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:22.000Z'),
+    org: {
+      id: 50994705,
+      login: 'projectdiscovery',
+      gravatar_id: '',
+      url: 'https://api.github.com/orgs/projectdiscovery',
+      avatar_url: 'https://avatars.githubusercontent.com/u/50994705?'
+    }
+  }
+]
+
+
+
+
+
+
+Q7. Find events where actor.id is greater than 1,000,000.
+Ans:-
+- db.gh_events.find({ "actor.id":{$gt:1000000}},{_id:0,type:1,"actor.id":1,"repo.name":1,created_at:1}).limit(5)
+
+Output:-
+[
+  {
+    type: 'PushEvent',
+    actor: { id: 1000006 },
+    repo: { name: 'Innoveto/ki-fundamental-playbook' },
+    created_at: ISODate('2026-02-10T17:56:52.000Z')
+  },
+  {
+    type: 'PushEvent',
+    actor: { id: 1000006 },
+    repo: { name: 'Innoveto/ki-fundamental-playbook' },
+    created_at: ISODate('2026-02-10T18:07:54.000Z')
+  },
+  {
+    type: 'CreateEvent',
+    actor: { id: 1000006 },
+    repo: { name: 'Innoveto/ki-fundamental-playbook' },
+    created_at: ISODate('2026-02-11T15:48:21.000Z')
+  },
+  {
+    type: 'ForkEvent',
+    actor: { id: 1000006 },
+    repo: { name: 'openclaw/openclaw' },
+    created_at: ISODate('2026-02-14T15:24:34.000Z')
+  },
+  {
+    type: 'PullRequestEvent',
+    actor: { id: 1000006 },
+    repo: { name: 'openclaw/openclaw' },
+    created_at: ISODate('2026-02-14T15:26:00.000Z')
+  }
+]
+
+
+
+
+
+
+Q8. Find events where type is NOT "CreateEvent".
+Ans:-
+- db.gh_events.find({ type : { $nin:["CreateEvent"] }})
+
+Output:-
+[
+  {
+    _id: ObjectId('69954fb0dce25a721f2e151c'),
+    id: '6442162769',
+    type: 'CommitCommentEvent',
+    actor: {
+      id: 35613825,
+      login: 'vercel[bot]',
+      display_login: 'vercel',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/vercel[bot]',
+      avatar_url: 'https://avatars.githubusercontent.com/u/35613825?'
+    },
+    repo: {
+      id: 1099337323,
+      name: 'vicenteopaso/vicenteopaso-vibecode',
+      url: 'https://api.github.com/repos/vicenteopaso/vicenteopaso-vibecode'
+    },
+    payload: {
+      action: 'created',
+      comment: {
+        url: 'https://api.github.com/repos/vicenteopaso/vicenteopaso-vibecode/comments/176781175',
+        html_url: 'https://github.com/vicenteopaso/vicenteopaso-vibecode/commit/873fc77c706f3b1039ec49f01d3e19b00f64becf#commitcomment-176781175',
+        id: 176781175,
+        node_id: 'CC_kwDOQYaOa84KiXd3',
+        user: {
+          login: 'vercel[bot]',
+          id: 35613825,
+          node_id: 'MDM6Qm90MzU2MTM4MjU=',
+          avatar_url: 'https://avatars.githubusercontent.com/in/8329?v=4',
+          gravatar_id: '',
+          url: 'https://api.github.com/users/vercel%5Bbot%5D',
+          html_url: 'https://github.com/apps/vercel',
+          followers_url: 'https://api.github.com/users/vercel%5Bbot%5D/followers',
+          following_url: 'https://api.github.com/users/vercel%5Bbot%5D/following{/other_user}',
+          gists_url: 'https://api.github.com/users/vercel%5Bbot%5D/gists{/gist_id}',
+          starred_url: 'https://api.github.com/users/vercel%5Bbot%5D/starred{/owner}{/repo}',
+          subscriptions_url: 'https://api.github.com/users/vercel%5Bbot%5D/subscriptions',
+          organizations_url: 'https://api.github.com/users/vercel%5Bbot%5D/orgs',
+          repos_url: 'https://api.github.com/users/vercel%5Bbot%5D/repos',
+          events_url: 'https://api.github.com/users/vercel%5Bbot%5D/events{/privacy}',
+          received_events_url: 'https://api.github.com/users/vercel%5Bbot%5D/received_events',
+          type: 'Bot',
+          user_view_type: 'public',
+          site_admin: false
+        },
+        position: null,
+        line: null,
+        path: null,
+        commit_id: '873fc77c706f3b1039ec49f01d3e19b00f64becf',
+        created_at: '2026-02-10T00:00:37Z',
+        updated_at: '2026-02-10T00:00:37Z',
+        body: 'Successfully deployed to the following URLs:\n' +
+          '\n' +
+          '## vicenteopaso – ./\n' +
+          '\n' +
+          '[opa.so](https://opa.so)  \n' +
+          '[vicenteopaso.vercel.app](https://vicenteopaso.vercel.app)  \n' +
+          '[vicenteopaso-vicenteopaso.vercel.app](https://vicenteopaso-vicenteopaso.vercel.app)  \n' +
+          '[vicenteopaso-git-main-vicenteopaso.vercel.app](https://vicenteopaso-git-main-vicenteopaso.vercel.app)',
+        reactions: {
+          url: 'https://api.github.com/repos/vicenteopaso/vicenteopaso-vibecode/comments/176781175/reactions',
+          total_count: 0,
+          '+1': 0,
+          '-1': 0,
+          laugh: 0,
+          hooray: 0,
+          confused: 0,
+          heart: 0,
+          rocket: 0,
+          eyes: 0
+        }
+      }
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:37.000Z')
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e2e59'),
+    id: '6442165991',
+    type: 'CommitCommentEvent',
+    actor: {
+      id: 35613825,
+      login: 'vercel[bot]',
+      display_login: 'vercel',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/vercel[bot]',
+      avatar_url: 'https://avatars.githubusercontent.com/u/35613825?'
+    },
+    repo: {
+      id: 1144426608,
+      name: 'GRRRillaNinja/modern-dnd-labyrinth',
+      url: 'https://api.github.com/repos/GRRRillaNinja/modern-dnd-labyrinth'
+    },
+    payload: {
+      action: 'created',
+      comment: {
+        url: 'https://api.github.com/repos/GRRRillaNinja/modern-dnd-labyrinth/comments/176781188',
+        html_url: 'https://github.com/GRRRillaNinja/modern-dnd-labyrinth/commit/468b297bcbac4cfdb3467d9e73154aa0ec346a92#commitcomment-176781188',
+        id: 176781188,
+        node_id: 'CC_kwDORDaQcM4KiXeE',
+        user: {
+          login: 'vercel[bot]',
+          id: 35613825,
+          node_id: 'MDM6Qm90MzU2MTM4MjU=',
+          avatar_url: 'https://avatars.githubusercontent.com/in/8329?v=4',
+          gravatar_id: '',
+          url: 'https://api.github.com/users/vercel%5Bbot%5D',
+          html_url: 'https://github.com/apps/vercel',
+          followers_url: 'https://api.github.com/users/vercel%5Bbot%5D/followers',
+          following_url: 'https://api.github.com/users/vercel%5Bbot%5D/following{/other_user}',
+          gists_url: 'https://api.github.com/users/vercel%5Bbot%5D/gists{/gist_id}',
+          starred_url: 'https://api.github.com/users/vercel%5Bbot%5D/starred{/owner}{/repo}',
+          subscriptions_url: 'https://api.github.com/users/vercel%5Bbot%5D/subscriptions',
+          organizations_url: 'https://api.github.com/users/vercel%5Bbot%5D/orgs',
+          repos_url: 'https://api.github.com/users/vercel%5Bbot%5D/repos',
+          events_url: 'https://api.github.com/users/vercel%5Bbot%5D/events{/privacy}',
+          received_events_url: 'https://api.github.com/users/vercel%5Bbot%5D/received_events',
+          type: 'Bot',
+          user_view_type: 'public',
+          site_admin: false
+        },
+        position: null,
+        line: null,
+        path: null,
+        commit_id: '468b297bcbac4cfdb3467d9e73154aa0ec346a92',
+        created_at: '2026-02-10T00:00:50Z',
+        updated_at: '2026-02-10T00:00:50Z',
+        body: 'Successfully deployed to the following URLs:\n' +
+          '\n' +
+          '## dnd_labyrinth – ./\n' +
+          '\n' +
+          '[dndlabyrinth.vercel.app](https://dndlabyrinth.vercel.app)  \n' +
+          '[dndlabyrinth-js-projects-e6da2884.vercel.app](https://dndlabyrinth-js-projects-e6da2884.vercel.app)  \n' +
+          '[dndlabyrinth-git-main-js-projects-e6da2884.vercel.app](https://dndlabyrinth-git-main-js-projects-e6da2884.vercel.app)',
+        reactions: {
+          url: 'https://api.github.com/repos/GRRRillaNinja/modern-dnd-labyrinth/comments/176781188/reactions',
+          total_count: 0,
+          '+1': 0,
+          '-1': 0,
+          laugh: 0,
+          hooray: 0,
+          confused: 0,
+          heart: 0,
+          rocket: 0,
+          eyes: 0
+        }
+      }
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:50.000Z')
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e2ec5'),
+    id: '6442167499',
+    type: 'CommitCommentEvent',
+    actor: {
+      id: 35613825,
+      login: 'vercel[bot]',
+      display_login: 'vercel',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/vercel[bot]',
+      avatar_url: 'https://avatars.githubusercontent.com/u/35613825?'
+    },
+    repo: {
+      id: 1077885053,
+      name: 'martin18f/ppauto',
+      url: 'https://api.github.com/repos/martin18f/ppauto'
+    },
+    payload: {
+      action: 'created',
+      comment: {
+        url: 'https://api.github.com/repos/martin18f/ppauto/comments/176781193',
+        html_url: 'https://github.com/martin18f/ppauto/commit/0039480509e61e4c5e953e5b5bc6cecd63f5c542#commitcomment-176781193',
+        id: 176781193,
+        node_id: 'CC_kwDOQD84fc4KiXeJ',
+        user: {
+          login: 'vercel[bot]',
+          id: 35613825,
+          node_id: 'MDM6Qm90MzU2MTM4MjU=',
+          avatar_url: 'https://avatars.githubusercontent.com/in/8329?v=4',
+          gravatar_id: '',
+          url: 'https://api.github.com/users/vercel%5Bbot%5D',
+          html_url: 'https://github.com/apps/vercel',
+          followers_url: 'https://api.github.com/users/vercel%5Bbot%5D/followers',
+          following_url: 'https://api.github.com/users/vercel%5Bbot%5D/following{/other_user}',
+          gists_url: 'https://api.github.com/users/vercel%5Bbot%5D/gists{/gist_id}',
+          starred_url: 'https://api.github.com/users/vercel%5Bbot%5D/starred{/owner}{/repo}',
+          subscriptions_url: 'https://api.github.com/users/vercel%5Bbot%5D/subscriptions',
+          organizations_url: 'https://api.github.com/users/vercel%5Bbot%5D/orgs',
+          repos_url: 'https://api.github.com/users/vercel%5Bbot%5D/repos',
+          events_url: 'https://api.github.com/users/vercel%5Bbot%5D/events{/privacy}',
+          received_events_url: 'https://api.github.com/users/vercel%5Bbot%5D/received_events',
+          type: 'Bot',
+          user_view_type: 'public',
+          site_admin: false
+        },
+        position: null,
+        line: null,
+        path: null,
+        commit_id: '0039480509e61e4c5e953e5b5bc6cecd63f5c542',
+        created_at: '2026-02-10T00:00:55Z',
+        updated_at: '2026-02-10T00:00:55Z',
+        body: 'Successfully deployed to the following URLs:\n' +
+          '\n' +
+          '## pp-auto – ./\n' +
+          '\n' +
+          '[ppauto.sk](https://ppauto.sk)  \n' +
+          '[www.ppauto.sk](https://www.ppauto.sk)  \n' +
+          '[pp-auto.vercel.app](https://pp-auto.vercel.app)  \n' +
+          '[pp-auto-martin18fs-projects.vercel.app](https://pp-auto-martin18fs-projects.vercel.app)  \n' +
+          '[pp-auto-git-main-martin18fs-projects.vercel.app](https://pp-auto-git-main-martin18fs-projects.vercel.app)',
+        reactions: {
+          url: 'https://api.github.com/repos/martin18f/ppauto/comments/176781193/reactions',
+          total_count: 0,
+          '+1': 0,
+          '-1': 0,
+          laugh: 0,
+          hooray: 0,
+          confused: 0,
+          heart: 0,
+          rocket: 0,
+          eyes: 0
+        }
+      }
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:56.000Z')
+  }
+]
+
+
+
+
+
+Q9. Find events where org field exists.
+Ans:-
+- db.gh_events.find({ org : { $exists:true }}).limit(3)
+
+Output:-
+[
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1438'),
+    id: '8289250532',
+    type: 'PushEvent',
+    actor: {
+      id: 45670,
+      login: 'jverkoey',
+      display_login: 'jverkoey',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/jverkoey',
+      avatar_url: 'https://avatars.githubusercontent.com/u/45670?'
+    },
+    repo: {
+      id: 927830970,
+      name: 'OBDb/Kia-K4',
+      url: 'https://api.github.com/repos/OBDb/Kia-K4'
+    },
+    payload: {
+      repository_id: 927830970,
+      push_id: Long('30584224358'),
+      ref: 'refs/heads/main',
+      head: 'abb66f2656a4064da87ddc7106de375c05fccc6d',
+      before: '47f2a4b25b21a2f779ab3d495707a7630463ce9d'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z'),
+    org: {
+      id: 121072653,
+      login: 'OBDb',
+      gravatar_id: '',
+      url: 'https://api.github.com/orgs/OBDb',
+      avatar_url: 'https://avatars.githubusercontent.com/u/121072653?'
+    }
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e143c'),
+    id: '8289250514',
+    type: 'PushEvent',
+    actor: {
+      id: 211645134,
+      login: 'adelphi-liong',
+      display_login: 'adelphi-liong',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/adelphi-liong',
+      avatar_url: 'https://avatars.githubusercontent.com/u/211645134?'
+    },
+    repo: {
+      id: 911130566,
+      name: 'AtomiCloud/ketone.workspace',
+      url: 'https://api.github.com/repos/AtomiCloud/ketone.workspace'
+    },
+    payload: {
+      repository_id: 911130566,
+      push_id: Long('30584224288'),
+      ref: 'refs/heads/main',
+      head: 'cd8264924b11d5b27f3026f4eda9356c1c60a7ce',
+      before: 'd2643937ed75f26bdf7f6c1bbb31dfe8501cac4e'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z'),
+    org: {
+      id: 55664364,
+      login: 'AtomiCloud',
+      gravatar_id: '',
+      url: 'https://api.github.com/orgs/AtomiCloud',
+      avatar_url: 'https://avatars.githubusercontent.com/u/55664364?'
+    }
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e143d'),
+    id: '8289250591',
+    type: 'PushEvent',
+    actor: {
+      id: 169709865,
+      login: 'ajanicijamd',
+      display_login: 'ajanicijamd',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/ajanicijamd',
+      avatar_url: 'https://avatars.githubusercontent.com/u/169709865?'
+    },
+    repo: {
+      id: 962090208,
+      name: 'ROCm/rocm-systems',
+      url: 'https://api.github.com/repos/ROCm/rocm-systems'
+    },
+    payload: {
+      repository_id: 962090208,
+      push_id: Long('30584224431'),
+      ref: 'refs/heads/ajanicijamd/ai-nic-2',
+      head: 'f2a272cc5a74c306ba11cda251479a08ef065d59',
+      before: 'ab46d0f9981e7ba51e66209c7fa6692d3e9bc4ff'
+    },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:00.000Z'),
+    org: {
+      id: 21157610,
+      login: 'ROCm',
+      gravatar_id: '',
+      url: 'https://api.github.com/orgs/ROCm',
+      avatar_url: 'https://avatars.githubusercontent.com/u/21157610?'
+    }
+  }
+]
+
+
+
+
+
+
+Q10. Find events where payload.action is "started" AND type is "WatchEvent".
+Ans:-
+- db.gh_events.find({ $and: [{type:"WatchEvent"},{"payload.action":"started"}]}).limit(3)
+
+Output:-
+[
+  {
+    _id: ObjectId('69954fb0dce25a721f2e2bd7'),
+    id: '6442154845',
+    type: 'WatchEvent',
+    actor: {
+      id: 206495698,
+      login: 'a-makelky',
+      display_login: 'a-makelky',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/a-makelky',
+      avatar_url: 'https://avatars.githubusercontent.com/u/206495698?'
+    },
+    repo: {
+      id: 1151665392,
+      name: 'elrolio/model-intel-skill',
+      url: 'https://api.github.com/repos/elrolio/model-intel-skill'
+    },
+    payload: { action: 'started' },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:06.000Z')
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e188d'),
+    id: '6442158111',
+    type: 'WatchEvent',
+    actor: {
+      id: 65445287,
+      login: 'KAPITOSHKA7400',
+      display_login: 'KAPITOSHKA7400',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/KAPITOSHKA7400',
+      avatar_url: 'https://avatars.githubusercontent.com/u/65445287?'
+    },
+    repo: {
+      id: 895714308,
+      name: 'NuboHeimer/VkVideoLiveService',
+      url: 'https://api.github.com/repos/NuboHeimer/VkVideoLiveService'
+    },
+    payload: { action: 'started' },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:19.000Z')
+  },
+  {
+    _id: ObjectId('69954fb0dce25a721f2e1898'),
+    id: '6442158896',
+    type: 'WatchEvent',
+    actor: {
+      id: 42789638,
+      login: 'Hamza-Shewa',
+      display_login: 'Hamza-Shewa',
+      gravatar_id: '',
+      url: 'https://api.github.com/users/Hamza-Shewa',
+      avatar_url: 'https://avatars.githubusercontent.com/u/42789638?'
+    },
+    repo: {
+      id: 326228917,
+      name: 'projectdiscovery/katana',
+      url: 'https://api.github.com/repos/projectdiscovery/katana'
+    },
+    payload: { action: 'started' },
+    public: true,
+    created_at: ISODate('2026-02-10T00:00:22.000Z'),
+    org: {
+      id: 50994705,
+      login: 'projectdiscovery',
+      gravatar_id: '',
+      url: 'https://api.github.com/orgs/projectdiscovery',
+      avatar_url: 'https://avatars.githubusercontent.com/u/50994705?'
+    }
+  }
+]
+
+
+
+
+Q11. Return only actor.login, repo.name, and type fields (exclude _id).
+Ans:-
+-  db.gh_events.find({},{_id:0,"repo.name":1,"actor.login":1,"type":1}).limit(3)
+
+Output:-
+db.gh_events.find({},{_id:0,"repo.name":1,"actor.login":1,"type":1}).limit(3)
+[
+  {
+    type: 'PushEvent',
+    actor: { login: 'wikibook' },
+    repo: { name: 'wikibook/sqld' }
+  },
+  {
+    type: 'PushEvent',
+    actor: { login: 'jverkoey' },
+    repo: { name: 'OBDb/Kia-K4' }
+  },
+  {
+    type: 'PushEvent',
+    actor: { login: 'juanpabloponceggg' },
+    repo: { name: 'juanpabloponceggg/MEJORAS-CV' }
+  }
+]
+
+
+
+
+
+Q12. Sort all events by created_at in descending order.
+Ans:-
+- db.gh_events.find({},{_id:0,type:1,"actor.id":1,"repo.name":1,created_at:1}).sort({created_at:-1}).limit(5)
+Output:-
+[
+  {
+    type: 'MemberEvent',
+    actor: { id: 149198402 },
+    repo: { name: 'Medet0777/unity-project-1' },
+    created_at: ISODate('2026-02-24T06:00:48.000Z')
+  },
+  {
+    type: 'ReleaseEvent',
+    actor: { id: 252817335 },
+    repo: { name: 'kenoke303/VOD_CDN' },
+    created_at: ISODate('2026-02-24T06:00:48.000Z')
+  },
+  {
+    type: 'IssuesEvent',
+    actor: { id: 41898282 },
+    repo: { name: 'Ansvar-Systems/Irish-law-mcp' },
+    created_at: ISODate('2026-02-24T06:00:48.000Z')
+  },
+  {
+    type: 'IssuesEvent',
+    actor: { id: 41898282 },
+    repo: { name: 'Ansvar-Systems/Irish-law-mcp' },
+    created_at: ISODate('2026-02-24T06:00:48.000Z')
+  },
+  {
+    type: 'IssuesEvent',
+    actor: { id: 232618043 },
+    repo: { name: 'antoarockiaraj48-max/Cassandra-' },
+    created_at: ISODate('2026-02-24T06:00:48.000Z')
+  }
+]
+
+
+
+
+Q13. Get the latest 5 events using sorting and limit.
+Ans:-
+- db.gh_events.find({},{_id:0,type:1,"actor.id":1,"repo.name":1,created_at:1}).sort({created_at:-1}).limit(5)
+
+Output:-
+[
+  {
+    type: 'PullRequestEvent',
+    actor: { id: 1084977 },
+    repo: { name: 'gonka-ai/gonka' },
+    created_at: ISODate('2026-02-24T06:01:54.000Z')
+  },
+  {
+    type: 'IssuesEvent',
+    actor: { id: 203058578 },
+    repo: { name: 'frmscoe/paysys-pmo' },
+    created_at: ISODate('2026-02-24T06:01:54.000Z')
+  },
+  {
+    type: 'CreateEvent',
+    actor: { id: 49699333 },
+    repo: { name: 'OwOBots/bluebot' },
+    created_at: ISODate('2026-02-24T06:01:53.000Z')
+  },
+  {
+    type: 'PushEvent',
+    actor: { id: 176685668 },
+    repo: { name: 'kanmitsu/kanmitsu.github.io' },
+    created_at: ISODate('2026-02-24T06:01:53.000Z')
+  },
+  {
+    type: 'IssueCommentEvent',
+    actor: { id: 56653020 },
+    repo: {
+      name: 'aws-aemilia-syd/Github-PR-Commit-Integration-Test-DoNotTouch-GitH-MJCD6L4M-v2-prod-ap-southeast-2'
+    },
+    created_at: ISODate('2026-02-24T06:01:53.000Z')
+  }
+]
+
+
+
+
+
+
+Q14. Update all "WatchEvent" documents and set a new field category: "engagement".
+Ans:-
+- db.gh_events.updateMany(
+    { type: "WatchEvent" },
+    { $set : { category: "engagement"}}
+)
+Output:-
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 6514,
+  modifiedCount: 6514,
+  upsertedCount: 0
+}
+
+
+
+
+
+Q15. Rename field actor.display_login to actor.displayName.
+Ans:-
+- db.gh_events.updateMany({},{$rename:{'actor.display_login':'actor.displayName'}})
+
+Output:-
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 301011,
+  modifiedCount: 301011,
+  upsertedCount: 0
+}
+
+
+
+
+Q16. Remove the gravatar_id field from all documents.
+Ans:-
+- db.gh_events.updateMany({ },{ $unset:{"actor.gravatar_id":""}})
+
+
+Output:-
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 301011,
+  modifiedCount: 301011,
+  upsertedCount: 0
+}
+
+
+
+
+Q17. Delete all documents where type is "PublicEvent".
+Ans:-
+- db.gh_events.deleteMany({type:"PublicEvent"})
+
+{ acknowledged: true, deletedCount: 112 }
+
+
+
+
+Q18. Count how many events exist for each type.
+Ans:-
+- db.gh_events.aggregate([
+    { $group: { _id:"$type",TotalNumber:{$sum:1}}}
+])
+
+Output:-
+[
+  { _id: 'GollumEvent', TotalNumber: 155 },
+  { _id: 'PushEvent', TotalNumber: 208197 },
+  { _id: 'DiscussionEvent', TotalNumber: 40 },
+  { _id: 'ForkEvent', TotalNumber: 1488 },
+  { _id: 'PullRequestReviewEvent', TotalNumber: 4318 },
+  { _id: 'IssueCommentEvent', TotalNumber: 8650 },
+  { _id: 'IssuesEvent', TotalNumber: 7564 },
+  { _id: 'PullRequestEvent', TotalNumber: 20893 },
+  { _id: 'ReleaseEvent', TotalNumber: 2042 },
+  { _id: 'CommitCommentEvent', TotalNumber: 142 },
+  { _id: 'PullRequestReviewCommentEvent', TotalNumber: 4468 },
+  { _id: 'CreateEvent', TotalNumber: 26597 },
+  { _id: 'WatchEvent', TotalNumber: 6514 },
+  { _id: 'MemberEvent', TotalNumber: 621 },
+  { _id: 'DeleteEvent', TotalNumber: 9322 }
+]
+
+
+
+
+
+
+Q19. Find total number of events per actor.login and sort by highest count.
+Aggregation:
+- Group events by repo.name
+- Count total events per repo
+- Show only repos with more than 1 event
+Ans:-
+- db.gh_events.aggregate([
+    { $group: { _id:"$repo.name",count:{$sum:1} }},
+    { $match: { count : { $gt: 1}}}
+]);
+
+
+Output:-
+[
+  { _id: 'GollumEvent', TotalNumber: 155 },
+  { _id: 'PushEvent', TotalNumber: 208197 },
+  { _id: 'DiscussionEvent', TotalNumber: 40 },
+  { _id: 'ForkEvent', TotalNumber: 1488 },
+  { _id: 'PullRequestReviewEvent', TotalNumber: 4318 },
+  { _id: 'IssueCommentEvent', TotalNumber: 8650 },
+  { _id: 'IssuesEvent', TotalNumber: 7564 },
+  { _id: 'PullRequestEvent', TotalNumber: 20893 },
+  { _id: 'ReleaseEvent', TotalNumber: 2042 },
+  { _id: 'CommitCommentEvent', TotalNumber: 142 },
+  { _id: 'PullRequestReviewCommentEvent', TotalNumber: 4468 },
+  { _id: 'CreateEvent', TotalNumber: 26597 },
+  { _id: 'WatchEvent', TotalNumber: 6514 },
+  { _id: 'MemberEvent', TotalNumber: 621 },
+  { _id: 'DeleteEvent', TotalNumber: 9322 }
+]
+gh_events> db.gh_events.aggregate([
+...     { $group: { _id:"$repo.name",count:{$sum:1} }},
+...     { $match: { count : { $gt: 1}}}
+... ]);
+
+gh_events> db.ghevents.aggregate([
+...     { $group: { _id:"$repo.name",count:{$sum:1} }},
+...     { $match: { count : { $gt: 1}}}
+... ]);
+[
+  { _id: 'wc-spaceopsinc/events', count: 6 },
+  { _id: 'purushothamr01/purushothamr', count: 8 },
+  { _id: 'Yanzz16/mikunime', count: 2 },
+  { _id: 'mayankpatel1004/service-pro', count: 2 },
+  { _id: 'XxxXTeam/business2api', count: 2 },
+  { _id: 'JJ-IM/JJ-IM', count: 2 },
+  { _id: 'mustang-im/mustang', count: 2 },
+  { _id: 'nuuuwan/lk_news', count: 2 },
+  { _id: 'levitte/openssl', count: 2 },
+  { _id: 'AzizReja10/DSA', count: 3 },
+  { _id: 'xieyuheng/x-lisp', count: 2 },
+  { _id: 'Bomussa/love', count: 5 },
+  { _id: 'Raw9exe-creator2/SKIDDER', count: 3 },
+  { _id: 'stranske/Counter_Risk', count: 3 },
+  { _id: 'dev-nolant/ai-permissions-layer', count: 5 },
+  { _id: 'KingBain/swimming-watcher-9000', count: 2 },
+  { _id: 'liamfoneill/dotfiles', count: 4 },
+  {
+    _id: 'skylathadani-ms/synthetics-swa-traffic-20260223120737',
+    count: 3
+  },
+  { _id: 'EminNiftili/MedAppointment', count: 2 },
+  { _id: 'ascenthurera/ascenthurera', count: 2 }
+]
