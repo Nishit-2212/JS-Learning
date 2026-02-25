@@ -8,7 +8,8 @@ const { adminMiddleware } = require('../middleware/adminmiddleware.js');
 const router = express.Router();
 
 
-router.post('/create-product',verifyToken,adminMiddleware, addProduct);
+// router.post('/create-product',verifyToken,adminMiddleware, addProduct);
+router.post('/create-product', addProduct);
 router.get('/list/:page',fetchProduct);
 router.get('/:id', getProductById);
 

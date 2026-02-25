@@ -2,22 +2,33 @@ const { LocalStorage } = require("node-localstorage");
 
 let localStorage = new LocalStorage("./models");
 
-let productData = JSON.parse(localStorage.getItem("product")) || [];
+let productData = JSON.parse(localStorage.getItem("productData")) || [];
 let productLastId = JSON.parse(localStorage.getItem("productId")) || 1;
 
-const addProduct = (req, res) => {
+
+const productModel = require("../models/product");
+
+
+const addProduct = async(req, res) => {
   let data = req.body;
   console.log(data);
 
   console.log("Inner Add Product Controller");
 
   try {
-    data.id = productLastId;
-    productData.push(data);
-    localStorage.setItem("productId", JSON.stringify(++productLastId));
-    localStorage.setItem("product", JSON.stringify(productData));
-    console.log(productData);
-    return res.status(201).json({message: "Product added successfully" });
+    const newProduct = new productModel({
+      title: data.title,
+      category: data.category,
+      image: data.image,
+      description: data.description,
+      price: Number(data.price),
+      stock: Number(data.stock),
+    });
+    await newProduct.save();
+    console.log(newProduct);
+    return res.status(201).json({message: "Product added successfully",
+      product: newProduct
+     });
   } catch (err) {
     console.error("error in adding product", err);
     return res.status(400).json({ message: "Error in adding product" });
