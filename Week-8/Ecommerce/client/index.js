@@ -66,10 +66,10 @@ const loadProducts = async (getPage) => {
   let page = getPage || 1;
 
   try {
-    const productsData = await fetch(`http://localhost:3000/api/product/list/${getPage}`)
+    const productsData = await fetch(`http://localhost:3000/api/product/list`)
       .then((res) => res.json())
 
-    console.log(page)
+    
     console.log(productsData);
 
     // let editDeleteBtn =
@@ -98,7 +98,7 @@ const loadProducts = async (getPage) => {
     productsData.map((da) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-                <td style="display: none;">${da.id}</td>   
+                <td style="display: none;">${da.productId}</td>   
                 <td>
                     ${da.title}
                 </td>

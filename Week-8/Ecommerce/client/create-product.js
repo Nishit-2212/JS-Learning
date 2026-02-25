@@ -105,7 +105,7 @@ const changeSettings = async () => {
     categoryInput.value = product.category;
     priceInput.value = product.price;
     stockInput.value = product.stock;
-    imageUrlInput.value = product.imageUrl || '';
+    imageUrlInput.value = product.image || '';
   }
   catch (err) {
     console.log("Error in fetching the product by id", err)

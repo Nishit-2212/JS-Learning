@@ -61,8 +61,8 @@ const getUserFromToken = async () => {
 (async() => {
 
     const user = await getUserFromToken();
-    if(user) {
-        globalThis.location.href = "index.html";
-        alert("You already Login Please LogOut first to login again")
-    }
+    // if(user) {
+    //     globalThis.location.href = "index.html";
+    //     alert("You already Login Please LogOut first to login again")
+    // }
 })()

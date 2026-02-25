@@ -1,24 +1,33 @@
-const { LocalStorage } = require("node-localstorage");
+const categoryModel = require('../models/category');
+const categoryCounterModel = require('../models/categoryCounter')
 
-let localStorage = new LocalStorage("./models");
 
-let Category = JSON.parse(localStorage.getItem("category")) || [];
-let CategoryLastId = JSON.parse(localStorage.getItem("categoryId")) || 1;
-
-const addCategory = (req, res) => {
+const addCategory = async(req, res) => {
     let data = req.body;
-    console.log(data.name);
-    const findCategoryExist = Category.find((category) => category.name == data.name);
-    if(findCategoryExist) {
+    console.log("data.name",data.name);
+
+    const getCategory = await categoryModel.findOne({name:data.name})
+    if(getCategory) {
         return res.status(400).json({message:"Category Already Exist"})
     }
 
     try {
-        data.id = CategoryLastId;
-        Category.push(data);
-        localStorage.setItem("categoryId", JSON.stringify(++CategoryLastId));
-        localStorage.setItem("category", JSON.stringify(Category));
-        // console.log(Category);
+        const categoryLastId = await categoryCounterModel.findOne();
+        console.log("categoryLastId",categoryLastId)
+
+        const newCategory = new categoryModel({
+            categoryId: categoryLastId.categoryId,
+            name: data.name
+        })
+
+        await newCategory.save();
+
+        await categoryCounterModel.findOneAndUpdate(
+              {},
+              { $inc: { categoryId: 1 } },
+              { new: true }
+            );
+
         return res.status(201).json({ message: "Category added successfully" });
     } catch (err) {
         console.error("error in adding category", err);
@@ -27,9 +36,10 @@ const addCategory = (req, res) => {
 }
 
 
-const getAllCategory = (req,res) => {
+const getAllCategory = async(req,res) => {
 
-    return res.status(200).send(JSON.stringify(Category))
+    const getAllCategory = await categoryModel.find()
+    return res.status(200).send(getAllCategory)
 
 }
 

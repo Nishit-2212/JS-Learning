@@ -1,11 +1,12 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
-const { LocalStorage } = require('node-localstorage');
 const jwt = require('jsonwebtoken');
 
-let localStorage = new LocalStorage('./models')
 
-let userData = JSON.parse(localStorage.getItem("user")) || [];
+
+
+
+const userModel = require('../models/user')
 
 const generateRefreshToken = (UserId) => {
     try {
@@ -25,14 +26,14 @@ const generateAccessToken = (loginData) => {
     try {
         console.log("inside generate token logindata", loginData.email)
         const data = {
-            "id": loginData.id,
+            "id": loginData._id,
             "email": loginData.email,
             "role": loginData.role,
-            "name" : loginData.username
+            "name": loginData.username
         }
         console.log("role in generateTOken", loginData.username);
         const secretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
-        const token = jwt.sign(data, secretKey, { expiresIn: '15s' });
+        const token = jwt.sign(data, secretKey, { expiresIn: '1d' });
 
         return token;
     }
@@ -49,47 +50,55 @@ const checkLogin = async (req, res) => {
     const loginData = req.body;
     console.log("inside login", loginData)
 
-    console.log("userData", loginData)
-    const getUserData = userData.find(user => user.email === loginData.email);
 
-    if (!getUserData) {
-        return res.status(400).json({ message: "email is not found" })
+    try {
+
+        const getUserData = await userModel.findOne({ email: loginData.email })
+
+        console.log("getUserData", getUserData)
+
+        if (!getUserData) {
+            return res.status(400).json({ message: "email is not found" })
+        }
+
+        let { password } = loginData
+        let storedPassword = getUserData.password;
+        console.log("pass,store", password, storedPassword);
+        const passwordMatched = await bcrypt.compare(password, storedPassword);
+
+
+        if (!passwordMatched) {
+            return res.status(400).json({ message: "password is incorrect" })
+        }
+        const token = generateAccessToken(getUserData);
+        const RefreshToken = generateRefreshToken(getUserData._id);
+
+        res.cookie('refreshToken', RefreshToken, {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000, //7 Day
+            path: "/"
+        });
+
+        res.cookie('accessToken', token, {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+            maxAge: 1 * 24 * 60 * 60 * 1000, //1 Day
+            path: "/"
+        });
+
+        // console.log(res)
+
+        return res.status(200).json({
+            message: "Login sucessful"
+        })
     }
-
-    console.log(getUserData)
-    let { password } = loginData
-    let storedPassword = getUserData.password;
-    console.log("pass,store", password, storedPassword);
-    const passwordMatched = await bcrypt.compare(password, storedPassword);
-
-
-    if (!passwordMatched) {
-        return res.status(400).json({ message: "password is incorrect" })
+    catch (err) {
+        console.log("Something goes wrong wile login", err);
+        res.status(200).json({ message: "Something is Going wrong" })
     }
-    const token = generateAccessToken(getUserData);
-    const RefreshToken = generateRefreshToken(getUserData.id);
-
-    res.cookie('refreshToken', RefreshToken, {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000, //7 Day
-        path: "/"
-    });
-
-    res.cookie('accessToken', token, {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-        maxAge: 1 * 24 * 60 * 60 * 1000, //1 Day
-        path: "/"
-    });
-
-    // console.log(res)
-
-    return res.status(200).json({
-        message: "Login sucessful"
-    })
 }
 
 
@@ -97,7 +106,7 @@ const checkLogin = async (req, res) => {
 
 
 const getDataFromToken = (req, res) => {
-
+    console.log("inner getDataFromToken")
     const token = req.cookies.accessToken || null;
     const refreshToken = req.cookies.refreshToken || null;
 
@@ -122,14 +131,14 @@ const getDataFromToken = (req, res) => {
 }
 
 
-const getUserFromRefreshToken = (token) => {
+const getUserFromRefreshToken = async(token) => {
 
     const secretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
 
     try {
         const decryptToken = jwt.verify(token, secretKey);
         console.log("User Id from refresh token", decryptToken.id)
-        const user = userData.find((user) => user.id == decryptToken.id);
+        const user = await userModel.find({userId:decryptToken.id})
 
         if (user == undefined) {
             console.log("User not Found")
@@ -138,7 +147,7 @@ const getUserFromRefreshToken = (token) => {
         return user;
     }
     catch (Err) {
-        if(Err.name === "TokenExpiredError") {
+        if (Err.name === "TokenExpiredError") {
             return null;
             // console.log("Inner Catch")
             // return res.status(404).json({error:"Refresh Token Expired"});
@@ -165,7 +174,7 @@ const generateTokenFromRefreshToken = (req, res) => {
 
         console.log(user)
         const newAccessToken = generateAccessToken(user);
-        console.log("New Access Token",newAccessToken);
+        console.log("New Access Token", newAccessToken);
 
         res.cookie('accessToken', newAccessToken, {
             httpOnly: true,

@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const productRoutes = require('./routes/productRoute');
-const userRoutes = require("./routes/userRoute");
 const authRoutes = require("./routes/authRoute")
 const categoryRoutes = require('./routes/categoryRoute');
 const cookieParser = require('cookie-parser');
@@ -30,7 +29,6 @@ app.use(cors({
 
 app.use("/api/product",productRoutes);
 app.use("/api/category",categoryRoutes);
-app.use("/api/user",userRoutes);
 app.use("/api/auth",authRoutes)
 
 

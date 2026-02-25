@@ -9,7 +9,8 @@ const { loginAllowedFields } = require('../config/allowFieldsArray.js')
 const route = express.Router();
 
 
-route.post("/signup", checkAllowedFields(loginAllowedFields), createUser);
+route.post("/signup",createUser);
+
 route.post("/login",checkLogin);
 route.get("/logout",logOut);
 route.get("/verifyToken",verifyToken, getDataFromToken)
