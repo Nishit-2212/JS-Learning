@@ -1,0 +1,17 @@
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: "customers",
+      localField: "customerId",
+      foreignField: "customerId",
+      as : "customerInfo"
+    }
+  },
+  {
+    $project: {
+      Name: {
+        $arrayElemAt: ["$customerInfo.profile.name.first",0]
+      }
+    }
+  }
+])
