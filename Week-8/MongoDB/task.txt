@@ -1348,7 +1348,89 @@ Revenue bucket distribution
 Payment method distribution
 -------------------------------------------------------------------------------------------------
 
+- db.payments.aggregate([
+  {
+    $facet:{
+      "Paginated customers":[
+        { $lookup: { from:"orders",localField:"orderId",foreignField:"orderId",as:"orderInfo" }},
+        { $group: { _id:"$orderInfo.customerId" }},
+        { $skip: 0 },
+        { $limit: 5}
+      ],
+      "Top 3 customers":[
+        { $lookup: { from:"orders",localField:"orderId",foreignField:"orderId",as:"orderInfo" }},
+        { $group: { _id:"$orderInfo.customerId" }},
+        { $sort: { "orderInfo.pricing.totalAmount": -1 }},
+        { $limit: 3}
+      ],
+      "Total Revenue":[
+        { $group: { _id:null,Total_Revenue:{ $sum:"$breakdown.baseAmount"} }},
+        { $project: { _id:0 }}
+      ],
+      "Total Customers":[
+        { $lookup: { from:"orders",localField:"orderId",foreignField:"orderId",as:"orderInfo" }},
+        { $group: { _id:"$orderInfo.customerId"}},
+        { $count: "Total Customer" }
+      ],
+      "Revenue bucket distribution":[
+        { $bucket: {
+          groupBy: "$breakdown.baseAmount",
+          boundaries:[1000,2000,3000],
+          default: "Other",
+          output: {
+            "Total_Count":{$sum:1}
+          }
+        }}
+      ],
+      "Payment method distribution":[
+        { $group: { _id:"$paymentDetails.method",Total_Count:{$sum:1}}},
+      ]
+    }
+  }
+])
 
+Output:- 
+
+db.payments.aggregate([
+  {
+    $facet:{
+      "Paginated customers":[
+        { $lookup: { from:"orders",localField:"orderId",foreignField:"orderId",as:"orderInfo" }},
+        { $group: { _id:"$orderInfo.customerId" }},
+        { $skip: 0 },
+        { $limit: 5}
+      ],
+      "Top 3 customers":[
+        { $lookup: { from:"orders",localField:"orderId",foreignField:"orderId",as:"orderInfo" }},
+        { $group: { _id:"$orderInfo.customerId" }},
+        { $sort: { "orderInfo.pricing.totalAmount": -1 }},
+        { $limit: 3}
+      ],
+      "Total Revenue":[
+        { $group: { _id:null,Total_Revenue:{ $sum:"$breakdown.baseAmount"} }},
+        { $project: { _id:0 }}
+      ],
+      "Total Customers":[
+        { $lookup: { from:"orders",localField:"orderId",foreignField:"orderId",as:"orderInfo" }},
+        { $group: { _id:"$orderInfo.customerId"}},
+        { $count: "Total Customer" }
+      ],
+      "Revenue bucket distribution":[
+        { $bucket: {
+          groupBy: "$breakdown.baseAmount",
+          boundaries:[1000,2000,3000],
+          default: "Other",
+          output: {
+            "Total_Count":{$sum:1}
+          }
+        }}
+      ],
+      "Payment method distribution":[
+        { $group: { _id:"$paymentDetails.method",Total_Count:{$sum:1}}},
+      ]
+    }
+  }
+])
 
 
 
@@ -1373,10 +1455,188 @@ Return only thetop 2 highest value orders
   {
     $project: {
       _id:0,
-      Customer_Name : { $concat: [ "$profile.name.first", "$profile.name.first"]},
+      Customer_Name : { $concat: [ "$profile.name.first", "$profile.name.last"]},
       Top_Order : {
-        $slice: [{$sortArray:{input:"$orders",sortBy:{"orders.pricing.totalAmount":1}}},]
+        $slice: [{$sortArray:{input:"$orders",sortBy:{"orders.pricing.totalAmount":-1}}},2]
       }
     }
   }
 ])
+Output:-
+[
+  {
+    Customer_Name: 'ParthMehta',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000001'),
+        orderId: 'ORD-1',
+        customerId: 101,
+        orderInfo: {
+          status: 'Delivered',
+          channel: 'Mobile',
+          createdAt: ISODate('2024-01-10T00:00:00.000Z')
+        },
+        pricing: { currency: 'INR', totalAmount: 1500, tax: 150, discount: 100 },
+        items: [
+          {
+            product: { productId: 1, name: 'Laptop', category: 'Electronics' },
+            price: 1000,
+            quantity: 1
+          },
+          {
+            product: { productId: 2, name: 'Mouse', category: 'Electronics' },
+            price: 500,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    Customer_Name: 'RahulSharma',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000002'),
+        orderId: 'ORD-2',
+        customerId: 102,
+        orderInfo: {
+          status: 'Pending',
+          channel: 'Web',
+          createdAt: ISODate('2024-02-05T00:00:00.000Z')
+        },
+        pricing: { currency: 'INR', totalAmount: 800, tax: 80, discount: 0 },
+        items: [
+          {
+            product: { productId: 3, name: 'Shoes', category: 'Fashion' },
+            price: 800,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    Customer_Name: 'EmilyJohnson',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000003'),
+        orderId: 'ORD-3',
+        customerId: 103,
+        orderInfo: {
+          status: 'Delivered',
+          channel: 'Web',
+          createdAt: ISODate('2024-02-15T00:00:00.000Z')
+        },
+        pricing: { currency: 'USD', totalAmount: 2000, tax: 200, discount: 150 },
+        items: [
+          {
+            product: { productId: 4, name: 'Watch', category: 'Accessories' },
+            price: 2000,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    Customer_Name: 'AmitVerma',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000004'),
+        orderId: 'ORD-4',
+        customerId: 104,
+        orderInfo: {
+          status: 'Cancelled',
+          channel: 'Mobile',
+          createdAt: ISODate('2024-03-01T00:00:00.000Z')
+        },
+        pricing: { currency: 'INR', totalAmount: 1200, tax: 120, discount: 50 },
+        items: [
+          {
+            product: { productId: 5, name: 'Headphones', category: 'Electronics' },
+            price: 1200,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    Customer_Name: 'SophiaBrown',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000005'),
+        orderId: 'ORD-5',
+        customerId: 105,
+        orderInfo: {
+          status: 'Delivered',
+          channel: 'Web',
+          createdAt: ISODate('2024-03-20T00:00:00.000Z')
+        },
+        pricing: { currency: 'USD', totalAmount: 2500, tax: 250, discount: 200 },
+        items: [
+          {
+            product: { productId: 6, name: 'Camera', category: 'Electronics' },
+            price: 2500,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  }
+]
+
+
+
+
+
+----------------------------------------------------------------------------------------------
+9. Delivered Revenue Percentage
+For each customer:
+Total revenue
+Delivered revenue
+Cancelled revenue
+Percentage of delivered revenue
+----------------------------------------------------------------------------------------------
+
+- db.orders.aggregate([
+  { $group: {
+    _id:'$customerId',
+    Total_Revenue: { $sum:"$pricing.totalAmount"},
+    Delivered_Revenue : {
+      $sum : {
+        $cond: { if: { $eq:["$orderInfo.status","Delivered"]},then: "$pricing.totalAmount",else:0 }
+      }
+    },
+    Cancelled_Revenue: {
+      $sum : {
+        $cond: { if: { $eq:["$orderInfo.status","Cancelled"]},then: "$pricing.totalAmount",else:0 }
+      }
+    },
+    Total_Delieverd:{
+      $sum : {
+        $cond: { if: { $eq:["$orderInfo.status","Delivered"]},then: 1,else:0 }
+      }
+    },
+    Total_orders: {
+      $sum:1
+    }
+  }},
+  {
+    $addFields:{
+      "Percentage_of_delivered_revenue":{
+        $divide:[{$multiply:["$Total_Delieverd",100]},"$Total_orders"]
+      }
+    }
+  }
+])
+
+
+
+------------------------------------------------------------------------------------------------
+10. Membership Tier Analysis
+Return:
+Membership tier
+Total customers
+Average revenue per tier
+------------------------------------------------------------------------------------------------
