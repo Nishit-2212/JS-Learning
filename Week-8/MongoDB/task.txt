@@ -1,657 +1,68 @@
-task> db.customers.find()
-[
-  {
-    _id: ObjectId('65c000000000000000000001'),
-    customerId: 101,
-    profile: {
-      name: { first: 'Parth', last: 'Mehta' },
-      contact: { email: 'parth@test.com', phone: '9999999999' },
-      address: { country: 'India', state: 'Rajasthan', city: 'Ajmer' }
-    },
-    membership: {
-      tier: 'Gold',
-      points: 1200,
-      joinedAt: ISODate('2023-01-01T00:00:00.000Z')
-    }
-  },
-  {
-    _id: ObjectId('65c000000000000000000002'),
-    customerId: 102,
-    profile: {
-      name: { first: 'Rahul', last: 'Sharma' },
-      contact: { email: 'rahul@test.com', phone: '8888888888' },
-      address: { country: 'India', state: 'Rajasthan', city: 'Jaipur' }
-    },
-    membership: {
-      tier: 'Silver',
-      points: 600,
-      joinedAt: ISODate('2023-02-01T00:00:00.000Z')
-    }
-  },
-  {
-    _id: ObjectId('65c000000000000000000003'),
-    customerId: 103,
-    profile: {
-      name: { first: 'Emily', last: 'Johnson' },
-      contact: { email: 'emily@test.com', phone: '7777777777' },
-      address: { country: 'USA', state: 'NY', city: 'New York' }
-    },
-    membership: {
-      tier: 'Gold',
-      points: 2000,
-      joinedAt: ISODate('2023-03-01T00:00:00.000Z')
-    }
-  },
-  {
-    _id: ObjectId('65c000000000000000000004'),
-    customerId: 104,
-    profile: {
-      name: { first: 'Amit', last: 'Verma' },
-      contact: { email: 'amit@test.com', phone: '6666666666' },
-      address: { country: 'India', state: 'Delhi', city: 'Delhi' }
-    },
-    membership: {
-      tier: 'Bronze',
-      points: 300,
-      joinedAt: ISODate('2023-04-01T00:00:00.000Z')
-    }
-  },
-  {
-    _id: ObjectId('65c000000000000000000005'),
-    customerId: 105,
-    profile: {
-      name: { first: 'Sophia', last: 'Brown' },
-      contact: { email: 'sophia@test.com', phone: '5555555555' },
-      address: { country: 'USA', state: 'CA', city: 'Los Angeles' }
-    },
-    membership: {
-      tier: 'Silver',
-      points: 850,
-      joinedAt: ISODate('2023-05-01T00:00:00.000Z')
-    }
-  }
-]
-
-
-
-
-task> db.orders.find()
-[
-  {
-    _id: ObjectId('65c100000000000000000001'),
-    orderId: 'ORD-1',
-    customerId: 101,
-    orderInfo: {
-      status: 'Delivered',
-      channel: 'Mobile',
-      createdAt: ISODate('2024-01-10T00:00:00.000Z')
-    },
-    pricing: { currency: 'INR', totalAmount: 1500, tax: 150, discount: 100 },
-    items: [
-      {
-        product: { productId: 1, name: 'Laptop', category: 'Electronics' },
-        price: 1000,
-        quantity: 1
-      },
-      {
-        product: { productId: 2, name: 'Mouse', category: 'Electronics' },
-        price: 500,
-        quantity: 1
-      }
-    ]
-  },
-  {
-    _id: ObjectId('65c100000000000000000002'),
-    orderId: 'ORD-2',
-    customerId: 102,
-    orderInfo: {
-      status: 'Pending',
-      channel: 'Web',
-      createdAt: ISODate('2024-02-05T00:00:00.000Z')
-    },
-    pricing: { currency: 'INR', totalAmount: 800, tax: 80, discount: 0 },
-    items: [
-      {
-        product: { productId: 3, name: 'Shoes', category: 'Fashion' },
-        price: 800,
-        quantity: 1
-      }
-    ]
-  },
-  {
-    _id: ObjectId('65c100000000000000000003'),
-    orderId: 'ORD-3',
-    customerId: 103,
-    orderInfo: {
-      status: 'Delivered',
-      channel: 'Web',
-      createdAt: ISODate('2024-02-15T00:00:00.000Z')
-    },
-    pricing: { currency: 'USD', totalAmount: 2000, tax: 200, discount: 150 },
-    items: [
-      {
-        product: { productId: 4, name: 'Watch', category: 'Accessories' },
-        price: 2000,
-        quantity: 1
-      }
-    ]
-  },
-  {
-    _id: ObjectId('65c100000000000000000004'),
-    orderId: 'ORD-4',
-    customerId: 104,
-    orderInfo: {
-      status: 'Cancelled',
-      channel: 'Mobile',
-      createdAt: ISODate('2024-03-01T00:00:00.000Z')
-    },
-    pricing: { currency: 'INR', totalAmount: 1200, tax: 120, discount: 50 },
-    items: [
-      {
-        product: { productId: 5, name: 'Headphones', category: 'Electronics' },
-        price: 1200,
-        quantity: 1
-      }
-    ]
-  },
-  {
-    _id: ObjectId('65c100000000000000000005'),
-    orderId: 'ORD-5',
-    customerId: 105,
-    orderInfo: {
-      status: 'Delivered',
-      channel: 'Web',
-      createdAt: ISODate('2024-03-20T00:00:00.000Z')
-    },
-    pricing: { currency: 'USD', totalAmount: 2500, tax: 250, discount: 200 },
-    items: [
-      {
-        product: { productId: 6, name: 'Camera', category: 'Electronics' },
-        price: 2500,
-        quantity: 1
-      }
-    ]
-  }
-]
-
-
-
-
-task> db.payments.find()
-[
-  {
-    _id: ObjectId('699ecc92c2a19652798ce5b6'),
-    paymentId: 'PAY-1',
-    orderId: 'ORD-1',
-    paymentDetails: {
-      method: 'Card',
-      transactionId: 'TXN-111',
-      status: 'Success',
-      paidAt: ISODate('2024-01-11T00:00:00.000Z')
-    },
-    breakdown: { baseAmount: 1500, gatewayFee: 25, taxOnFee: 5 }
-  },
-  {
-    _id: ObjectId('699ecc92c2a19652798ce5b7'),
-    paymentId: 'PAY-2',
-    orderId: 'ORD-2',
-    paymentDetails: {
-      method: 'UPI',
-      transactionId: 'TXN-222',
-      status: 'Pending',
-      paidAt: ISODate('2024-02-06T00:00:00.000Z')
-    },
-    breakdown: { baseAmount: 800, gatewayFee: 10, taxOnFee: 2 }
-  },
-  {
-    _id: ObjectId('699ecc92c2a19652798ce5b8'),
-    paymentId: 'PAY-3',
-    orderId: 'ORD-3',
-    paymentDetails: {
-      method: 'Card',
-      transactionId: 'TXN-333',
-      status: 'Success',
-      paidAt: ISODate('2024-02-16T00:00:00.000Z')
-    },
-    breakdown: { baseAmount: 2000, gatewayFee: 35, taxOnFee: 7 }
-  },
-  {
-    _id: ObjectId('699ecc92c2a19652798ce5b9'),
-    paymentId: 'PAY-4',
-    orderId: 'ORD-4',
-    paymentDetails: {
-      method: 'Card',
-      transactionId: 'TXN-444',
-      status: 'Failed',
-      paidAt: ISODate('2024-03-02T00:00:00.000Z')
-    },
-    breakdown: { baseAmount: 1200, gatewayFee: 20, taxOnFee: 4 }
-  },
-  {
-    _id: ObjectId('699ecc92c2a19652798ce5ba'),
-    paymentId: 'PAY-5',
-    orderId: 'ORD-5',
-    paymentDetails: {
-      method: 'NetBanking',
-      transactionId: 'TXN-555',
-      status: 'Success',
-      paidAt: ISODate('2024-03-21T00:00:00.000Z')
-    },
-    breakdown: { baseAmount: 2500, gatewayFee: 40, taxOnFee: 8 }
-  }
-]
-
-
-
-
---------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
 1. Join + Basic Aggregation
 Write an aggregation to:
---------------------------------------------------------------------------------------------------------------------------------
+Join customers with orders
+Show full name
+Total number of orders
+Total revenue
+Only include Delivered orders
+Must use: $lookup, $unwind, $match, $group
+--------------------------------------------------------------------------------------------------
 
-*    Join customers with orders
+
 - db.customers.aggregate([
-    { $lookup : {
-        from : "orders",
-        localField: "customerId",
-        foreignField: "customerId",
-        as: "order"
-    }}
-])
-Output:-
-    [
-    {
-        _id: ObjectId('65c000000000000000000001'),
-        customerId: 101,
-        profile: {
-        name: { first: 'Parth', last: 'Mehta' },
-        contact: { email: 'parth@test.com', phone: '9999999999' },
-        address: { country: 'India', state: 'Rajasthan', city: 'Ajmer' }
-        },
-        membership: {
-        tier: 'Gold',
-        points: 1200,
-        joinedAt: ISODate('2023-01-01T00:00:00.000Z')
-        },
-        order: [
-        {
-            _id: ObjectId('65c100000000000000000001'),
-            orderId: 'ORD-1',
-            customerId: 101,
-            orderInfo: {
-            status: 'Delivered',
-            channel: 'Mobile',
-            createdAt: ISODate('2024-01-10T00:00:00.000Z')
-            },
-            pricing: { currency: 'INR', totalAmount: 1500, tax: 150, discount: 100 },
-            items: [
-            {
-                product: { productId: 1, name: 'Laptop', category: 'Electronics' },
-                price: 1000,
-                quantity: 1
-            },
-            {
-                product: { productId: 2, name: 'Mouse', category: 'Electronics' },
-                price: 500,
-                quantity: 1
-            }
-            ]
-        }
-        ]
-    },
-    {
-        _id: ObjectId('65c000000000000000000002'),
-        customerId: 102,
-        profile: {
-        name: { first: 'Rahul', last: 'Sharma' },
-        contact: { email: 'rahul@test.com', phone: '8888888888' },
-        address: { country: 'India', state: 'Rajasthan', city: 'Jaipur' }
-        },
-        membership: {
-        tier: 'Silver',
-        points: 600,
-        joinedAt: ISODate('2023-02-01T00:00:00.000Z')
-        },
-        order: [
-        {
-            _id: ObjectId('65c100000000000000000002'),
-            orderId: 'ORD-2',
-            customerId: 102,
-            orderInfo: {
-            status: 'Pending',
-            channel: 'Web',
-            createdAt: ISODate('2024-02-05T00:00:00.000Z')
-            },
-            pricing: { currency: 'INR', totalAmount: 800, tax: 80, discount: 0 },
-            items: [
-            {
-                product: { productId: 3, name: 'Shoes', category: 'Fashion' },
-                price: 800,
-                quantity: 1
-            }
-            ]
-        }
-        ]
-    },
-    {
-        _id: ObjectId('65c000000000000000000003'),
-        customerId: 103,
-        profile: {
-        name: { first: 'Emily', last: 'Johnson' },
-        contact: { email: 'emily@test.com', phone: '7777777777' },
-        address: { country: 'USA', state: 'NY', city: 'New York' }
-        },
-        membership: {
-        tier: 'Gold',
-        points: 2000,
-        joinedAt: ISODate('2023-03-01T00:00:00.000Z')
-        },
-        order: [
-        {
-            _id: ObjectId('65c100000000000000000003'),
-            orderId: 'ORD-3',
-            customerId: 103,
-            orderInfo: {
-            status: 'Delivered',
-            channel: 'Web',
-            createdAt: ISODate('2024-02-15T00:00:00.000Z')
-            },
-            pricing: { currency: 'USD', totalAmount: 2000, tax: 200, discount: 150 },
-            items: [
-            {
-                product: { productId: 4, name: 'Watch', category: 'Accessories' },
-                price: 2000,
-                quantity: 1
-            }
-            ]
-        }
-        ]
-    },
-    {
-        _id: ObjectId('65c000000000000000000004'),
-        customerId: 104,
-        profile: {
-        name: { first: 'Amit', last: 'Verma' },
-        contact: { email: 'amit@test.com', phone: '6666666666' },
-        address: { country: 'India', state: 'Delhi', city: 'Delhi' }
-        },
-        membership: {
-        tier: 'Bronze',
-        points: 300,
-        joinedAt: ISODate('2023-04-01T00:00:00.000Z')
-        },
-        order: [
-        {
-            _id: ObjectId('65c100000000000000000004'),
-            orderId: 'ORD-4',
-            customerId: 104,
-            orderInfo: {
-            status: 'Cancelled',
-            channel: 'Mobile',
-            createdAt: ISODate('2024-03-01T00:00:00.000Z')
-            },
-            pricing: { currency: 'INR', totalAmount: 1200, tax: 120, discount: 50 },
-            items: [
-            {
-                product: { productId: 5, name: 'Headphones', category: 'Electronics' },
-                price: 1200,
-                quantity: 1
-            }
-            ]
-        }
-        ]
-    },
-    {
-        _id: ObjectId('65c000000000000000000005'),
-        customerId: 105,
-        profile: {
-        name: { first: 'Sophia', last: 'Brown' },
-        contact: { email: 'sophia@test.com', phone: '5555555555' },
-        address: { country: 'USA', state: 'CA', city: 'Los Angeles' }
-        },
-        membership: {
-        tier: 'Silver',
-        points: 850,
-        joinedAt: ISODate('2023-05-01T00:00:00.000Z')
-        },
-        order: [
-        {
-            _id: ObjectId('65c100000000000000000005'),
-            orderId: 'ORD-5',
-            customerId: 105,
-            orderInfo: {
-            status: 'Delivered',
-            channel: 'Web',
-            createdAt: ISODate('2024-03-20T00:00:00.000Z')
-            },
-            pricing: { currency: 'USD', totalAmount: 2500, tax: 250, discount: 200 },
-            items: [
-            {
-                product: { productId: 6, name: 'Camera', category: 'Electronics' },
-                price: 2500,
-                quantity: 1
-            }
-            ]
-        }
-        ]
+  {
+    $lookup: {
+      from: "orders",
+      localField: "customerId",
+      foreignField: "customerId",
+      as: "orders"
     }
-    ]
-
-
-*    Show full name
-- db.customers.aggregate([
-    { 
-        $lookup : 
-            {
-                from:"orders",
-                localField:"customerId",
-                foreignField:"customerId",
-                as:"orders"
-            }
-    },
-    {
-        $project: {
-            _id:0,
-            customerId:1,
-            FullName: {
-                $concat : ["$profile.name.first"," ","$profile.name.last"]
-            },
-            orders:1
+  },
+  { 
+    $unwind: "$orders" 
+  },
+  {
+    $match: { "orders.orderInfo.status": "Delivered" }
+  },
+  {
+    $group: {
+      _id: "$customerId",
+      fullName: {
+        $first: {
+          $concat: [
+            "$profile.name.first"," ","$profile.name.last"
+          ]
         }
+      },
+      totalOrders: { $sum: 1 },
+      totalRevenue: { $sum: "$orders.pricing.totalAmount" }
     }
-])
-
-Output:- 
-    [
-    {
-        customerId: 101,
-        orders: [
-        {
-            _id: ObjectId('65c100000000000000000001'),
-            orderId: 'ORD-1',
-            customerId: 101,
-            orderInfo: {
-            status: 'Delivered',
-            channel: 'Mobile',
-            createdAt: ISODate('2024-01-10T00:00:00.000Z')
-            },
-            pricing: { currency: 'INR', totalAmount: 1500, tax: 150, discount: 100 },
-            items: [
-            {
-                product: { productId: 1, name: 'Laptop', category: 'Electronics' },
-                price: 1000,
-                quantity: 1
-            },
-            {
-                product: { productId: 2, name: 'Mouse', category: 'Electronics' },
-                price: 500,
-                quantity: 1
-            }
-            ]
-        }
-        ],
-        FullName: 'Parth Mehta'
-    },
-    {
-        customerId: 102,
-        orders: [
-        {
-            _id: ObjectId('65c100000000000000000002'),
-            orderId: 'ORD-2',
-            customerId: 102,
-            orderInfo: {
-            status: 'Pending',
-            channel: 'Web',
-            createdAt: ISODate('2024-02-05T00:00:00.000Z')
-            },
-            pricing: { currency: 'INR', totalAmount: 800, tax: 80, discount: 0 },
-            items: [
-            {
-                product: { productId: 3, name: 'Shoes', category: 'Fashion' },
-                price: 800,
-                quantity: 1
-            }
-            ]
-        }
-        ],
-        FullName: 'Rahul Sharma'
-    },
-    {
-        customerId: 103,
-        orders: [
-        {
-            _id: ObjectId('65c100000000000000000003'),
-            orderId: 'ORD-3',
-            customerId: 103,
-            orderInfo: {
-            status: 'Delivered',
-            channel: 'Web',
-            createdAt: ISODate('2024-02-15T00:00:00.000Z')
-            },
-            pricing: { currency: 'USD', totalAmount: 2000, tax: 200, discount: 150 },
-            items: [
-            {
-                product: { productId: 4, name: 'Watch', category: 'Accessories' },
-                price: 2000,
-                quantity: 1
-            }
-            ]
-        }
-        ],
-        FullName: 'Emily Johnson'
-    },
-    {
-        customerId: 104,
-        orders: [
-        {
-            _id: ObjectId('65c100000000000000000004'),
-            orderId: 'ORD-4',
-            customerId: 104,
-            orderInfo: {
-            status: 'Cancelled',
-            channel: 'Mobile',
-            createdAt: ISODate('2024-03-01T00:00:00.000Z')
-            },
-            pricing: { currency: 'INR', totalAmount: 1200, tax: 120, discount: 50 },
-            items: [
-            {
-                product: { productId: 5, name: 'Headphones', category: 'Electronics' },
-                price: 1200,
-                quantity: 1
-            }
-            ]
-        }
-        ],
-        FullName: 'Amit Verma'
-    },
-    {
-        customerId: 105,
-        orders: [
-        {
-            _id: ObjectId('65c100000000000000000005'),
-            orderId: 'ORD-5',
-            customerId: 105,
-            orderInfo: {
-            status: 'Delivered',
-            channel: 'Web',
-            createdAt: ISODate('2024-03-20T00:00:00.000Z')
-            },
-            pricing: { currency: 'USD', totalAmount: 2500, tax: 250, discount: 200 },
-            items: [
-            {
-                product: { productId: 6, name: 'Camera', category: 'Electronics' },
-                price: 2500,
-                quantity: 1
-            }
-            ]
-        }
-        ],
-        FullName: 'Sophia Brown'
-    }
-    ]
-
-
-
-
-
-*    Total number of orders
-- db.orders.aggregate([
-    {
-        $unwind : '$items'
-    },
-    {
-        $count : 'TotalOrders'
-    }
+  }
 ])
 
 Output:-
-[ { TotalOrders: 6 } ]
 
-
-
-
-*    Total revenue
--  db.orders.aggregate([
-    { $group: {
-        _id: null,
-        Total_Revenue:{$sum:"$pricing.totalAmount"}
-    }},
-    {
-        $project: {
-            _id:0,
-        }
-    }
-])
-
-Output:-
-[ { Total_Revenue: 8000 } ]
-
-
-
-
-
-*    Only include Delivered orders
-- db.orders.aggregate([
-    { 
-        $match: {
-        "orderInfo.status" : "Delivered"
-    } 
-    },
-    {
-        $group: {
-            _id:null,
-            Total_Revenue_of_delivered_orders: { $sum:"$pricing.totalAmount" }
-        }
-    },
-    {
-        $project: {
-            _id:0
-        }
-    }
-])
-
-Output:- 
-[ { Total_Revenue_of_delivered_orders: 6000 } ]
+[
+  {
+    _id: 101,
+    fullName: 'Parth Mehta',
+    totalOrders: 1,
+    totalRevenue: 1500
+  },
+  {
+    _id: 105,
+    fullName: 'Sophia Brown',
+    totalOrders: 1,
+    totalRevenue: 2500
+  },
+  {
+    _id: 103,
+    fullName: 'Emily Johnson',
+    totalOrders: 1,
+    totalRevenue: 2000
+  }
+]
 
 
 
@@ -728,7 +139,7 @@ Add a field:
       _id: {
         Id:"$customerId",
         Name:{
-          $arrayElemAt: ["$customerInfo.profile.name.first",0]   //to eleminate the unwind stage
+          $arrayElemAt: ["$customerInfo.profile.name.first",0]  
         }
       },
       Total: {
@@ -1371,23 +782,32 @@ Total customers
 Average revenue per tier
 ------------------------------------------------------------------------------------------------
 
-- db.customers.aggregate([
-  {
-    $lookup: {
-      from:"orders",
-      localField:"customerId",
-      foreignField:"customerId",
-      as:"ordersInfo",
+  - db.customers.aggregate([
+    {
+      $lookup: {
+        from:"orders",
+        localField:"customerId",
+        foreignField:"customerId",
+        as:"ordersInfo",
+      }
+    },
+    {
+      $unwind: "$ordersInfo"
+    },
+    {
+      $group: {
+        _id:"$membership.tier",
+        Total: { $sum:1 },
+        Total_Revenue: { $sum: "$ordersInfo.pricing.totalAmount" }
+      }
     }
-  },
-  {
-    $group: {
-      _id:"$membership.tier",
-      Total:"$sum:1",
-      Total_Revenue:"$ordersInfo.pricing.totalAmount"
-    }
-  },
-  {
-    $unwind:"$ordersInfo"
-  }
-])
+  ])
+
+  Output:-
+  [
+    { _id: 'Gold', Total: 2, Total_Revenue: 3500 },
+    { _id: 'Silver', Total: 2, Total_Revenue: 3300 },
+    { _id: 'Bronze', Total: 1, Total_Revenue: 1200 }
+  ]
+
+
