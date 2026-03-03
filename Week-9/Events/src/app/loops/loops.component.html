@@ -1,0 +1,21 @@
+<p>loops works!</p>
+
+<!-- <h1>{{users[0]}}</h1>
+<h1>{{users[1]}}</h1>
+<h1>{{users[2]}}</h1>
+<h1>{{users[3]}}</h1> -->
+
+
+<!-- @for (user of users; track $index) {
+    <h3>{{user}}</h3>
+} -->
+
+@for (student of students; track student.name; let i = $index) {
+    <h4>
+        <span> {{i+1}} </span>
+        <span> {{student.name}} </span>
+        <span> {{student.age}} </span>
+        <span> {{student.email}} </span>
+        <button (click)="getInfo(student.name)"> get Name </button>
+    </h4>
+}

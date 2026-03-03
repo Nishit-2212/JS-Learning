@@ -1,0 +1,25 @@
+<h3>{{x}}</h3>
+
+<h3>{{count()}}</h3>
+
+<button (click)="count.set(100)">Increse Signal</button>
+<button (click)="count.set(count()+1)">Increse Property</button>
+
+<button (click)="updateValue()">Update Value</button>
+
+<hr>
+<br>
+<app-data-type-signal></app-data-type-signal>
+
+
+<hr>
+<br>
+<app-writable-signal></app-writable-signal>
+
+<hr>
+<br>
+<app-computed-signals></app-computed-signals>
+
+<hr>
+<br>
+<app-effect></app-effect>

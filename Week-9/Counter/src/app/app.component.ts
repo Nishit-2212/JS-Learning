@@ -13,4 +13,16 @@ export class AppComponent {
     handleIncrement() {
       this.count++
     }
+
+    handleDecrement() {
+      if(this.count <= 0) {
+        alert("the value can not be negative");
+        return;
+      }
+      this.count--
+    }
+
+    handleReset() {
+      this.count = 0
+    }
 }
