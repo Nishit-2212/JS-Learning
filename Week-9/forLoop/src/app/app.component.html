@@ -1,0 +1,24 @@
+<h2>For loop contextual Variables</h2>
+
+@for(user of users; track user) {
+ <!-- <p>{{$first}}</p>   // it prints true in the first line. and yiu can use $last for last line true -->
+
+
+  @if($first || $last) {
+    <p style="background-color: beige;"> this is our {{$index+1}} {{user}}</p>
+  }
+
+<!-- If our use in empty and this inly be used after @for block-->
+  <!-- @empty{
+    <p>no users found</p>
+  } -->
+
+ <!-- <p>this is our {{$index + 1}} {{user}}</p> -->
+
+
+
+}
+
+
+
+<app-two-way-binding></app-two-way-binding>
