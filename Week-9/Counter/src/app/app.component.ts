@@ -11,6 +11,7 @@ export class AppComponent {
     count = 1
 
     handleIncrement() {
+      console.log("Increment clicked");
       this.count++
     }
 
