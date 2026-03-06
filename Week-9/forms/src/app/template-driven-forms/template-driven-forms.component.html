@@ -1,0 +1,48 @@
+<p>template-driven-forms works!</p>
+
+
+<!-- Without Validation -->
+<!-- <form #userForm="ngForm" (ngSubmit)="addDetails(userForm.value)">
+
+    <input type="text" placeholder="enter name" name="name" ngModel>
+    <br><br>
+    <input type="password" placeholder="enter password" name="password" ngModel>
+    <br><br>
+    <select name="gender" ngModel>
+        <option value="">Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+    <br><br>
+    <input type="range" min="0" max="100" name="range" ngModel>
+    <br><br>
+    <button>Add User</button>
+
+</form>
+
+<h4>{{userDetails?.name}}</h4>
+<h4>{{userDetails?.password}}</h4>
+<h4>{{userDetails?.gender}}</h4>
+<h4>{{userDetails?.range}}</h4> -->
+
+
+
+<!-- With validation -->
+ <form #userForm="ngForm" (ngSubmit)="addDetails(userForm.value)">
+
+    <input #name="ngModel" type="text" placeholder="enter name" name="name" ngModel>
+    <span *ngIf="name.invalid"> Name is Required</span>
+    <br><br>
+    <input type="password" placeholder="enter password" name="password" ngModel>
+    <br><br>
+    <select name="gender" ngModel>
+        <option value="">Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+    <br><br>
+    <input type="range" min="0" max="100" name="range" ngModel>
+    <br><br>
+    <button>Add User</button>
+
+</form>
