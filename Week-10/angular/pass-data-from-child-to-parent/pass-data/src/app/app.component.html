@@ -1,0 +1,7 @@
+<h1>Pass data Chold to Component</h1>
+
+<app-user (getUsers)="HandleUsers($event)"> </app-user>
+
+@for (user of users; track user) {
+  <h4>{{user}}</h4>
+}
