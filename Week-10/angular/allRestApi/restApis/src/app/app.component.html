@@ -1,0 +1,33 @@
+<h3> Doing user api call </h3>
+
+<form #userForm="ngForm" (ngSubmit)="addUser(userForm.value)">
+  <input type="text" placeholder="enter name" name="name" [ngModel]="selectedUser?.name">
+  <br><br>
+  <input type="text" placeholder="enter email" name="email" [ngModel]="selectedUser?.email">
+  <br><br>
+  <input type="number" placeholder="enter your age" name="age" [ngModel]="selectedUser?.age">
+  <br><br>
+  @if (!selectedUser) {
+  <button>Add user</button>
+  }
+  @else {
+  <button>Update user</button>
+  }
+</form>
+
+
+@for (use of users; track use) {
+<ul>
+  <li>{{use.id}}</li>
+  <li>{{use.name}}</li>
+  <li>{{use.age}}</li>
+  <li>{{use.email}}</li>
+  <button (click)="deletedUser(use.id)">Delete</button>
+  <button (click)="selectUser(use.id)"> Update </button>
+</ul>
+}
+
+
+
+
+<h5>End</h5>

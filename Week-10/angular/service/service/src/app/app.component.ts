@@ -13,7 +13,7 @@ export class AppComponent {
 
   productData: {
     name: string;
-    branch: string;
+    brand: string;
     price: string;
   }[]| undefined;
 

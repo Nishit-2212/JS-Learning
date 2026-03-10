@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "name": "Nishit",
+      "age": 24,
+      "email": "nishit@test.com",
+      "id": "f380"
+    },
+    {
+      "name": "anil",
+      "age": 27,
+      "email": "anil@test.com",
+      "id": "76e3"
+    },
+    {
+      "name": "Kashyap",
+      "age": 29,
+      "email": "kashyap@test.com",
+      "id": "7145"
+    },
+    {
+      "name": "aniruddha",
+      "age": 24,
+      "email": "ani@test.com",
+      "id": "810b"
+    },
+    {
+      "id": "0dac",
+      "name": "dsaffs",
+      "email": "sdgfd@",
+      "age": 23
+    },
+    {
+      "id": "ecb5",
+      "name": "eee",
+      "email": "ee",
+      "age": 2
+    },
+    {
+      "name": "qqq2",
+      "email": "qqq111111",
+      "age": 1,
+      "id": "65dc"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

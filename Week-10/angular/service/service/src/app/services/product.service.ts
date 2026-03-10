@@ -13,16 +13,16 @@ export class ProductService {
   getProductData() {
     return [
       {
-        name: 'mobile', branch: 'samsung', price: '20000'
+        name: 'mobile', brand: 'samsung', price: '20000'
       },
       {
-        name: 'laptop', branch: 'laptop', price: '3420000'
+        name: 'laptop', brand: 'laptop', price: '3420000'
       },
       {
-        name: 'PC', branch: 'pc', price: '10000'
+        name: 'PC', brand: 'pc', price: '10000'
       },
       {
-        name: 'mobile', branch: 'samsung', price: '20000'
+        name: 'mobile', brand: 'samsung', price: '20000'
       }
     ]
 
