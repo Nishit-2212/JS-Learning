@@ -41,6 +41,12 @@
       "email": "qqq111111",
       "age": 1,
       "id": "65dc"
+    },
+    {
+      "id": "7629",
+      "name": "zzz",
+      "email": "zzz",
+      "age": 222
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
