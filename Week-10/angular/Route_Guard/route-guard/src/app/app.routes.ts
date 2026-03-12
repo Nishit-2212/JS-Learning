@@ -1,11 +1,13 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth/auth.guard';
 import { roleGuard } from './guards/role/role.guard';
+import { unsavedChangesGuard } from './guards/unsaved-changes/unsaved-changes.guard';
+import { adminsOnlyGuard } from './guards/admins-only/admins-only.guard';
 
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: '/dashboard/reports',
+        redirectTo: '/login',
         pathMatch: 'full'
     },
     {
@@ -18,11 +20,11 @@ export const routes: Routes = [
         canActivate: [authGuard],
         canActivateChild: [roleGuard],
         children: [
-            {
-                path: '',
-                redirectTo: '/dashboard/reports',
-                pathMatch: 'full'
-            },
+            // {
+            //     path: '',
+            //     redirectTo: '/dashboard',
+            //     pathMatch: 'full'
+            // },
             {
                 path: 'reports',
                 loadComponent: () => import('./pages/dashboard/reports/reports.component').then((c) => c.ReportsComponent),
@@ -39,6 +41,7 @@ export const routes: Routes = [
                     {
                         path: ':id/edit',
                         loadComponent: () => import('./pages/dashboard/projects/edit-project/edit-project.component').then((c) => c.EditProjectComponent),
+                        canDeactivate: [unsavedChangesGuard]
                     }
                 ]
             }
@@ -46,7 +49,8 @@ export const routes: Routes = [
     },
     {
         path: 'settings',
-        loadComponent: () => import('./pages/settings/settings.component').then((c) => c.SettingsComponent)
+        loadComponent: () => import('./pages/settings/settings.component').then((c) => c.SettingsComponent),
+        canMatch :[adminsOnlyGuard]
     },
     {
         path:'**',

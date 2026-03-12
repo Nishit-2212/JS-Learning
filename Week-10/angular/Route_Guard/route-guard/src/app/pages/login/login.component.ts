@@ -20,6 +20,8 @@ export class LoginComponent {
 
   onSubmit() {
     const isUser = this.authService.login(this.email,this.password);
+    console.log("is User",isUser);
+    
 
     if(isUser) {
       this.errorMessage = '';

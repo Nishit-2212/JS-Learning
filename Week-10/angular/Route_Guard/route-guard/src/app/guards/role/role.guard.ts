@@ -8,12 +8,15 @@ export const roleGuard: CanActivateChildFn = (childRoute, state) => {
 
   const requiredRole = childRoute.data['role'];
   
+  console.log(requiredRole);
+  
+
   if(auth.hasRole(requiredRole)) {
     return true;
   }
   else {
+    console.log('You cant access')
+    alert('Sorry you can not access it')
     return false;
   }
-
-  return true;
 };

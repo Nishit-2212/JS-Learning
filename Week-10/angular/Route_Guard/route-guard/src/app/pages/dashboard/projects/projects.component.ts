@@ -9,4 +9,18 @@ import { RouterLink } from "@angular/router";
 })
 export class ProjectsComponent {
 
+  projects = [
+    {
+      id: 1, name: 'dasjdk'
+    },
+    {
+      id: 2, name: 'cdsc3k'
+    },
+    {
+      id: 3, name: 'cew4354df'
+    }
+  ];
+
+
+
 }

@@ -1,7 +1,15 @@
-<h2> API Call Service </h2>
-@for (product of productData; track product) {
+<!-- <h2> API Call Service </h2>
+@for (product of productData | async); track product) {
   <ul>
     <li> {{product.title}}</li>
     <li> {{product.price}}</li>
   </ul>
-}
+} -->
+
+
+<h2>API Call Service</h2>
+
+<ul *ngFor="let product of productData$ | async">
+  <!-- <li>Title: {{ product.title }}</li>
+  <li>Price: {{ product.price }}</li> -->
+</ul>
