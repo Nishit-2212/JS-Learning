@@ -1,6 +1,6 @@
 <div class="login-container">
     <h2>Login</h2>
-    <form id="loginForm" #userForm="ngForm" (ngSubmit)="checkDetails(userForm.value)">
+    <form id="loginForm" #userForm="ngForm" (ngSubmit)="checkDetails(userForm)">
         <label for="username">email</label>
         <input type="text" id="email" name="email" #name="ngModel" required ngModel>
 

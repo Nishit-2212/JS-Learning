@@ -17,13 +17,14 @@ app.use(express.json())
 app.use(cookieParser())
 
 const PORT = process.env.port || 3000;
-const ALLOW_ORIGIN = process.env.ALLOW_ORIGIN || "*";
+
+const ALLOW_ORIGIN = 'http://localhost:4200';
 
 app.use(cors({
-    origin: [ALLOW_ORIGIN],
+    origin: ALLOW_ORIGIN,
     credentials: true,
     methods: ['GET', 'POST','PUT','DELETE'],
-    headers : ["Content-Type" ,"Authorization"] 
+    allowedHeaders : ["Content-Type" ,"Authorization"] 
 }));
 
 
