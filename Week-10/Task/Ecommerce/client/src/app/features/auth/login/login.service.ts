@@ -12,12 +12,12 @@ export class LoginService {
 
   url = 'http://localhost:3000';
 
-  LoginUser(user:User):Observable<any> {
-    console.log('In service',user);
+  LoginUser(user: User): Observable<any> {
+    console.log('In service', user);
 
     // include credentials so cookies set by the server are accepted by the browser
-    return this.http.post(this.url+'/api/auth/login', user, { withCredentials: true });
+    return this.http.post(this.url + '/api/auth/login', user, { withCredentials: true, observe: 'response' });
   }
-  
+
 
 }

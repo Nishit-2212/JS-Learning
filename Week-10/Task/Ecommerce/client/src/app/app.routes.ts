@@ -15,6 +15,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/auth/sign-up/sign-up.component').then((c) => c.SignUpComponent)
     },
     {
+        path: 'home',
+        loadComponent: () => import('./features/home/home.component').then((c) => c.HomeComponent)
+    },
+    {
         path: '**',
         redirectTo: '/login'
     }

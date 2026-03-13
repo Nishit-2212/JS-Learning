@@ -4,8 +4,16 @@ const jwt = require('jsonwebtoken');
 
 const verifyToken = (req,res,next) => {
 
+    console.log("Header: ", req.headers['authorization']);
+    const authHeader = req.headers['Authorization'];
+    console.log('this is my token from interceptor',authHeader);
+
+
     const token = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
+
+    console.log('This is my access token',token);
+    console.log('This is my refresh token',refreshToken);
 
     if(!refreshToken) {
         console.log("Refresh token not found");

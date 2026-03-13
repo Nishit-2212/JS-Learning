@@ -33,7 +33,7 @@ const generateAccessToken = (loginData) => {
         }
         console.log("role in generateTOken", loginData.username);
         const secretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
-        const token = jwt.sign(data, secretKey, { expiresIn: '1d' });
+        const token = jwt.sign(data, secretKey, { expiresIn: '20s' });
 
         return token;
     }
@@ -58,7 +58,7 @@ const checkLogin = async (req, res) => {
         console.log("getUserData", getUserData)
 
         if (!getUserData) {
-            return res.status(400).json({ message: "email is not found" })
+            return res.status(404).json({ message: "email is not found" })
         }
 
         let { password } = loginData
@@ -68,7 +68,7 @@ const checkLogin = async (req, res) => {
 
 
         if (!passwordMatched) {
-            return res.status(400).json({ message: "password is incorrect" })
+            return res.status(404).json({ message: "password is incorrect" })
         }
         const token = generateAccessToken(getUserData);
         const RefreshToken = generateRefreshToken(getUserData._id);
@@ -97,7 +97,7 @@ const checkLogin = async (req, res) => {
     }
     catch (err) {
         console.log("Something goes wrong wile login", err);
-        res.status(200).json({ message: "Something is Going wrong" })
+        res.status(400).json({ message: "Something is Going wrong" })
     }
 }
 
