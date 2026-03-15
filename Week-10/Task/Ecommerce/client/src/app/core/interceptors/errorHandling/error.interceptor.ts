@@ -15,7 +15,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         const url = environment.apiUrl;
         return http.post(url+'/api/auth/generateToken',null,{ withCredentials: true}).pipe(
           switchMap(() => {
-            return next(req.clone({ withCredentials: true}))
+            return next(req.clone())
           })
         )
       }

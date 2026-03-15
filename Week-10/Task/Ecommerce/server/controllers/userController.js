@@ -21,6 +21,7 @@ const createUser = async (req, res) => {
     user.password = hashedPassword;
 
     const userId = await userCounter.findOne();
+    console.log("User id from user counter", userId);
     const userLastId = userId.toObject();
     console.log("Last userid ocjext", userLastId);
     console.log("Last user id", userLastId.userId);

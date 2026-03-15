@@ -131,34 +131,32 @@ const getDataFromToken = (req, res) => {
 }
 
 
-const getUserFromRefreshToken = async(token) => {
-
+const getUserFromRefreshToken = async (token) => {
     const secretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
 
     try {
         const decryptToken = jwt.verify(token, secretKey);
-        console.log("User Id from refresh token", decryptToken.id)
-        const user = await userModel.find({userId:decryptToken.id})
+        console.log("User Id from refresh token", decryptToken.id);
+        // lookup by ObjectId (use findById for clarity)
+        const user = await userModel.findById(decryptToken.id);
+        console.log('user', user);
 
-        if (user == undefined) {
-            console.log("User not Found")
+        if (!user) {
+            console.log("User not Found");
             return null;
         }
         return user;
-    }
-    catch (Err) {
-        if (Err.name === "TokenExpiredError") {
+    } catch (Err) {
+        if (Err && Err.name === "TokenExpiredError") {
             return null;
-            // console.log("Inner Catch")
-            // return res.status(404).json({error:"Refresh Token Expired"});
         }
-        console.log("Error in geting data from refreshToken", Err)
+        console.log("Error in geting data from refreshToken", Err);
+        return null;
     }
-}
+};
 
 
-const generateTokenFromRefreshToken = (req, res) => {
-
+const generateTokenFromRefreshToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken || null;
     console.log("Inner generateTokenFromRefreshToken");
     if (!refreshToken) {
@@ -166,13 +164,13 @@ const generateTokenFromRefreshToken = (req, res) => {
     }
 
     try {
-        const user = getUserFromRefreshToken(refreshToken);
+        const user = await getUserFromRefreshToken(refreshToken);
 
         if (!user) {
-            return res.status(400).json({ message: "User not Found" })
+            return res.status(400).json({ message: "User not Found" });
         }
 
-        console.log(user)
+        console.log(user);
         const newAccessToken = generateAccessToken(user);
         console.log("New Access Token", newAccessToken);
 
@@ -187,18 +185,14 @@ const generateTokenFromRefreshToken = (req, res) => {
         console.log("End generateTokenFromRefreshToken");
         return res.status(200).json({
             message: "new Access Token generated Succesfully"
-        })
-    }
-    catch (err) {
-        console.log("Error in generating newAccessToken", err)
+        });
+    } catch (err) {
+        console.log("Error in generating newAccessToken", err);
         return res.status(400).json({
             message: "Error in generating new Access token",
-        })
+        });
     }
-
-
-
-}
+};
 
 
 const logOut = (req, res) => {
