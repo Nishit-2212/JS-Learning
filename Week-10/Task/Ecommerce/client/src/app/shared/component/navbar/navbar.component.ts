@@ -17,9 +17,10 @@ export class NavbarComponent {
 
   ngOnInit() {
     this.authService.user$.subscribe((user) => {
+      console.log('NavbarComponent received user:', user); // Debugging log
       this.userName = user;
       console.log('the user is changed');
-      console.log('ang the new user user',user);
+      console.log('and the new user is', user);
     })
   }
   

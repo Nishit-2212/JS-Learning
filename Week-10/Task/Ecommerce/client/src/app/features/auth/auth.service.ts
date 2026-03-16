@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { User } from '../../models/User.model';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,7 +20,7 @@ export class AuthService {
   user$ = this.userSubject.asObservable();
 
   setUser(user: any) {
-    console.log('in setUser method',user);
+    console.log('setUser called with:', user); // Debugging log
     this.userSubject.next(user);
   }
 
