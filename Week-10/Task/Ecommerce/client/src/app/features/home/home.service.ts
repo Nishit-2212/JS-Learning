@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,9 @@ export class HomeService {
   
   getUserFromToken():Observable<any>  {
     return this.http.get(this.url+'/api/auth/verifyToken', { observe: 'response'});
-    
   }
+
+
+  
+
 }

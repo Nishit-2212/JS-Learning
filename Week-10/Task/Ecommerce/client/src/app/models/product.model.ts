@@ -1,4 +1,5 @@
 export interface Product{
+    _id: String,
     productId:Number,
     title:string,
     category:string,

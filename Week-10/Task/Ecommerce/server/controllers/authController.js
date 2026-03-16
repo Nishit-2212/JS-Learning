@@ -92,7 +92,11 @@ const checkLogin = async (req, res) => {
         // console.log(res)
 
         return res.status(200).json({
-            message: "Login sucessful"
+            message: "Login sucessful",
+            data : {
+                username:getUserData.username,
+                role:getUserData.role
+            }
         })
     }
     catch (err) {

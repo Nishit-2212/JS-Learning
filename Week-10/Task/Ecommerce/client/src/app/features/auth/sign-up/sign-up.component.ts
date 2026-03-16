@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
-import { User } from '../../../models/user.model';
 import { AuthService } from '../auth.service';
+import { User } from '../../../models/User.model';
 
 @Component({
   selector: 'app-sign-up',
