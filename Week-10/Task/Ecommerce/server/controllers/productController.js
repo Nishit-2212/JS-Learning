@@ -85,12 +85,12 @@ const updateProduct = async (req, res) => {
   console.log(updatedProduct);
 
   try {
-    const getProduct = await productModel.findOne({productId:updatedProduct.id})
+    const getProduct = await productModel.findOne({productId:updatedProduct.productId})
     if(!getProduct) {
       return res.status(400).json({ message: "Product Not found" });
     }
 
-    await productModel.findOneAndUpdate({ productId: updatedProduct.id }, {
+    await productModel.findOneAndUpdate({ productId: updatedProduct.productId }, {
       title: updatedProduct.title,
       category: updatedProduct.category,
       image: updatedProduct.imageUrl,
@@ -99,10 +99,10 @@ const updateProduct = async (req, res) => {
       stock: Number(updatedProduct.stock),
     })
 
-
     return res.status(200).json({ message: "Product Updated Succesfully" });
   } catch (err) {
     console.log("Error in updating the product", err);
+    return res.status(400).json({ message: "Something goes wrong in product update" });
   }
 };
 

@@ -21,4 +21,20 @@ export class ProductService {
     return this.http.post(this.url + '/api/product/create-product',product,{ observe: 'response'})
   }
 
+  getAllCategory():Observable<any> {
+    return this.http.get(this.url+'/api/category/', { observe: 'response'})
+  }
+
+  getProductById(id:number):Observable<any> {
+    return this.http.get(this.url+'/api/product/'+id,{ observe: 'response' })
+  }
+
+  editProduct(product:Product):Observable<any> {
+    return this.http.put(this.url+'/api/product/update-product',product,{ observe: 'response'})
+  }
+
+  deleteProduct(id:number) {
+    return this.http.delete(this.url+'/api/product/'+id, { observe: 'response'})
+  }
+
 }

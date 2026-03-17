@@ -2,16 +2,13 @@
     <nav class="navbar">
         <div class="container">
 
-            <!-- Brand / Logo -->
             <h3 class="navbar-brand">Ecommerce</h3>
 
-            <!-- Search Form -->
             <form class="search-form" autocomplete="off" action="/">
                 <input id="myInput" type="text" name="search" placeholder="Search Title">
                 <button type="submit">Search</button>
             </form>
 
-            <!-- Navbar links -->
             <ul class="navbar-nav">
                 <li><a routerLink="/home">Home</a></li>
                 <li>
@@ -30,6 +27,7 @@
                         } -->
                 <li><a routerLink="/login">Login</a></li>
                 <li> {{userName}}</li>
+                <li><a routerLink="/login" (click)="logOut()">Logout</a></li>
             </ul>
 
         </div>

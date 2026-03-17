@@ -16,4 +16,8 @@ export class NavbarService {
     return this.http.get(this.url+'/api/auth/verifyToken', { observe: 'response'})
   }
 
+  logOut():Observable<any> {
+    return this.http.get(this.url+'/api/auth/logout', { observe: 'response' })
+  }
+
 }

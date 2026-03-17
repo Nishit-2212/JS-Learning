@@ -8,6 +8,7 @@ const verifyToken = (req,res,next) => {
     const authHeader = req.headers['Authorization'];
     console.log('this is my token from interceptor',authHeader);
 
+    console.log('inner verify token middleware',req.body)
 
     const token = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;

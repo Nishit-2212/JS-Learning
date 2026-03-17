@@ -15,18 +15,21 @@ export class AuthService {
 
   url = environment.apiUrl;
 
-
-  private userSubject = new BehaviorSubject<any>('Guest');
+  userLoaded = false;
+  private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
-
+  
   setUser(user: any) {
-    console.log('setUser called with:', user); // Debugging log
-    this.userSubject.next(user);
+    if(this.userLoaded) return;
+
+      console.log('setUser called with:', user);
+      this.userLoaded = true
+      return this.userSubject.next(user);
   }
 
   clearUser() {
     console.log('clearn user method called in authService');
-    this.userSubject.next(null)
+    return this.userSubject.next(null)
   }
 
   signupUser(user: User): Observable<any> {

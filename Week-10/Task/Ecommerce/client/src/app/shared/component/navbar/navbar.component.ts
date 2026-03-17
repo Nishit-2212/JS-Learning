@@ -13,14 +13,30 @@ export class NavbarComponent {
 
   constructor(private navbarService: NavbarService, private authService: AuthService) { }
 
-  userName = 'Guest';
+  userName:any;
 
   ngOnInit() {
     this.authService.user$.subscribe((user) => {
-      console.log('NavbarComponent received user:', user); // Debugging log
+      console.log('NavbarComponent received user:', user); 
       this.userName = user;
       console.log('the user is changed');
       console.log('and the new user is', user);
+      if(this.userName === null) {
+        this.userName = 'Guests'
+      }
+    })
+  }
+
+
+  logOut() {
+    this.navbarService.logOut().subscribe((res) => {
+      console.log(res);
+
+      if(res.status === 200) {
+        return alert('You logged out successfully')
+      }
+
+      return alert('You are already logged out !!')
     })
   }
   

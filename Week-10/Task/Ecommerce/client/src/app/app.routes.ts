@@ -23,6 +23,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/products/product-add/product-add.component').then((c) => c.ProductAddComponent)
     },
     {
+        path: 'product-edit/:id',
+        loadComponent: () => import('./features/products/product-add/product-add.component').then((c) => c.ProductAddComponent)
+    },
+    {
+        path: 'category-add',
+        loadComponent: () => import('./features/categories/category-add/category-add.component').then((c) => c.CategoryAddComponent)
+    },
+    {
         path: '**',
         redirectTo: '/login'
     }

@@ -39,8 +39,6 @@ export class LoginComponent {
         return alert('Incorrect email or password');
       });
     }
-    
-
   }
 
 }
