@@ -21,13 +21,12 @@
                         <span class="cart-count">0</span>
                     </a>
                 </li>
-                <!-- @if (userName == 'Guest') {
-                    }
-                    @else {
-                        } -->
-                <li><a routerLink="/login">Login</a></li>
-                <li> {{userName}}</li>
-                <li><a routerLink="/login" (click)="logOut()">Logout</a></li>
+                @if (!isLoggedIn) {
+                    <li><a routerLink="/login">Login</a></li>
+                } @else {
+                    <li>Welcome {{userName}} !!</li>
+                    <li><a routerLink="/login" (click)="logOut()">Logout</a></li>
+                }
             </ul>
 
         </div>

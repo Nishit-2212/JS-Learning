@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { User } from '../../models/User.model';
+import { User } from '../../models/user.model';
 
 
 @Injectable({
@@ -11,24 +11,30 @@ import { User } from '../../models/User.model';
 
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  private storageKey = 'auth_user';
+
+  constructor(private http: HttpClient) {
+    // Rehydrate user on refresh so subscribers (navbar) get it immediately.
+    const savedUser = this.getSavedUser();
+    if (savedUser) {
+      this.userSubject.next(savedUser);
+    }
+  }
 
   url = environment.apiUrl;
 
-  userLoaded = false;
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
   
   setUser(user: any) {
-    if(this.userLoaded) return;
-
-      console.log('setUser called with:', user);
-      this.userLoaded = true
-      return this.userSubject.next(user);
+    console.log('setUser called with:', user);
+    this.saveUser(user);
+    return this.userSubject.next(user);
   }
 
   clearUser() {
     console.log('clearn user method called in authService');
+    this.clearSavedUser();
     return this.userSubject.next(null)
   }
 
@@ -42,6 +48,36 @@ export class AuthService {
       withCredentials: true,
       observe: 'response'
     });
+  }
+
+  private getSavedUser(): any | null {
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  private saveUser(user: any) {
+    try {
+      if (user === null || user === undefined) {
+        this.clearSavedUser();
+        return;
+      }
+      localStorage.setItem(this.storageKey, JSON.stringify(user));
+    } catch {
+      // ignore storage failures (private mode, disabled storage, etc.)
+    }
+  }
+
+  private clearSavedUser() {
+    try {
+      localStorage.removeItem(this.storageKey);
+    } catch {
+      // ignore
+    }
   }
 
 }

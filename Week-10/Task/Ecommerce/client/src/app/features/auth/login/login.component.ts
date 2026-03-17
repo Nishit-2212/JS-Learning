@@ -3,7 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../auth.service';
-import { User } from '../../../models/User.model';
+import { User } from '../../../models/user.model';
 import { environment } from '../../../../environments/environment.development';
 
 @Component({
