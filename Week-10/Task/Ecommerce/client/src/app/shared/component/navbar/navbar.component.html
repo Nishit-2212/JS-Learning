@@ -27,6 +27,9 @@
                     <li>Welcome {{userName}} !!</li>
                     <li><a routerLink="/login" (click)="logOut()">Logout</a></li>
                 }
+                @if (isAdmin) {
+                    <li> Add Product</li>
+                }
             </ul>
 
         </div>

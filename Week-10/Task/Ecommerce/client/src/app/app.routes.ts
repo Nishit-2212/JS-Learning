@@ -11,24 +11,16 @@ export const routes: Routes = [
         loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule)
     },
     {
+        path: 'product',
+        loadChildren: () => import('./features/products/product.module').then((m) => m.ProductModule)
+    },
+    {
         path: 'home',
         loadComponent: () => import('./features/home/home.component').then((c) => c.HomeComponent)
     },
     {
-        path: 'product-list',
-        loadComponent: () => import('./features/products/product-list/product-list.component').then((c) => c.ProductListComponent)
-    },
-    {
-        path: 'product-add',
-        loadComponent: () => import('./features/products/product-add/product-add.component').then((c) => c.ProductAddComponent)
-    },
-    {
-        path: 'product-edit/:id',
-        loadComponent: () => import('./features/products/product-add/product-add.component').then((c) => c.ProductAddComponent)
-    },
-    {
-        path: 'category-add',
-        loadComponent: () => import('./features/categories/category-add/category-add.component').then((c) => c.CategoryAddComponent)
+        path: 'category',
+        loadChildren: () => import('./features/categories/category.module').then((c) => c.CategoryModule)
     },
     {
         path: '**',

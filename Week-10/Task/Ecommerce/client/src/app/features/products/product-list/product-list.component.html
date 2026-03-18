@@ -18,17 +18,17 @@
 
     <tr *ngFor="let pro of products; let i=index;">
         <td style="display: none;">{{pro.productId}}</td>
-        <!-- <td>{{i+1}}</td> -->
-         <td> {{pro.productId}}</td>
+        <td>{{i+1}}</td>
+         <!-- <td> {{pro.productId}}</td> -->
         <td>{{pro.title}}</td>
         <td>{{pro.category}}</td>
         <td>{{pro.description}}</td>
         <td><img height="70px" width="80px" src={{pro.image}}></td>
 
-        <td>{{pro.price}}</td>
+        <td>{{pro.price | currencyConvertor}}</td>
         <td>{{pro.stock}}</td>
         @if (userRole == 'admin') {
-            <td> <button [routerLink]="['/product-edit',pro.productId]"> Edit </button></td>
+            <td> <button [routerLink]="['/product/edit',pro.productId]"> Edit </button></td>
             <td> <button (click)="deleteProduct(pro.productId)"> Delete </button> </td>
         }
     </tr>

@@ -5,10 +5,12 @@ import { ProductService } from '../product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { category } from '../../../models/category.model';
 import { NgFor } from '@angular/common';
+import { CurrencyConvertorPipe } from '../../../shared/pipes/currency-convertor.pipe';
+import { NumberOnlyDirective } from '../../../shared/directives/number-only.directive';
 
 @Component({
   selector: 'app-product-add',
-  imports: [FormsModule, NgFor],
+  imports: [FormsModule, NumberOnlyDirective],
   templateUrl: './product-add.component.html',
   styleUrl: './product-add.component.css'
 })
@@ -84,19 +86,5 @@ export class ProductAddComponent {
     })
   }
 
-  // editProduct(val: NgForm) {
-
-  //   if (this.product) {
-  //     this.productService.editProduct(this.product).subscribe((res) => {
-  //       console.log('response', res);
-
-  //       if (res.status === 200) {
-  //         alert('Product Updated Succesfully')
-  //         return this.router.navigateByUrl('/home')
-  //       }
-
-  //       return alert('Something Goes Wrong')
-  //     })
-  //   }
-  // }
+  
 }

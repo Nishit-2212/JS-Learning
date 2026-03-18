@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { User } from '../../models/user.model';
+import { User } from '../../models/User.model';
 
 
 @Injectable({
@@ -14,7 +14,7 @@ export class AuthService {
   private storageKey = 'auth_user';
 
   constructor(private http: HttpClient) {
-    // Rehydrate user on refresh so subscribers (navbar) get it immediately.
+    // on refresh it get the user from localstorage if required
     const savedUser = this.getSavedUser();
     if (savedUser) {
       this.userSubject.next(savedUser);
@@ -25,10 +25,10 @@ export class AuthService {
 
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
-  
-  setUser(user: any) {
+
+  setUser(user: any,role:any) {
     console.log('setUser called with:', user);
-    this.saveUser(user);
+    this.saveUser(user,role);
     return this.userSubject.next(user);
   }
 
@@ -60,24 +60,22 @@ export class AuthService {
     }
   }
 
-  private saveUser(user: any) {
-    try {
-      if (user === null || user === undefined) {
-        this.clearSavedUser();
-        return;
-      }
-      localStorage.setItem(this.storageKey, JSON.stringify(user));
-    } catch {
-      // ignore storage failures (private mode, disabled storage, etc.)
+  private saveUser(user: any,role: any) {
+    if (user === null || user === undefined) {
+      this.clearSavedUser();
+      return;
+    }
+    localStorage.setItem(this.storageKey, JSON.stringify(user));
+    if(role === 'admin') {
+      localStorage.setItem('isAdmin',JSON.stringify(true))
+    }
+    else {
+      localStorage.setItem('isAdmin',JSON.stringify(false))
     }
   }
 
   private clearSavedUser() {
-    try {
-      localStorage.removeItem(this.storageKey);
-    } catch {
-      // ignore
-    }
+    localStorage.removeItem(this.storageKey);
+    localStorage.setItem('isAdmin',JSON.stringify(false))
   }
-
 }

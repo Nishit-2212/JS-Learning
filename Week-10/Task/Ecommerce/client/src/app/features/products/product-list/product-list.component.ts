@@ -3,10 +3,11 @@ import { ProductService } from '../product.service';
 import { Product } from '../../../models/product.model';
 import { NgFor } from '@angular/common';
 import { Route, RouterLink } from '@angular/router';
+import { CurrencyConvertorPipe } from '../../../shared/pipes/currency-convertor.pipe';
 
 @Component({
   selector: 'app-product-list',
-  imports: [NgFor, RouterLink],
+  imports: [NgFor, RouterLink, CurrencyConvertorPipe],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })

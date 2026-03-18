@@ -6,7 +6,7 @@ import { ProductListComponent } from "../products/product-list/product-list.comp
 
 @Component({
   selector: 'app-home',
-  imports: [ProductAddComponent, ProductListComponent],
+  imports: [ ProductListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
