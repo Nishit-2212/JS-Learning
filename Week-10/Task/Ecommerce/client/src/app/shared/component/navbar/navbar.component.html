@@ -22,14 +22,12 @@
                     </a>
                 </li>
                 @if (!isLoggedIn) {
-                    <li><a routerLink="/login">Login</a></li>
+                <li><a routerLink="/login">Login</a></li>
                 } @else {
-                    <li>Welcome {{userName}} !!</li>
-                    <li><a routerLink="/login" (click)="logOut()">Logout</a></li>
+                <li>Welcome {{authService.userName()}} !!</li>
+                <li><a routerLink="/login" (click)="logOut()">Logout</a></li>
                 }
-                @if (isAdmin) {
-                    <li> Add Product</li>
-                }
+                <li *ngIf="authService.isAdmin()"><a routerLink="/product/add"> Add Product </a> </li>
             </ul>
 
         </div>

@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { Observable } from 'rxjs';
+import { AuthService } from '../../../features/auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NavbarService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService:AuthService) { }
 
   url = environment.apiUrl;
 
@@ -17,6 +18,7 @@ export class NavbarService {
   }
 
   logOut():Observable<any> {
+    this.authService.logOut()
     return this.http.get(this.url+'/api/auth/logout', { observe: 'response' })
   }
 

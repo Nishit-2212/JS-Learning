@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { User } from '../../models/User.model';
@@ -14,7 +14,6 @@ export class AuthService {
   private storageKey = 'auth_user';
 
   constructor(private http: HttpClient) {
-    // on refresh it get the user from localstorage if required
     const savedUser = this.getSavedUser();
     if (savedUser) {
       this.userSubject.next(savedUser);
@@ -78,4 +77,26 @@ export class AuthService {
     localStorage.removeItem(this.storageKey);
     localStorage.setItem('isAdmin',JSON.stringify(false))
   }
+
+  
+  private userSignal = signal<User | null>(null);
+
+  isAdmin = computed(() => {
+    return this.userSignal()?.role === 'admin';
+  })
+
+  userName = computed(() => {
+    return this.userSignal()?.username;
+  })
+
+  setUsers(user:User) {
+    localStorage.setItem('user',JSON.stringify(user));
+    this.userSignal.set(user);
+  }
+
+  logOut() {
+    localStorage.removeItem('user');
+    this.userSignal.set(null)
+  }
+  
 }
