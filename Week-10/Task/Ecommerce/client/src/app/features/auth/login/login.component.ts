@@ -6,6 +6,7 @@ import { AuthService } from '../auth.service';
 import { environment } from '../../../../environments/environment.development';
 import { User } from '../../../models/User.model';
 import { NgIf } from '@angular/common';
+import { NavbarService } from '../../../shared/component/navbar/navbar.service';
 
 @Component({
   selector: 'app-login',
@@ -34,8 +35,7 @@ export class LoginComponent {
             this.authService.setUsers({
               username:res.body.data.username,
               role:res.body.data.role,
-              email: '',
-              password: ''
+              
             })
 
             this.router.navigateByUrl('/home', { replaceUrl: true });

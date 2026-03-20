@@ -18,7 +18,6 @@ export class NavbarService {
   }
 
   logOut():Observable<any> {
-    this.authService.logOut()
     return this.http.get(this.url+'/api/auth/logout', { observe: 'response' })
   }
 

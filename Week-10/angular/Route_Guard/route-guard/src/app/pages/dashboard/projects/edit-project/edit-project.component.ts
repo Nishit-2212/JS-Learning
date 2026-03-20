@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
   templateUrl: './edit-project.component.html',
   styleUrl: './edit-project.component.css'
 })
+
 export class EditProjectComponent {
 
   projectData = ''
@@ -20,9 +21,8 @@ export class EditProjectComponent {
 
   canDeactivate(): boolean | Observable<boolean> {
     if(!this.isSaved) {
-      return confirm('You have unsaved changes do you realy want to leav')
+      return confirm('You have unsaved changes do you realy want to leave')
     }
     return true;
   }
-
 }

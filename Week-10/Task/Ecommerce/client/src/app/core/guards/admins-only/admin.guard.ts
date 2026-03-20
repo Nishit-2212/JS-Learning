@@ -17,10 +17,12 @@ export const adminGuard: CanMatchFn = (route, segments) => {
         if (role === 'admin') {
           return true;
         } else {
+          console.log('You are not an admin');
           router.navigate(['/login']);
           return false;
         }
       } else {
+        console.log('You are not an admin');
         router.navigate(['/login']);
         return false;
       }

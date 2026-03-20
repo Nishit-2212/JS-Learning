@@ -7,6 +7,8 @@ import { category } from '../../../models/category.model';
 import { NgFor } from '@angular/common';
 import { CurrencyConvertorPipe } from '../../../shared/pipes/currency-convertor.pipe';
 import { NumberOnlyDirective } from '../../../shared/directives/number-only.directive';
+import { Observable } from 'rxjs';
+import { ProductModule } from '../product.module';
 
 @Component({
   selector: 'app-product-add',
@@ -22,7 +24,7 @@ export class ProductAddComponent {
   isEdit = false;
   id: number | null | string = null;
   selectedProduct: Product | undefined;
-
+  isSaved: Boolean = false;
 
   constructor(private productService: ProductService, private router: Router, private activeRouter: ActivatedRoute) { }
 
@@ -47,6 +49,17 @@ export class ProductAddComponent {
     this.product = val.value;
     console.log(this.product);
 
+    this.isSaved = true;
+
+    console.log('selectedProduct and inputProduct',this.selectedProduct,this.product);
+    
+    // if(this.selectedProduct == this.product) {
+    //   console.log('true');
+    // }
+    // else {
+    //   console.log('false');
+    // }
+
     if (this.isEdit) {
       if (this.product) {
         this.productService.editProduct(this.product).subscribe((res) => {
@@ -54,7 +67,8 @@ export class ProductAddComponent {
 
           if (res.status === 200) {
             alert('Product Updated Succesfully')
-            return this.router.navigateByUrl('/home')
+            return
+            // return this.router.navigateByUrl('/home')
           }
 
           return alert('Something Goes Wrong')
@@ -68,14 +82,22 @@ export class ProductAddComponent {
 
           if (res.status === 201) {
             alert('Product Created Succesfully')
-            return this.router.navigateByUrl('/home')
+            return;
+            // return this.router.navigateByUrl('/home')
           }
 
           return alert('Something Goes Wrong')
         })
       }
     }
+  }
 
+
+  canDeactivate(): boolean | Observable<boolean> {
+    if(!this.isSaved) {
+      return confirm('You have unsaved changes do you really want to leave')
+    }
+    return true;
   }
 
 
@@ -86,5 +108,10 @@ export class ProductAddComponent {
     })
   }
 
+
+
+  
   
 }
+
+

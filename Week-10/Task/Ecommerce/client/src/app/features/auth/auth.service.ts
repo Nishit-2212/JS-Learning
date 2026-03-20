@@ -12,27 +12,39 @@ import { User } from '../../models/User.model';
 export class AuthService {
 
   private storageKey = 'auth_user';
+  private userSignal = signal<any>(null);
+
 
   constructor(private http: HttpClient) {
     const savedUser = this.getSavedUser();
     if (savedUser) {
       this.userSubject.next(savedUser);
     }
+    // if(this.getUserFromLocalStorage()) {
+    //   this.userSignal.set(JSON.parse(localStorage.getItem('user')))
+    // }
+
+    if (localStorage.getItem('user')) {
+      // this.userSignal = localStorage.getItem('user')
+      this.userSignal.set(localStorage.getItem('user'))
+    }
+
   }
+
 
   url = environment.apiUrl;
 
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
-  setUser(user: any,role:any) {
+  setUser(user: any, role: any) {
     console.log('setUser called with:', user);
-    this.saveUser(user,role);
+    this.saveUser(user, role);
     return this.userSubject.next(user);
   }
 
   clearUser() {
-    console.log('clearn user method called in authService');
+    console.log('clean user method called in authService');
     this.clearSavedUser();
     return this.userSubject.next(null)
   }
@@ -59,27 +71,32 @@ export class AuthService {
     }
   }
 
-  private saveUser(user: any,role: any) {
+  private saveUser(user: any, role: any) {
     if (user === null || user === undefined) {
       this.clearSavedUser();
       return;
     }
     localStorage.setItem(this.storageKey, JSON.stringify(user));
-    if(role === 'admin') {
-      localStorage.setItem('isAdmin',JSON.stringify(true))
+    if (role === 'admin') {
+      localStorage.setItem('isAdmin', JSON.stringify(true))
     }
     else {
-      localStorage.setItem('isAdmin',JSON.stringify(false))
+      localStorage.setItem('isAdmin', JSON.stringify(false))
     }
   }
 
   private clearSavedUser() {
     localStorage.removeItem(this.storageKey);
-    localStorage.setItem('isAdmin',JSON.stringify(false))
+    localStorage.setItem('isAdmin', JSON.stringify(false))
   }
 
-  
-  private userSignal = signal<User | null>(null);
+  // userFromLocal: any = this.getUserFromLocalStorage();
+  getUserFromLocalStorage(): boolean {
+    //  this.userFromLocal = JSON.parse(localStorage.getItem<string|null>('user'))
+    return (localStorage.getItem('user') ? true : false);
+  }
+
+  // private userSignal = signal<User | null>(null);
 
   isAdmin = computed(() => {
     return this.userSignal()?.role === 'admin';
@@ -89,8 +106,10 @@ export class AuthService {
     return this.userSignal()?.username;
   })
 
-  setUsers(user:User) {
-    localStorage.setItem('user',JSON.stringify(user));
+  setUsers(user: any) {
+    console.log(user);
+    
+    localStorage.setItem('user', JSON.stringify(user));
     this.userSignal.set(user);
   }
 
@@ -98,5 +117,5 @@ export class AuthService {
     localStorage.removeItem('user');
     this.userSignal.set(null)
   }
-  
+
 }

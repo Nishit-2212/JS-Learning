@@ -8,19 +8,12 @@ import { Observable, of } from 'rxjs';
 })
 export class SharedService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   url = environment.apiUrl;
 
-  getCurrentUser():Observable<any> {
-    const loggedInUser = localStorage.getItem('auth_user') ? true : false;
-
-    if(loggedInUser) {
-      return this.http.get(this.url+'/api/auth/verifyToken',{ observe: 'response' })
-    }
-    else {
-      return of(null);
-    }
+  getCurrentUser(): Observable<any> {
+    return this.http.get(this.url + '/api/auth/verifyToken', { observe: 'response' })
   }
 
 }

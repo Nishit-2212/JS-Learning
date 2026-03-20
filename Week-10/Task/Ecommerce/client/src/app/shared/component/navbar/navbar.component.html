@@ -21,7 +21,7 @@
                         <span class="cart-count">0</span>
                     </a>
                 </li>
-                @if (!isLoggedIn) {
+                @if (!authService.userName()) {
                 <li><a routerLink="/login">Login</a></li>
                 } @else {
                 <li>Welcome {{authService.userName()}} !!</li>
