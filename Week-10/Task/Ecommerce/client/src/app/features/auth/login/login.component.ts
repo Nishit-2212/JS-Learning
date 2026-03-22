@@ -32,11 +32,10 @@ export class LoginComponent {
           console.log('res', res);
 
           if (res.status === 200) {
-            this.authService.setUsers({
-              username:res.body.data.username,
-              role:res.body.data.role,
-              
-            })
+            this.authService.saveUser({
+              username: res.body.data.username,
+              role: res.body.data.role,
+            });
 
             this.router.navigateByUrl('/home', { replaceUrl: true });
             alert('Logged In succesfull')

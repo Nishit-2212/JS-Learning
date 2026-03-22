@@ -21,10 +21,10 @@
                         <span class="cart-count">0</span>
                     </a>
                 </li>
-                @if (!authService.userName()) {
+                @if (!authService.user()) {
                 <li><a routerLink="/login">Login</a></li>
                 } @else {
-                <li>Welcome {{authService.userName()}} !!</li>
+                <li>Welcome {{ authService.user()?.username }} !!</li>
                 <li><a routerLink="/login" (click)="logOut()">Logout</a></li>
                 }
                 <li *ngIf="authService.isAdmin()"><a routerLink="/product/add"> Add Product </a> </li>

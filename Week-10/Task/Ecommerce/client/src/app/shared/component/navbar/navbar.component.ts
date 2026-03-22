@@ -1,9 +1,8 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavbarService } from './navbar.service';
 import { AuthService } from '../../../features/auth/auth.service';
 import { NgIf } from '@angular/common';
-import { User } from '../../../models/User.model';
 
 @Component({
   selector: 'app-navbar',
@@ -19,29 +18,12 @@ export class NavbarComponent {
     
   }
 
-  isLoggedIn = false;
-
-  ngOnInit() {
-    // if(localStorage.getItem('user')) {
-    //   // this.userSignal = localStorage.getItem('user')
-    //   this.userSignal.set(localStorage.getItem('user'))
-    // }
-    console.log('ngOnInit call in navBar component');
-    
-    this.authService.setUsers(localStorage.getItem('user'))
-  }
-
-
-
   logOut() {
     this.navbarService.logOut().subscribe((res) => {
       console.log(res);
 
       if (res.status === 200) {
-        localStorage.removeItem('user');
-        // this.userSignal.set(null)
-        // this.authService.clearUser();
-        this.authService.logOut()
+        this.authService.logOut();
         return alert('You logged out successfully')
       }
 
