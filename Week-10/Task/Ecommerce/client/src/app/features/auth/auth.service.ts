@@ -13,9 +13,9 @@ export type SavedUser = {
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly STORAGE_KEY = 'user';
+  private  STORAGE_KEY = 'user';
 
-  readonly user = signal<SavedUser | null>(null);
+  user = signal<SavedUser | null>(null);
 
   url = environment.apiUrl;
 
