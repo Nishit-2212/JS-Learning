@@ -1,0 +1,21 @@
+<p>ng-if works!</p>
+
+
+<!-- <div *ngIf="login; else elseBlock">
+    <a href="">logOut</a>
+</div>
+<ng-template #elseBlock>
+    <a href="">login</a>
+</ng-template> -->
+
+<div *ngIf="task==1">
+    task 1
+</div>
+<div *ngIf="task==2">
+    task 2
+</div>
+<div *ngIf="task==3">
+    task 3
+</div>
+
+<button (click)="changeTask()"> change task </button>

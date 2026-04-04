@@ -1,0 +1,22 @@
+<p>get-and-set-input-field works!</p>
+
+<br>
+<h3> User Name is {{name}}</h3>
+<h3> Display Name is {{displayName}}</h3>
+<br>
+
+<input type="text"
+(input)="handleInput($event)"
+ value="{{name}}" placeholder="Enter a userName">
+
+<button (click)="handleSubmit()">Submit</button>
+<button (click)="setName()">Set Name</button>
+
+<hr>
+<br>
+<h3> Email: {{email}}</h3>
+<input type="text" placeholder="Enter a email" #emailField>
+<button (click)="getEmail(emailField.value)">Get Email</button>
+<button (click)="setName()">Set Name</button>
+
+

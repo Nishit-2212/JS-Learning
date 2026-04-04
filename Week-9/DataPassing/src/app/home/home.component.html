@@ -1,0 +1,8 @@
+<h3> Home Page <h3>
+
+<a [routerLink]="['profile',{name:'nishit'}]">Go to profile page with info</a>
+
+<hr>
+<button (click)="goToLogin()">Login Page with query Params (data from .ts file)</button>
+<br>
+<button (click)="goToLoginData('Nishit')">Data from .html file</button>
