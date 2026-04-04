@@ -1,0 +1,13 @@
+<h1 id="form-title">Create Category</h1>
+
+<form id="create-form" #categoryForm="ngForm" (ngSubmit)="createCategory(categoryForm)">
+
+    <label for="category-name">Category name:</label>
+    <input type="text" id="category-name" name="name" maxlength="10" #name="ngModel" required ngModel>
+    <br>
+    <br>
+
+    <div id="btn">
+        <button type="submit" id="submitBtn" value="createProduct">Create Category</button>
+    </div>
+</form>

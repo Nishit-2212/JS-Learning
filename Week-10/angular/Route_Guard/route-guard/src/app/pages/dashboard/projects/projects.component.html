@@ -1,0 +1,14 @@
+<p>projects works!</p>
+
+<ul>
+        @for (project of projects; track project) {
+        <li>
+            <span>{{project.name}}</span>
+            <button
+                [routerLink]="['/dashboard/projects',project.id,'edit']"
+            > 
+            Edit-Project </button>
+        </li>
+        }
+    </ul>
+<button routerLink="/projects/1/edit"> Edit button</button>

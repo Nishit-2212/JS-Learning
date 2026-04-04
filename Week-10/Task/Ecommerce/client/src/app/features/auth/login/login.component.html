@@ -1,0 +1,36 @@
+<div class="bbody">
+    <div class="login-container">
+        <h2>Login</h2>
+
+        <form #userForm="ngForm" (ngSubmit)="checkDetails(userForm)">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" ngModel required email #email="ngModel" />
+
+            <div *ngIf="email.invalid && (email.touched || userForm.submitted)" style="color:red">
+                <div *ngIf="email.errors?.['required']">
+                    Email is required
+                </div>
+                <div *ngIf="email.errors?.['email']">
+                    Enter a valid email
+                </div>
+            </div>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" ngModel required #password="ngModel" />
+
+            <div *ngIf="password.invalid && (password.touched || userForm.submitted)" style="color:red">
+                <div *ngIf="password.errors?.['required']">
+                    Password is required
+                </div>
+            </div>
+
+            <button type="submit" [disabled]="userForm.invalid">
+                Login
+            </button>
+
+        </form>
+
+        sign up new user? <a routerLink="/sign-up">Signup</a>
+    </div>
+</div>

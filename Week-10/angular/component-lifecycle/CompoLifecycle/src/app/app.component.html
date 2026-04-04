@@ -1,0 +1,7 @@
+<h3>Component Lifecycle </h3>
+
+<button (click)="updateCounter()">counter:{{counter}}</button>
+
+<div *ngIf="counter!=5">
+  <app-user #userComp [counter]="counter"></app-user>
+</div>

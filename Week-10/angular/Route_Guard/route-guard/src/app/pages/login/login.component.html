@@ -1,0 +1,23 @@
+<p>Welcome </p>
+
+<form (ngSubmit)="onSubmit()">
+    Email:
+    <input type="email" placeholder="enter your mail" name="email" [(ngModel)]="email" required>
+    <br><br>
+    Password:
+    <input type="password" placeholder="Enter Password" name="password" [(ngModel)]="password" required>
+    <br><br>
+    @if (errorMessage) {
+        <br>
+        {{errorMessage}}
+        <br>
+    }
+    <button type="submit">Login</button>
+</form>
+
+<br>
+<a routerLink="">Forget Password</a><br>
+<a routerLink="/sign-up">Sign-up</a>
+
+{{email}}
+{{password}}

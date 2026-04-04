@@ -1,0 +1,25 @@
+<p>dashboard works!</p>
+
+<ul>
+    <li>
+        <a routerLink="/dashboard/reports" routerLinkActive="active">Reports</a>
+    </li>
+    <li>
+        <a routerLink="/dashboard/projects" routerLinkActive="active">Projects</a>
+    </li>
+    <li>
+        <a routerLink="/settings" routerLinkActive="active">Settings</a>
+    </li>
+</ul>
+
+
+
+<header>
+    <h3>Welcome to the dashboard !</h3>
+    <button (click)="logout()">Logout</button>
+</header>
+
+
+<div>
+    <router-outlet></router-outlet>
+</div>

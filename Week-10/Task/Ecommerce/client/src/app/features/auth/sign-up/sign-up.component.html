@@ -1,0 +1,39 @@
+<div class="bbody">
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form id="signupForm" #userForm="ngForm" (ngSubmit)="signupUser(userForm)">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" #username='ngModel' required ngModel username>
+
+            <div *ngIf="username.touched" style="color:red">
+                <div *ngIf="username.errors?.['required']">
+                    UserName is required
+                </div>
+            </div>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" #email='ngModel' required ngModel email>
+
+            <div *ngIf="email.invalid && (email.touched || userForm.submitted)" style="color:red">
+                <div *ngIf="email.errors?.['required']">
+                    Email is required
+                </div>
+                <div *ngIf="email.errors?.['email']">
+                    Enter a valid email
+                </div>
+            </div>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" #password='ngModel' required ngModel password>
+
+            <div *ngIf="password.invalid && (password.touched || userForm.submitted)" style="color:red">
+                <div *ngIf="password.errors?.['required']">
+                    Password is required
+                </div>
+            </div>
+
+            <button type="submit" [disabled]="userForm.invalid">Sign Up</button>
+        </form>
+        login existing user? <a routerLink="/login">Login</a>
+    </div>
+</div>
