@@ -1,0 +1,813 @@
+--------------------------------------------------------------------------------------------------
+1. Join + Basic Aggregation
+Write an aggregation to:
+Join customers with orders
+Show full name
+Total number of orders
+Total revenue
+Only include Delivered orders
+Must use: $lookup, $unwind, $match, $group
+--------------------------------------------------------------------------------------------------
+
+
+- db.customers.aggregate([
+  {
+    $lookup: {
+      from: "orders",
+      localField: "customerId",
+      foreignField: "customerId",
+      as: "orders"
+    }
+  },
+  { 
+    $unwind: "$orders" 
+  },
+  {
+    $match: { "orders.orderInfo.status": "Delivered" }
+  },
+  {
+    $group: {
+      _id: "$customerId",
+      fullName: {
+        $first: {
+          $concat: [
+            "$profile.name.first"," ","$profile.name.last"
+          ]
+        }
+      },
+      totalOrders: { $sum: 1 },
+      totalRevenue: { $sum: "$orders.pricing.totalAmount" }
+    }
+  }
+])
+
+Output:-
+
+[
+  {
+    _id: 101,
+    fullName: 'Parth Mehta',
+    totalOrders: 1,
+    totalRevenue: 1500
+  },
+  {
+    _id: 105,
+    fullName: 'Sophia Brown',
+    totalOrders: 1,
+    totalRevenue: 2500
+  },
+  {
+    _id: 103,
+    fullName: 'Emily Johnson',
+    totalOrders: 1,
+    totalRevenue: 2000
+  }
+]
+
+
+
+
+
+-------------------------------------------------------------------------------------------------
+2. Category Revenue Calculation
+From orders:
+Unwind items
+Group by items.product.category
+Calculate:
+total quantity sold
+total revenue (price × quantity)
+Sort descending by revenue
+-------------------------------------------------------------------------------------------------
+- db.orders.aggregate([
+    { $unwind:"$items"},
+    { $group: {
+      _id:"$items.product.category",
+      TotalQuantity: { $sum: "$items.quantity" },
+      Total_Revenue: { $sum : {
+        $multiply: ["$items.price","$items.quantity"]
+      }},
+    }},
+    {
+      $sort: {
+        Total_Revenue:-1
+      }
+    },
+    {
+      $project: {
+        _id:0,
+        Category:"$_id",
+        Total_Quantity:"$TotalQuantity",
+        Total_Revenue:"$Total_Revenue"
+      }
+    }
+  ])
+
+  Output:-
+  [
+    { Category: 'Electronics', Total_Quantity: 4, Total_Revenue: 5200 },
+    { Category: 'Accessories', Total_Quantity: 1, Total_Revenue: 2000 },
+    { Category: 'Fashion', Total_Quantity: 1, Total_Revenue: 800 }
+  ]
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+3. Revenue After Discount
+For each customer:
+Calculate gross revenue (pricing.totalAmount)
+Calculate total discount
+Calculate net revenue
+Add a field:
+"High Value" if netRevenue > 2000
+"Regular" otherwise
+-----------------------------------------------------------------------------------------------
+
+- db.orders.aggregate([
+  {
+    $lookup: {
+      from: "customers",
+      localField: "customerId",
+      foreignField: "customerId",
+      as : "customerInfo"
+    }
+  },
+  {
+    $group: {
+      _id: {
+        Id:"$customerId",
+        Name:{
+          $arrayElemAt: ["$customerInfo.profile.name.first",0]  
+        }
+      },
+      Total: {
+        $sum:{
+          $subtract:["$pricing.totalAmount",{
+            $add:["$pricing.tax","$pricing.discount"]
+          }]
+        }
+      },
+      Discount: {
+        $sum:"$pricing.discount"
+      },
+      Gross: {
+        $sum:"$pricing.totalAmount"
+      },
+    }
+  },
+  {
+    $project: {
+      _id:0,
+      customerId:"$_id.Id",
+      customerName:"$_id.Name",
+      Net_Revenue: "$Total",
+      Total_Discount:"$Discount",
+      Gross_Revenue:"$Gross"
+    }
+  },
+  {
+    $addFields: {
+      Net_Revenue_type : {
+        $cond: {
+          if : {
+            $gt : [ "$Net_Revenue",2000]
+          },
+          then: "High Value",
+          else: "Reguler"
+        }
+      }
+    }
+  }
+])
+
+Output:- 
+[
+  {
+    customerId: 104,
+    customerName: 'Amit',
+    Net_Revenue: 1030,
+    Total_Discount: 50,
+    Gross_Rebenue: 1200,
+    Net_Revenue_type: 'Reguler'
+  },
+  {
+    customerId: 105,
+    customerName: 'Sophia',
+    Net_Revenue: 2050,
+    Total_Discount: 200,
+    Gross_Rebenue: 2500,
+    Net_Revenue_type: 'High Value'
+  },
+  {
+    customerId: 103,
+    customerName: 'Emily',
+    Net_Revenue: 1650,
+    Total_Discount: 150,
+    Gross_Rebenue: 2000,
+    Net_Revenue_type: 'Reguler'
+  },
+  {
+    customerId: 102,
+    customerName: 'Rahul',
+    Net_Revenue: 720,
+    Total_Discount: 0,
+    Gross_Rebenue: 800,
+    Net_Revenue_type: 'Reguler'
+  },
+  {
+    customerId: 101,
+    customerName: 'Parth',
+    Net_Revenue: 1250,
+    Total_Discount: 100,
+    Gross_Rebenue: 1500,
+    Net_Revenue_type: 'Reguler'
+  }
+]
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+4. Payment Method Analysis
+Join orders with payments and return:
+-----------------------------------------------------------------------------------------------
+
+Payment method
+Number of transactions
+Total gateway fees collected
+- db.payments.aggregate([
+  {
+    $lookup: {
+      from:"orders",
+      localField:"orderId",
+      foreignField:"orderId",
+      as:"orderDetail"
+    }
+  },
+  {
+    $group: {
+      _id: "orderId",
+      Total_transaction: {
+        $sum:1
+      },
+      Total_Gatewat_Fee: {
+        $sum: "$breakdown.gatewayFee"
+      }
+    }
+  },
+  {
+    $project:{
+      _id:0
+    }
+  }
+])
+
+Output:-
+[ { Total_transaction: 5, Total_Gatewat_Fee: 130 } ]
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------
+5. Customer Revenue Ranking
+Return:
+-------------------------------------------------------------------------------------------------
+fullName
+totalRevenue
+rank (highest revenue = rank 1)
+denseRank
+runningRevenue
+revenueDifference from previous customer
+
+
+- db.payments.aggregate([
+  {
+    $lookup: {
+      from:"orders",
+      localField:"orderId",
+      foreignField:"orderId",
+      as:"orderDetail"
+    }
+  },
+  {
+    $unwind:"$orderDetail"
+  },
+  {
+    $lookup: {
+      from:"customers",
+      localField:"orderDetail.customerId",
+      foreignField:"customerId",
+      as:"customerInfo"
+    }
+  },
+  {
+    $unwind:"$customerInfo"
+  },
+  {
+    $group: {
+      _id: "$customerInfo.customerId",
+      Total_Revenue: { $sum: "$orderDetail.pricing.totalAmount" },
+    }
+  },
+  {
+    $setWindowFields: {
+      sortBy: { Total_Revenue : -1 },
+      output: {
+        Totalrank : { $rank:{} },
+        denseRank : { $denseRank: {}},
+        runningRevenue : {
+          $sum:"$Total_Revenue",
+          window: {
+            documents : ["unbounded","current"]
+          }
+        },
+        Revenue_Difference_With_previous_Customer : {
+          $shift: {
+            output:"$Total_Revenue",
+            by:-1
+          }
+        }
+      }
+    }
+  }
+])
+
+Output:-
+[
+  {
+    _id: 105,
+    Total_Revenue: 2500,
+    Totalrank: 1,
+    denseRank: 1,
+    runningRevenue: 2500,
+    Revenue_Difference_With_previous_Customer: null
+  },
+  {
+    _id: 103,
+    Total_Revenue: 2000,
+    Totalrank: 2,
+    denseRank: 2,
+    runningRevenue: 4500,
+    Revenue_Difference_With_previous_Customer: 2500
+  },
+  {
+    _id: 101,
+    Total_Revenue: 1500,
+    Totalrank: 3,
+    denseRank: 3,
+    runningRevenue: 6000,
+    Revenue_Difference_With_previous_Customer: 2000
+  },
+  {
+    _id: 104,
+    Total_Revenue: 1200,
+    Totalrank: 4,
+    denseRank: 4,
+    runningRevenue: 7200,
+    Revenue_Difference_With_previous_Customer: 1500
+  },
+  {
+    _id: 102,
+    Total_Revenue: 800,
+    Totalrank: 5,
+    denseRank: 5,
+    runningRevenue: 8000,
+    Revenue_Difference_With_previous_Customer: 1200
+  }
+]
+
+
+
+
+------------------------------------------------------------------------------------------------
+6. Top Category Per Customer
+For each customer:
+Find the category they spent most money on
+Return only top category
+------------------------------------------------------------------------------------------------
+
+- db.customers.aggregate([
+  {
+    $lookup: {
+      from:"orders",
+      localField:"customerId",
+      foreignField:"customerId",
+      as:"orderDetail"
+    }
+  },
+  {
+    $unwind: "$orderDetail"
+  },
+  {
+    $unwind:"$orderDetail.items"
+  },
+  {
+  $group: {
+    _id: {
+      Id: "$customerId",
+      Category:"$orderDetail.items.product.category"
+    },
+    Total_Spent:{ $sum: { $multiply: ["$orderDetail.items.price","$orderDetail.items.quantity"] } }
+  }
+  },
+  {
+    $sort: {
+      Total_Spent:1
+    }
+  },
+  {
+    $group: {
+      _id:"$_id.Id",
+      Category: { $first:"$_id.Category"},
+      Top_Category_Spent: {$first:"$Total_Spent"}
+    }
+  }
+])
+Output:-
+[
+  { _id: 103, Category: 'Accessories', Top_Category_Spent: 2000 },
+  { _id: 104, Category: 'Electronics', Top_Category_Spent: 1200 },
+  { _id: 102, Category: 'Fashion', Top_Category_Spent: 800 },
+  { _id: 101, Category: 'Electronics', Top_Category_Spent: 1500 },
+  { _id: 105, Category: 'Electronics', Top_Category_Spent: 2500 }
+]
+
+
+
+-------------------------------------------------------------------------------------------------
+7. Advanced $facet Dashboard Query
+Single query returning:
+Paginated customers (skip 0, limit 5)
+Top 3 customers
+Total revenue
+Total customers
+Revenue bucket distribution
+Payment method distribution
+-------------------------------------------------------------------------------------------------
+
+- db.payments.aggregate([
+  {
+    $facet:{
+      "Paginated customers":[
+        { $lookup: { from:"orders",localField:"orderId",foreignField:"orderId",as:"orderInfo" }},
+        { $group: { _id:"$orderInfo.customerId" }},
+        { $skip: 0 },
+        { $limit: 5}
+      ],
+      "Top 3 customers":[
+        { $lookup: { from:"orders",localField:"orderId",foreignField:"orderId",as:"orderInfo" }},
+        { $group: { _id:"$orderInfo.customerId" }},
+        { $sort: { "orderInfo.pricing.totalAmount": -1 }},
+        { $limit: 3}
+      ],
+      "Total Revenue":[
+        { $group: { _id:null,Total_Revenue:{ $sum:"$breakdown.baseAmount"} }},
+        { $project: { _id:0 }}
+      ],
+      "Total Customers":[
+        { $lookup: { from:"orders",localField:"orderId",foreignField:"orderId",as:"orderInfo" }},
+        { $group: { _id:"$orderInfo.customerId"}},
+        { $count: "Total Customer" }
+      ],
+      "Revenue bucket distribution":[
+        { $bucket: {
+          groupBy: "$breakdown.baseAmount",
+          boundaries:[1000,2000,3000],
+          default: "Other",
+          output: {
+            "Total_Count":{$sum:1}
+          }
+        }}
+      ],
+      "Payment method distribution":[
+        { $group: { _id:"$paymentDetails.method",Total_Count:{$sum:1}}},
+      ]
+    }
+  }
+])
+
+Output:- 
+
+[
+  {
+    'Paginated customers': [
+      { _id: [ 101 ] },
+      { _id: [ 104 ] },
+      { _id: [ 105 ] },
+      { _id: [ 102 ] },
+      { _id: [ 103 ] }
+    ],
+    'Top 3 customers': [ { _id: [ 101 ] }, { _id: [ 104 ] }, { _id: [ 105 ] } ],
+    'Total Revenue': [ { Total_Revenue: 8000 } ],
+    'Total Customers': [ { 'Total Customer': 5 } ],
+    'Revenue bucket distribution': [
+      { _id: 1000, Total_Count: 2 },
+      { _id: 2000, Total_Count: 2 },
+      { _id: 'Other', Total_Count: 1 }
+    ],
+    'Payment method distribution': [
+      { _id: 'Card', Total_Count: 3 },
+      { _id: 'NetBanking', Total_Count: 1 },
+      { _id: 'UPI', Total_Count: 1 }
+    ]
+  }
+]
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------
+8. Top 2 Orders Per Customer
+For each customer:
+Return only thetop 2 highest value orders
+-------------------------------------------------------------------------------------------------
+
+- db.customers.aggregate([
+  {
+    $lookup: {
+      from:"orders",
+      localField:"customerId",
+      foreignField:"customerId",
+      as:"orders"
+    }
+  },
+  {
+    $project: {
+      _id:0,
+      Customer_Name : { $concat: [ "$profile.name.first", "$profile.name.last"]},
+      Top_Order : {
+        $slice: [{$sortArray:{input:"$orders",sortBy:{"orders.pricing.totalAmount":-1}}},2]
+      }
+    }
+  }
+])
+Output:-
+[
+  {
+    Customer_Name: 'ParthMehta',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000001'),
+        orderId: 'ORD-1',
+        customerId: 101,
+        orderInfo: {
+          status: 'Delivered',
+          channel: 'Mobile',
+          createdAt: ISODate('2024-01-10T00:00:00.000Z')
+        },
+        pricing: { currency: 'INR', totalAmount: 1500, tax: 150, discount: 100 },
+        items: [
+          {
+            product: { productId: 1, name: 'Laptop', category: 'Electronics' },
+            price: 1000,
+            quantity: 1
+          },
+          {
+            product: { productId: 2, name: 'Mouse', category: 'Electronics' },
+            price: 500,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    Customer_Name: 'RahulSharma',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000002'),
+        orderId: 'ORD-2',
+        customerId: 102,
+        orderInfo: {
+          status: 'Pending',
+          channel: 'Web',
+          createdAt: ISODate('2024-02-05T00:00:00.000Z')
+        },
+        pricing: { currency: 'INR', totalAmount: 800, tax: 80, discount: 0 },
+        items: [
+          {
+            product: { productId: 3, name: 'Shoes', category: 'Fashion' },
+            price: 800,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    Customer_Name: 'EmilyJohnson',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000003'),
+        orderId: 'ORD-3',
+        customerId: 103,
+        orderInfo: {
+          status: 'Delivered',
+          channel: 'Web',
+          createdAt: ISODate('2024-02-15T00:00:00.000Z')
+        },
+        pricing: { currency: 'USD', totalAmount: 2000, tax: 200, discount: 150 },
+        items: [
+          {
+            product: { productId: 4, name: 'Watch', category: 'Accessories' },
+            price: 2000,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    Customer_Name: 'AmitVerma',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000004'),
+        orderId: 'ORD-4',
+        customerId: 104,
+        orderInfo: {
+          status: 'Cancelled',
+          channel: 'Mobile',
+          createdAt: ISODate('2024-03-01T00:00:00.000Z')
+        },
+        pricing: { currency: 'INR', totalAmount: 1200, tax: 120, discount: 50 },
+        items: [
+          {
+            product: { productId: 5, name: 'Headphones', category: 'Electronics' },
+            price: 1200,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    Customer_Name: 'SophiaBrown',
+    Top_Order: [
+      {
+        _id: ObjectId('65c100000000000000000005'),
+        orderId: 'ORD-5',
+        customerId: 105,
+        orderInfo: {
+          status: 'Delivered',
+          channel: 'Web',
+          createdAt: ISODate('2024-03-20T00:00:00.000Z')
+        },
+        pricing: { currency: 'USD', totalAmount: 2500, tax: 250, discount: 200 },
+        items: [
+          {
+            product: { productId: 6, name: 'Camera', category: 'Electronics' },
+            price: 2500,
+            quantity: 1
+          }
+        ]
+      }
+    ]
+  }
+]
+
+
+
+
+
+----------------------------------------------------------------------------------------------
+9. Delivered Revenue Percentage
+For each customer:
+Total revenue
+Delivered revenue
+Cancelled revenue
+Percentage of delivered revenue
+----------------------------------------------------------------------------------------------
+
+- db.orders.aggregate([
+  { $group: {
+    _id:'$customerId',
+    Total_Revenue: { $sum:"$pricing.totalAmount"},
+    Delivered_Revenue : {
+      $sum : {
+        $cond: { if: { $eq:["$orderInfo.status","Delivered"]},then: "$pricing.totalAmount",else:0 }
+      }
+    },
+    Cancelled_Revenue: {
+      $sum : {
+        $cond: { if: { $eq:["$orderInfo.status","Cancelled"]},then: "$pricing.totalAmount",else:0 }
+      }
+    },
+    Total_Delieverd:{
+      $sum : {
+        $cond: { if: { $eq:["$orderInfo.status","Delivered"]},then: 1,else:0 }
+      }
+    },
+    Total_orders: {
+      $sum:1
+    }
+  }},
+  {
+    $addFields:{
+      "Percentage_of_delivered_revenue":{
+        $divide:[{$multiply:["$Total_Delieverd",100]},"$Total_orders"]
+      }
+    }
+  }
+])
+
+Output:-
+[
+  {
+    _id: 101,
+    Total_Revenue: 1500,
+    Delivered_Revenue: 1500,
+    Cancelled_Revenue: 0,
+    Total_Delieverd: 1,
+    Total_orders: 1,
+    Percentage_of_delivered_revenue: 100
+  },
+  {
+    _id: 102,
+    Total_Revenue: 800,
+    Delivered_Revenue: 0,
+    Cancelled_Revenue: 0,
+    Total_Delieverd: 0,
+    Total_orders: 1,
+    Percentage_of_delivered_revenue: 0
+  },
+  {
+    _id: 103,
+    Total_Revenue: 2000,
+    Delivered_Revenue: 2000,
+    Cancelled_Revenue: 0,
+    Total_Delieverd: 1,
+    Total_orders: 1,
+    Percentage_of_delivered_revenue: 100
+  },
+  {
+    _id: 104,
+    Total_Revenue: 1200,
+    Delivered_Revenue: 0,
+    Cancelled_Revenue: 1200,
+    Total_Delieverd: 0,
+    Total_orders: 1,
+    Percentage_of_delivered_revenue: 0
+  },
+  {
+    _id: 105,
+    Total_Revenue: 2500,
+    Delivered_Revenue: 2500,
+    Cancelled_Revenue: 0,
+    Total_Delieverd: 1,
+    Total_orders: 1,
+    Percentage_of_delivered_revenue: 100
+  }
+]
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------
+10. Membership Tier Analysis
+Return:
+Membership tier
+Total customers
+Average revenue per tier
+------------------------------------------------------------------------------------------------
+
+  - db.customers.aggregate([
+    {
+      $lookup: {
+        from:"orders",
+        localField:"customerId",
+        foreignField:"customerId",
+        as:"ordersInfo",
+      }
+    },
+    {
+      $unwind: "$ordersInfo"
+    },
+    {
+      $group: {
+        _id:"$membership.tier",
+        Total: { $sum:1 },
+        Total_Revenue: { $sum: "$ordersInfo.pricing.totalAmount" }
+      }
+    }
+  ])
+
+  Output:-
+  [
+    { _id: 'Gold', Total: 2, Total_Revenue: 3500 },
+    { _id: 'Silver', Total: 2, Total_Revenue: 3300 },
+    { _id: 'Bronze', Total: 1, Total_Revenue: 1200 }
+  ]
+
+

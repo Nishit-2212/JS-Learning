@@ -1,0 +1,349 @@
+[
+  {
+    _id: ObjectId("65c000000000000000000001"),
+    customerId: 101,
+    profile: {
+      name: { first: "Parth", last: "Mehta" },
+      contact: { email: "parth@test.com", phone: "9999999999" },
+      address: { country: "India", state: "Rajasthan", city: "Ajmer" }
+    },
+    membership: {
+      tier: "Gold",
+      points: 1200,
+      joinedAt: ISODate("2023-01-01")
+    }
+  },
+  {
+    _id: ObjectId("65c000000000000000000002"),
+    customerId: 102,
+    profile: {
+      name: { first: "Rahul", last: "Sharma" },
+      contact: { email: "rahul@test.com", phone: "8888888888" },
+      address: { country: "India", state: "Rajasthan", city: "Jaipur" }
+    },
+    membership: {
+      tier: "Silver",
+      points: 600,
+      joinedAt: ISODate("2023-02-01")
+    }
+  },
+  {
+    _id: ObjectId("65c000000000000000000003"),
+    customerId: 103,
+    profile: {
+      name: { first: "Emily", last: "Johnson" },
+      contact: { email: "emily@test.com", phone: "7777777777" },
+      address: { country: "USA", state: "NY", city: "New York" }
+    },
+    membership: {
+      tier: "Gold",
+      points: 2000,
+      joinedAt: ISODate("2023-03-01")
+    }
+  },
+  {
+    _id: ObjectId("65c000000000000000000004"),
+    customerId: 104,
+    profile: {
+      name: { first: "Amit", last: "Verma" },
+      contact: { email: "amit@test.com", phone: "6666666666" },
+      address: { country: "India", state: "Delhi", city: "Delhi" }
+    },
+    membership: {
+      tier: "Bronze",
+      points: 300,
+      joinedAt: ISODate("2023-04-01")
+    }
+  },
+  {
+    _id: ObjectId("65c000000000000000000005"),
+    customerId: 105,
+    profile: {
+      name: { first: "Sophia", last: "Brown" },
+      contact: { email: "sophia@test.com", phone: "5555555555" },
+      address: { country: "USA", state: "CA", city: "Los Angeles" }
+    },
+    membership: {
+      tier: "Silver",
+      points: 850,
+      joinedAt: ISODate("2023-05-01")
+    }
+  }
+]
+ 
+ 
+Collection 2: Orders
+ 
+[
+  {
+    _id: ObjectId("65c100000000000000000001"),
+    orderId: "ORD-1",
+    customerId: 101,
+    orderInfo: {
+      status: "Delivered",
+      channel: "Mobile",
+      createdAt: ISODate("2024-01-10")
+    },
+    pricing: {
+      currency: "INR",
+      totalAmount: 1500,
+      tax: 150,
+      discount: 100
+    },
+    items: [
+      {
+        product: { productId: 1, name: "Laptop", category: "Electronics" },
+        price: 1000,
+        quantity: 1
+      },
+      {
+        product: { productId: 2, name: "Mouse", category: "Electronics" },
+        price: 500,
+        quantity: 1
+      }
+    ]
+  },
+  {
+    _id: ObjectId("65c100000000000000000002"),
+    orderId: "ORD-2",
+    customerId: 102,
+    orderInfo: {
+      status: "Pending",
+      channel: "Web",
+      createdAt: ISODate("2024-02-05")
+    },
+    pricing: {
+      currency: "INR",
+      totalAmount: 800,
+      tax: 80,
+      discount: 0
+    },
+    items: [
+      {
+        product: { productId: 3, name: "Shoes", category: "Fashion" },
+        price: 800,
+        quantity: 1
+      }
+    ]
+  },
+  {
+    _id: ObjectId("65c100000000000000000003"),
+    orderId: "ORD-3",
+    customerId: 103,
+    orderInfo: {
+      status: "Delivered",
+      channel: "Web",
+      createdAt: ISODate("2024-02-15")
+    },
+    pricing: {
+      currency: "USD",
+      totalAmount: 2000,
+      tax: 200,
+      discount: 150
+    },
+    items: [
+      {
+        product: { productId: 4, name: "Watch", category: "Accessories" },
+        price: 2000,
+        quantity: 1
+      }
+    ]
+  },
+  {
+    _id: ObjectId("65c100000000000000000004"),
+    orderId: "ORD-4",
+    customerId: 104,
+    orderInfo: {
+      status: "Cancelled",
+      channel: "Mobile",
+      createdAt: ISODate("2024-03-01")
+    },
+    pricing: {
+      currency: "INR",
+      totalAmount: 1200,
+      tax: 120,
+      discount: 50
+    },
+    items: [
+      {
+        product: { productId: 5, name: "Headphones", category: "Electronics" },
+        price: 1200,
+        quantity: 1
+      }
+    ]
+  },
+  {
+    _id: ObjectId("65c100000000000000000005"),
+    orderId: "ORD-5",
+    customerId: 105,
+    orderInfo: {
+      status: "Delivered",
+      channel: "Web",
+      createdAt: ISODate("2024-03-20")
+    },
+    pricing: {
+      currency: "USD",
+      totalAmount: 2500,
+      tax: 250,
+      discount: 200
+    },
+    items: [
+      {
+        product: { productId: 6, name: "Camera", category: "Electronics" },
+        price: 2500,
+        quantity: 1
+      }
+    ]
+  }
+]
+ 
+Collection 3: Payment
+ 
+ 
+[
+  {
+    paymentId: "PAY-1",
+    orderId: "ORD-1",
+    paymentDetails: {
+      method: "Card",
+      transactionId: "TXN-111",
+      status: "Success",
+      paidAt: ISODate("2024-01-11")
+    },
+    breakdown: {
+      baseAmount: 1500,
+      gatewayFee: 25,
+      taxOnFee: 5
+    }
+  },
+  {
+    paymentId: "PAY-2",
+    orderId: "ORD-2",
+    paymentDetails: {
+      method: "UPI",
+      transactionId: "TXN-222",
+      status: "Pending",
+      paidAt: ISODate("2024-02-06")
+    },
+    breakdown: {
+      baseAmount: 800,
+      gatewayFee: 10,
+      taxOnFee: 2
+    }
+  },
+  {
+    paymentId: "PAY-3",
+    orderId: "ORD-3",
+    paymentDetails: {
+      method: "Card",
+      transactionId: "TXN-333",
+      status: "Success",
+      paidAt: ISODate("2024-02-16")
+    },
+    breakdown: {
+      baseAmount: 2000,
+      gatewayFee: 35,
+      taxOnFee: 7
+    }
+  },
+  {
+    paymentId: "PAY-4",
+    orderId: "ORD-4",
+    paymentDetails: {
+      method: "Card",
+      transactionId: "TXN-444",
+      status: "Failed",
+      paidAt: ISODate("2024-03-02")
+    },
+    breakdown: {
+      baseAmount: 1200,
+      gatewayFee: 20,
+      taxOnFee: 4
+    }
+  },
+  {
+    paymentId: "PAY-5",
+    orderId: "ORD-5",
+    paymentDetails: {
+      method: "NetBanking",
+      transactionId: "TXN-555",
+      status: "Success",
+      paidAt: ISODate("2024-03-21")
+    },
+    breakdown: {
+      baseAmount: 2500,
+      gatewayFee: 40,
+      taxOnFee: 8
+    }
+  }
+]
+ 
+ 
+ 
+1. Join + Basic Aggregation
+Write an aggregation to:
+Join customers with orders
+Show full name
+Total number of orders
+Total revenue
+Only include Delivered orders
+Must use: $lookup, $unwind, $match, $group
+ 
+2. Category Revenue Calculation
+From orders:
+Unwind items
+Group by items.product.category
+Calculate:
+total quantity sold
+total revenue (price × quantity)
+Sort descending by revenue
+3. Revenue After Discount
+For each customer:
+Calculate gross revenue (pricing.totalAmount)
+Calculate total discount
+Calculate net revenue
+Add a field:
+"High Value" if netRevenue > 2000
+"Regular" otherwise
+4. Payment Method Analysis
+Join orders with payments and return:
+Payment method
+Number of transactions
+Total gateway fees collected
+5. Customer Revenue Ranking
+Return:
+fullName
+totalRevenue
+rank (highest revenue = rank 1)
+denseRank
+runningRevenue
+revenueDifference from previous customer
+6. Top Category Per Customer
+For each customer:
+Find the category they spent most money on
+Return only top category
+7. Advanced $facet Dashboard Query
+Single query returning:
+Paginated customers (skip 0, limit 5)
+Top 3 customers
+Total revenue
+Total customers
+Revenue bucket distribution
+Payment method distribution
+ 
+8. Top 2 Orders Per Customer
+For each customer:
+Return only thetop 2 highest value orders
+
+9. Delivered Revenue Percentage
+For each customer:
+Total revenue
+Delivered revenue
+Cancelled revenue
+Percentage of delivered revenue
+
+10. Membership Tier Analysis
+Return:
+Membership tier
+Total customers
+Average revenue per tier
